@@ -188,12 +188,13 @@ namespace SelfLanguage {
         /// Start the program
         /// </summary>
         /// <param name="ProgramEntryPoint">Where to start</param>
-        public void Run(int ProgramEntryPoint) {
+        public void Run(int ProgramEntryPoint,bool debug=false) {
             var end_o_P = false;
             _pointer = ProgramEntryPoint;
             if (Memory[ProgramEntryPoint] != PreCommand) { throw new InvalidProgramEntryPointException(); }
             while (!end_o_P) {
                 if (Memory[_pointer] == PreCommand) {
+                    if (debug) { GenericLog(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
                     CommandList[Convert.ToString(Memory[_pointer + 1])]();
                 }
                 _pointer++;
