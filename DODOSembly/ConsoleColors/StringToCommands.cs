@@ -23,13 +23,14 @@ namespace SelfLanguage {
             Memory = new char[_memorySize];
             Memory = Memory.Select((s) => '\\').ToArray();
             RegisterInterrupt = new List<Action>();
+            Ram = new List<Variable>();
             CommandList = new Dictionary<string, Action>();
             CommandList.Add("j", () => JumpCommand(_pointer));          //Jump
             CommandList.Add("p", () => PopOrPush(_pointer));            //pop is 0 or push that is 1
             CommandList.Add("i", () => Interrupt(_pointer));            //Interrupt n
             CommandList.Add("s", () => SetCarry(_pointer));             //Set value carry
             CommandList.Add("n", () => WriteValueCarry());              //Write value carry in logger
-            CommandList.Add("m", () => Move(_pointer+2));                 //Move&Here;what
+            CommandList.Add("m", () => Move(_pointer+2));               //Move&Here;what
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
         }
         #region Commands
@@ -50,29 +51,37 @@ namespace SelfLanguage {
                 var name = dst.ElementAtOrDefault(1);
                 var value = dst.ElementAtOrDefault(2);
                 var type = dst.ElementAtOrDefault(3);
-                HandleToRam(string.Concat(name,to_move,type));
+                HandleToRam(string.Concat(name,":",to_move,":",type));
             } else {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
             }
         }
         private void HandleToRam(string generator) {
             var dst1 = generator.Split(':');
-            var name = dst1.ElementAtOrDefault(1); //Name
-            var value = dst1.ElementAtOrDefault(2);//Value
-            var type = dst1.ElementAtOrDefault(3); //Type
+            var name = dst1.ElementAtOrDefault(0); //Name
+            var value = dst1.ElementAtOrDefault(1);//Value
+            var type = dst1.ElementAtOrDefault(2); //Type
             //Remove if exsists the variable from ram
             if(Ram.Any((s) => s.Name == name)){ Ram.Remove(Ram.First((s) => s.Name == name));}
             //The variable is not in ram and has to be created
-            var obj = Type.GetType(type).GetConstructors().First((s) => s.GetParameters().Length == 0).Invoke(new object[] { });
+            var actual_type = Type.GetType(type);
+            if (actual_type == typeof(string)) {
+                Ram.Add(new Variable(value, name));
+                return;
+            }
+            var obj = actual_type.GetConstructors().First((s) => s.GetParameters().Length == 0 ).Invoke(new object[] { });
             if (obj.GetType().GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(obj.GetType()))) {
                 dynamic o = obj;
                 Ram.Add(new Variable(o.FromString(value), name));
+                return;
             } else if (obj.GetType().GetInterfaces().Any((e) => e == typeof(IConvertible))) {
                 var o = Convert.ChangeType(value, obj.GetType());
                 Ram.Add(new Variable(o, name));
+                return;
             } else if (obj.GetType().GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
                 var o = obj.GetType().GetConstructors().First((s) => s.GetParameters().Length == 1 && s.GetParameters().First().GetType() == typeof(string));
                 Ram.Add(new Variable(o, name));
+                return;
             }
         }
         private string HandleFromRam(string variableName) {
