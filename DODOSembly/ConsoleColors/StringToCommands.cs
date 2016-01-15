@@ -2,6 +2,9 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using SelfLanguage.Interfaces;
+using SelfLanguage.Utility;
+using SelfLanguage.Exceptions;
 
 namespace SelfLanguage {
     class Language {
@@ -34,6 +37,7 @@ namespace SelfLanguage {
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
         }
         #region Commands
+        #region Move
         public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)
             var v = GetLitteral(pointer);
             var targets = v.Split(';');
@@ -101,12 +105,11 @@ namespace SelfLanguage {
                 }
             }
         }
-        private void HandleToMemory(int pointer, string what) {
-
-        }
         private string HandleFromMemory(int pointer) {
             return GetLitteral(pointer);
         }
+        #endregion
+        #region Generation
         private object GenerateFromString(Type type, string generator) {
             object o = new object();
             if (TryCreateFromStringConstructor(type, generator, out o)) { return o; } else if (TryCreateFromStringConvert(type, generator, out o)) { return o; } else {
@@ -134,6 +137,8 @@ namespace SelfLanguage {
                 return true;
             }
         }
+        #endregion
+
         public void DefineInterrupt(Action f, int where) {
             for (var i = 0; RegisterInterrupt.Count <= where; i++) {
                 if (RegisterInterrupt.Count < i) { RegisterInterrupt.Add(EmptyInterrupt); }
@@ -256,77 +261,4 @@ namespace SelfLanguage {
         }
         #endregion
     }
-    interface IStringable<T> {
-        T FromString(string s);
-        string ToMemoryString();
-    }
-    class Logging {
-        public string Message;
-        public int Pointer;
-        public Logging(string message = "", int pointer = -1) {
-            Message = message;
-            Pointer = pointer;
-        }
-    }
-    class Variable {
-        public string Name { get; set; }
-        public object IncapsulatedValue { get; set; }
-        public Variable(object o, string name) {
-            this.IncapsulatedValue = o;
-            this.Name = name;
-        }
-        public new Type GetType() {
-            return IncapsulatedValue.GetType();
-        }
-    }
-    #region Exceptions
-    class NotDefinedVariableException : Exception {
-        private string _Message { get; set; }
-        public override string Message {
-            get {
-                return _Message;
-            }
-        }
-        public NotDefinedVariableException(string s) {
-            _Message = s;
-        }
-    }
-    class EmptyInterruptException : Exception {
-        public override string Message {
-            get {
-                return "The called interrupt is empty";
-            }
-        }
-    }
-    class InvalidProgramEntryPointException : Exception {
-        public override string Message {
-            get {
-                return "The specified entry point is not a valid starting command or is over,or beyond the memory limits";
-            }
-        }
-        public InvalidProgramEntryPointException() {
-        }
-    }
-    class InvalidPointerException : Exception {
-        public override string Message {
-            get {
-                return "The specified pointer is over or beyond the memory bound, or is not a valid pointer";
-            }
-        }
-    }
-    class InvalidTypeGeneratorException : Exception {
-        public override string Message {
-            get {
-                return "Invalid type generator exception, the type to generate might not be string parsable or have no string constructor";
-            }
-        }
-    }
-    class InvalidMoveException : Exception {
-        public override string Message {
-            get {
-                return "The move is not well formed, invalid target or source";
-            }
-        }
-    }
-    #endregion
 }
