@@ -23,18 +23,17 @@ namespace IDE {
             Intellisense.Add("n", Color.Red, "Write value carry");
             Intellisense.Add("m", Color.Red, "Move");
             Intellisense.Add("\\", Color.Red, "End of program");
-            //CommandList.Add("j", () => JumpCommand(_pointer));          //Jump
-            //CommandList.Add("p", () => PopOrPush(_pointer));            //pop is 0 or push that is 1
-            //CommandList.Add("i", () => Interrupt(_pointer));            //Interrupt n
-            //CommandList.Add("s", () => SetCarry(_pointer));             //Set value carry
-            //CommandList.Add("n", () => WriteValueCarry());              //Write value carry in logger
-            //CommandList.Add("m", () => Move(_pointer + 2));               //Move&Here;what
-            //CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
         }
 
         private void txtCode_TextChanged(object sender, EventArgs e) {
+            var v = txtCode.SelectionStart;
             Pointer_number();
+            txtCode.SelectionStart = 0;
+            txtCode.SelectionLength = txtCode.Text.Length;
+            txtCode.SelectionBackColor = txtCode.BackColor;
             Intellisense_Worker();
+            txtCode.SelectionStart = v;
+            txtStatusPointer.Text = string.Format("Currently at pointer: {0}", txtCode.SelectionStart - txtCode.Text.Count((s)=>s=='\n'));
         }
         private void Pointer_number() {
             var count_line_l = txtCode.Lines.ToList().Select((line) => line.Length);
@@ -48,20 +47,49 @@ namespace IDE {
             txtPointers.Lines = temp.ToArray();
         }
         private void Intellisense_Worker() {
-            Enumerable.Range(0, txtCode.Lines.Length).ToList().ForEach((i) => {
-                var contained = Intellisense.Keys.Where((item) => txtCode.Lines[i].Contains(item));
-                contained.ToList().ForEach((item) => {
-                    var index = Convert.ToInt32((txtPointers.Lines.ElementAtOrDefault(i-1)??"0 0").Split(' ').ElementAt(1));
-                    Change_Color(index + txtCode.Lines[i].IndexOf(item) + i, item.Length, Intellisense[item]);
-                });
+            var tmp_text = txtCode.Text;
+            var accumulator = "";
+            Enumerable.Range(0, tmp_text.Length).ToList().ForEach((s) => { //Fuck this, took me 30 minutes
+                accumulator += tmp_text[s];
+                if (Intellisense.Any((k)=>k==accumulator)) {
+                    txtCode.SelectionStart = s-(accumulator.Length-1);
+                    txtCode.SelectionLength = accumulator.Length;
+                    txtCode.SelectionBackColor = Intellisense[accumulator];
+                    txtCode.SelectionStart = txtCode.Text.Length;
+                    txtCode.SelectionLength = 0;
+                    txtCode.SelectionBackColor = txtCode.BackColor;
+                    accumulator = "";
+                } else if(!Intellisense.Any((k)=>k.Contains(accumulator))){
+                    accumulator = (accumulator.Length ==1)?"":accumulator.Skip(1).ToList().Select((e)=>Convert.ToString(e)).Aggregate((first,second)=>first+second);
+                }
             });
         }
-        private void Change_Color(int from, int length,Color c) {
-            txtCode.SelectionStart = from;
-            txtCode.SelectionLength = length;
-            txtCode.SelectionBackColor = c;
-            txtCode.SelectionStart = txtCode.Text.Length;
-            txtCode.SelectionBackColor = txtCode.BackColor;
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var f = new FontDialog();
+            var result = f.ShowDialog();
+            if (result == DialogResult.OK) {
+                txtCode.Font = f.Font;
+                txtPointers.Font = f.Font;
+            }
+            
+        }
+
+        private void txtCode_FontChanged(object sender, EventArgs e) {
+            txtPointers.Font = ((RichTextBox)sender).Font;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) {
+            txtPointers.ZoomFactor = txtCode.ZoomFactor;
+            var line = txtCode.Text.Take(txtCode.SelectionStart).Count((s)=> s=='\n');
+            if (line != 0) { var n_text = txtPointers.Lines.Take(line).Select((s) => s.Length).Aggregate((n1, n2) => n1 + n2); txtPointers.SelectionStart = n_text; }
+            txtPointers.SelectionLength = 0;
+            txtPointers.ScrollToCaret();
+        }
+
+        private void splitter_SplitterMoved(object sender, SplitterEventArgs e) {
+
         }
         
     }
@@ -73,8 +101,11 @@ namespace IDE {
                 return doc.First((k) => k.Item1 == s).Item2;
             }
         }
+        public bool Any(Func<string,bool> s) {
+            return Keys.Any(s);
+        }
         public string[] Keys {
-            get {
+           get {
                 return doc.Select((s) => s.Item1).ToArray();
             }
         }

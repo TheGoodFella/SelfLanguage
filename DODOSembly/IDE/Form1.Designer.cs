@@ -23,23 +23,23 @@
         /// il contenuto del metodo con l'editor di codice.
         /// </summary>
         private void InitializeComponent() {
-            this.textEditor1 = new IDE.TextEditor();
+            this.textEditor2 = new IDE.TextEditor();
             this.SuspendLayout();
             // 
-            // textEditor1
+            // textEditor2
             // 
-            this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textEditor1.Location = new System.Drawing.Point(0, 0);
-            this.textEditor1.Name = "textEditor1";
-            this.textEditor1.Size = new System.Drawing.Size(284, 262);
-            this.textEditor1.TabIndex = 0;
+            this.textEditor2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textEditor2.Location = new System.Drawing.Point(0, 0);
+            this.textEditor2.Name = "textEditor2";
+            this.textEditor2.Size = new System.Drawing.Size(509, 322);
+            this.textEditor2.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.textEditor1);
+            this.ClientSize = new System.Drawing.Size(509, 322);
+            this.Controls.Add(this.textEditor2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -48,7 +48,7 @@
 
         #endregion
 
-        private TextEditor textEditor1;
+        private TextEditor textEditor2;
     }
 }
 
