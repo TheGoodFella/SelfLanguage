@@ -44,9 +44,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfLanguage.Utility.cs" />
-    <Compile Include="StringToCommands.cs" />
-    <Compile Include="StringToCommands.Exceptions.cs" />
-    <Compile Include="StringToCommands.Interfaces.cs" />
+    <Compile Include="SelfLanguage.cs" />
+    <Compile Include="SelfLanguage.Exceptions.cs" />
+    <Compile Include="SelfLanguage.Interfaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
