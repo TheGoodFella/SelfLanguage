@@ -17,6 +17,8 @@ namespace SelfLanguage {
         public Dictionary<string, Action> CommandList { get; private set; } //int is where the pointer is when calling the command
         public char[] Memory { get; private set; }
         public char ProgramEntryPoint { get; set; }
+
+        public Action<Logging> Debug { get; set; }
         public Action<Logging> GenericLog { get; set; }
 
         public readonly char PreCommand = '\0';
@@ -69,24 +71,22 @@ namespace SelfLanguage {
             if(Ram.Any((s) => s.Name == name)){ Ram.Remove(Ram.First((s) => s.Name == name));}
             //The variable is not in ram and has to be created
             var actual_type = Type.GetType(type);
-            if (actual_type == typeof(string)) {
-                Ram.Add(new Variable(value, name));
-                return;
-            }
-            var obj = actual_type.GetConstructors().First((s) => s.GetParameters().Length == 0 ).Invoke(new object[] { });
-            if (obj.GetType().GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(obj.GetType()))) {
+            //var obj = actual_type.GetConstructors().First((s) => s.GetParameters().Length == 0 ).Invoke(new object[] { });
+            var obj = GetVariableOfType(actual_type);
+            if (obj!=null && actual_type.GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(obj.GetType()))) {
                 dynamic o = obj;
                 Ram.Add(new Variable(o.FromString(value), name));
                 return;
-            } else if (obj.GetType().GetInterfaces().Any((e) => e == typeof(IConvertible))) {
+            } else if (actual_type.GetInterfaces().Any((e) => e == typeof(IConvertible))) {
                 var o = Convert.ChangeType(value, obj.GetType());
                 Ram.Add(new Variable(o, name));
                 return;
-            } else if (obj.GetType().GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
+            } else if (actual_type.GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
                 var o = obj.GetType().GetConstructors().First((s) => s.GetParameters().Length == 1 && s.GetParameters().First().GetType() == typeof(string));
                 Ram.Add(new Variable(o, name));
                 return;
             }
+            
         }
         private string HandleFromRam(string variableName) {
             var new_source = variableName.Split(':');
@@ -107,6 +107,15 @@ namespace SelfLanguage {
         }
         private string HandleFromMemory(int pointer) {
             return GetLitteral(pointer);
+        }
+        private object GetVariableOfType(Type t) {
+            if (t.IsValueType || t.GetType().GetConstructors().Any((s)=>s.GetParameters().Length ==0)) {
+                return Activator.CreateInstance(t);
+            } else if(t == typeof(string)){
+                return "";
+            } else { 
+                return null; 
+            }
         }
         #endregion
         #region Generation
@@ -138,7 +147,6 @@ namespace SelfLanguage {
             }
         }
         #endregion
-
         public void DefineInterrupt(Action f, int where) {
             for (var i = 0; RegisterInterrupt.Count <= where; i++) {
                 if (RegisterInterrupt.Count < i) { RegisterInterrupt.Add(EmptyInterrupt); }
@@ -208,7 +216,7 @@ namespace SelfLanguage {
             if (Memory[ProgramEntryPoint] != PreCommand) { throw new InvalidProgramEntryPointException(); }
             while (!end_o_P) {
                 if (Memory[_pointer] == PreCommand) {
-                    if (debug) { GenericLog(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
+                    if (debug) { Debug(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
                     CommandList[Convert.ToString(Memory[_pointer + 1])]();
                 }
                 _pointer++;
