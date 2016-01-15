@@ -111,7 +111,7 @@ namespace SelfLanguage {
         private object GetVariableOfType(Type t) {
             if (t.IsValueType || t.GetType().GetConstructors().Any((s)=>s.GetParameters().Length ==0)) {
                 return Activator.CreateInstance(t);
-            } else if(t == typeof(string)){
+            }else if(t == typeof(string)){
                 return "";
             } else { 
                 return null; 
