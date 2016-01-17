@@ -28,10 +28,15 @@
             this.txtPointers = new System.Windows.Forms.RichTextBox();
             this.txtCode = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeSelectionColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeSelectionBackcolorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatusPointer = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmrZoom = new System.Windows.Forms.Timer(this.components);
+            this.codeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
             this.splitter.Panel1.SuspendLayout();
             this.splitter.Panel2.SuspendLayout();
@@ -56,6 +61,7 @@
             this.splitter.Size = new System.Drawing.Size(583, 264);
             this.splitter.SplitterDistance = 62;
             this.splitter.TabIndex = 2;
+            this.splitter.TabStop = false;
             this.splitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitter_SplitterMoved);
             // 
             // txtPointers
@@ -72,6 +78,7 @@
             // 
             // txtCode
             // 
+            this.txtCode.AcceptsTab = true;
             this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCode.Location = new System.Drawing.Point(0, 0);
             this.txtCode.Name = "txtCode";
@@ -85,19 +92,44 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fontToolStripMenuItem});
+            this.textToolStripMenuItem,
+            this.codeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(583, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // textToolStripMenuItem
+            // 
+            this.textToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeSelectionColorToolStripMenuItem,
+            this.changeSelectionBackcolorToolStripMenuItem,
+            this.fontToolStripMenuItem});
+            this.textToolStripMenuItem.Name = "textToolStripMenuItem";
+            this.textToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.textToolStripMenuItem.Text = "Text";
+            // 
+            // changeSelectionColorToolStripMenuItem
+            // 
+            this.changeSelectionColorToolStripMenuItem.Name = "changeSelectionColorToolStripMenuItem";
+            this.changeSelectionColorToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.changeSelectionColorToolStripMenuItem.Text = "Change selection Forecolor";
+            this.changeSelectionColorToolStripMenuItem.Click += new System.EventHandler(this.changeSelectionColorToolStripMenuItem_Click);
+            // 
+            // changeSelectionBackcolorToolStripMenuItem
+            // 
+            this.changeSelectionBackcolorToolStripMenuItem.Name = "changeSelectionBackcolorToolStripMenuItem";
+            this.changeSelectionBackcolorToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.changeSelectionBackcolorToolStripMenuItem.Text = "Change selection Backcolor";
+            this.changeSelectionBackcolorToolStripMenuItem.Click += new System.EventHandler(this.changeSelectionBackcolorToolStripMenuItem_Click);
+            // 
             // fontToolStripMenuItem
             // 
             this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-            this.fontToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.fontToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.fontToolStripMenuItem.Text = "Font";
-            this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
+            this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click_1);
             // 
             // statusStrip1
             // 
@@ -119,6 +151,21 @@
             // 
             this.tmrZoom.Enabled = true;
             this.tmrZoom.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // codeToolStripMenuItem
+            // 
+            this.codeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.compileToolStripMenuItem});
+            this.codeToolStripMenuItem.Name = "codeToolStripMenuItem";
+            this.codeToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.codeToolStripMenuItem.Text = "Code";
+            // 
+            // compileToolStripMenuItem
+            // 
+            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.compileToolStripMenuItem.Text = "Compile";
+            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // TextEditor
             // 
@@ -148,9 +195,14 @@
         private System.Windows.Forms.RichTextBox txtPointers;
         private System.Windows.Forms.RichTextBox txtCode;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fontToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel txtStatusPointer;
         private System.Windows.Forms.Timer tmrZoom;
+        private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeSelectionColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeSelectionBackcolorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fontToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem codeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
     }
 }
