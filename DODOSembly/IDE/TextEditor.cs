@@ -35,9 +35,11 @@ namespace IDE {
             Intellisense.Add("n", Color.Red, "Write value carry");
             Intellisense.Add("m", Color.Red, "Move");
             Intellisense.Add("\\", Color.Red, "End of program");
+            txtCode.AddPeer(txtPointers);
         }
 
         private void txtCode_TextChanged(object sender, EventArgs e) {
+            txtPointers.ScrollToCaret();
             var v = txtCode.SelectionStart;
             Pointer_number();
             //txtCode.SelectionStart = 0;
@@ -59,7 +61,8 @@ namespace IDE {
             });
             int_lines_c.Select((k) => Convert.ToString(k)).ToArray();
             var temp = new List<string>();
-            Enumerable.Range(1, int_lines_c.Count).ToList().ForEach((k) => temp.Add(k + " " + int_lines_c[k - 1]));
+            Enumerable.Range(1, int_lines_c.Count).ToList().ForEach((k) => temp
+                .Add((k>1?int_lines_c[k-2]:0)!=int_lines_c[k - 1]?string.Format("{0,-3}> {1,-3}-{2,3}",k ,(k>1?int_lines_c[k-2]:0),int_lines_c[k - 1]):"-")); //Write Line> FromP - ToP or - 
             txtPointers.Lines = temp.ToArray();
         }
 
@@ -102,10 +105,6 @@ namespace IDE {
 
         private void timer1_Tick(object sender, EventArgs e) {
             txtPointers.ZoomFactor = txtCode.ZoomFactor;
-            var line = txtCode.Text.Take(txtCode.SelectionStart).Count((s) => s == '\n');
-            if (line != 0) { var n_text = txtPointers.Lines.Take(line).Select((s) => s.Length).Aggregate((n1, n2) => n1 + n2); txtPointers.SelectionStart = n_text; }
-            txtPointers.SelectionLength = 0;
-            txtPointers.ScrollToCaret();
         }
 
         private void splitter_SplitterMoved(object sender, SplitterEventArgs e) {
@@ -139,15 +138,8 @@ namespace IDE {
 
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
             var to_compile = txtCode.Lines.Where((s)=>CleanPointer(s)!=0);
-            //// var v = to_compile.Select((s) => Intellisense.Keys.Any((n) => n.Take(n.Length) == s.Take(n.Length)) ? "\0" + s : s).Aggregate((n1,n2)=>n1+n2);
-            //var v = new List<string>();
-            //to_compile.ToList().ForEach((s) => {
-            //    while (Intellisense.Any((k) => s.IndexOf(k) != -1)) {
-            //        var index = s.IndexOf(
-            //    }
-            //});
             var query = to_compile.Select((s)=>{
-                while(Intellisense.Keys.Any((k)=>s.Contains(k) && ((s.Length > 1)?(s.Take(s.IndexOf(k)-1).First()!='\0'):(true)) )){
+                while(Intellisense.Keys.Any((k)=>s.Contains(k) && ((s.Length > 1)?(s.Take(s.IndexOf(k)+1).First()!='\0'):(true)))){
                     var contained = Intellisense.Keys.Where((p)=>s.Contains(p)).First();
                     s=s.Replace(contained, '\0' + contained);   
                 }
@@ -156,6 +148,12 @@ namespace IDE {
 
 
             if (OnCompile != null) { OnCompile(this, query.Aggregate((first,second)=>first + second)); }
+        }
+
+        private void txtCode_VScroll(object sender, EventArgs e){
+            Message m = Message.Create(txtPointers.Handle,0x115,new IntPtr(100),new IntPtr(100));
+            txtCode.DirectWndProc(ref m);
+            //hwnd 853026  wparam 5111813
         }
 
     }

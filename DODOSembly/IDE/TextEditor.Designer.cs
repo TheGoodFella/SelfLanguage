@@ -25,18 +25,18 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.splitter = new System.Windows.Forms.SplitContainer();
-            this.txtPointers = new System.Windows.Forms.RichTextBox();
-            this.txtCode = new System.Windows.Forms.RichTextBox();
+            this.txtPointers = new IDE.CustomTextBox();
+            this.txtCode = new IDE.CustomTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSelectionColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSelectionBackcolorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatusPointer = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmrZoom = new System.Windows.Forms.Timer(this.components);
-            this.codeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
             this.splitter.Panel1.SuspendLayout();
             this.splitter.Panel2.SuspendLayout();
@@ -59,19 +59,23 @@
             // 
             this.splitter.Panel2.Controls.Add(this.txtCode);
             this.splitter.Size = new System.Drawing.Size(583, 264);
-            this.splitter.SplitterDistance = 62;
+            this.splitter.SplitterDistance = 88;
             this.splitter.TabIndex = 2;
             this.splitter.TabStop = false;
             this.splitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitter_SplitterMoved);
             // 
             // txtPointers
             // 
+            this.txtPointers.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPointers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPointers.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.txtPointers.Location = new System.Drawing.Point(0, 0);
             this.txtPointers.Name = "txtPointers";
             this.txtPointers.ReadOnly = true;
-            this.txtPointers.Size = new System.Drawing.Size(62, 264);
-            this.txtPointers.TabIndex = 10;
+            this.txtPointers.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtPointers.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.txtPointers.Size = new System.Drawing.Size(88, 264);
+            this.txtPointers.TabIndex = 0;
             this.txtPointers.TabStop = false;
             this.txtPointers.Text = "";
             this.txtPointers.WordWrap = false;
@@ -82,10 +86,11 @@
             this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCode.Location = new System.Drawing.Point(0, 0);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(517, 264);
+            this.txtCode.Size = new System.Drawing.Size(491, 264);
             this.txtCode.TabIndex = 1;
             this.txtCode.Text = "";
             this.txtCode.WordWrap = false;
+            this.txtCode.VScroll += new System.EventHandler(this.txtCode_VScroll);
             this.txtCode.FontChanged += new System.EventHandler(this.txtCode_FontChanged);
             this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
             // 
@@ -131,6 +136,21 @@
             this.fontToolStripMenuItem.Text = "Font";
             this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click_1);
             // 
+            // codeToolStripMenuItem
+            // 
+            this.codeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.compileToolStripMenuItem});
+            this.codeToolStripMenuItem.Name = "codeToolStripMenuItem";
+            this.codeToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.codeToolStripMenuItem.Text = "Code";
+            // 
+            // compileToolStripMenuItem
+            // 
+            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.compileToolStripMenuItem.Text = "Compile";
+            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -151,21 +171,6 @@
             // 
             this.tmrZoom.Enabled = true;
             this.tmrZoom.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // codeToolStripMenuItem
-            // 
-            this.codeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.compileToolStripMenuItem});
-            this.codeToolStripMenuItem.Name = "codeToolStripMenuItem";
-            this.codeToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.codeToolStripMenuItem.Text = "Code";
-            // 
-            // compileToolStripMenuItem
-            // 
-            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.compileToolStripMenuItem.Text = "Compile";
-            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // TextEditor
             // 
@@ -192,8 +197,6 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitter;
-        private System.Windows.Forms.RichTextBox txtPointers;
-        private System.Windows.Forms.RichTextBox txtCode;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel txtStatusPointer;
@@ -204,5 +207,7 @@
         private System.Windows.Forms.ToolStripMenuItem fontToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem codeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
+        private CustomTextBox txtCode;
+        private CustomTextBox txtPointers;
     }
 }
