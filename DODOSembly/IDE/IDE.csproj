@@ -44,6 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASCII_Table.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ASCII_Table.Designer.cs">
+      <DependentUpon>ASCII_Table.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -65,6 +71,9 @@
     <Compile Include="TextEditor.Designer.cs">
       <DependentUpon>TextEditor.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ASCII_Table.resx">
+      <DependentUpon>ASCII_Table.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -151,9 +151,13 @@ namespace IDE {
         }
 
         private void txtCode_VScroll(object sender, EventArgs e){
-            Message m = Message.Create(txtPointers.Handle,0x115,new IntPtr(100),new IntPtr(100));
-            txtCode.DirectWndProc(ref m);
-            //hwnd 853026  wparam 5111813
+            //var v = txtCode.GetLineFromCharIndex(txtCode.SelectionStart);
+            //var k = 0;
+            //for (int i = 0; i < txtPointers.Lines.Length; i++) {
+            //    k += txtPointers.Lines[i].Length;
+            //}
+            //if (k == 0) { return ; }
+            //txtPointers.SelectionStart = k;
         }
 
     }
