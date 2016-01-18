@@ -45,8 +45,8 @@ namespace IDE {
             //txtCode.SelectionBackColor = txtCode.BackColor;
             Intellisense_Worker();
             txtCode.SelectionStart = v;
-            if (txtCode.Text.Length > 0) {
-                txtStatusPointer.Text = string.Format("Currently at pointer: {0}", txtCode.Lines.Select((s)=>CleanPointer(s)).Aggregate((n1,n2)=>n1+n2));
+            if (txtCode.Text.Take(txtCode.SelectionStart).Count() > 0) {
+                txtStatusPointer.Text = string.Format("Currently at pointer: {0}", txtCode.Text.Take(txtCode.SelectionStart).Select((s) => CleanPointer(Convert.ToString(s))).Aggregate((n1, n2) => n1 + n2));
             } else {
                 txtStatusPointer.Text = string.Format("Currently at pointer: {0}", 0);
             }
@@ -138,7 +138,7 @@ namespace IDE {
         }
 
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
-            //var to_compile = txtCode.Lines.Where((s)=>CleanPointer(s)!=0);
+            var to_compile = txtCode.Lines.Where((s)=>CleanPointer(s)!=0);
             //// var v = to_compile.Select((s) => Intellisense.Keys.Any((n) => n.Take(n.Length) == s.Take(n.Length)) ? "\0" + s : s).Aggregate((n1,n2)=>n1+n2);
             //var v = new List<string>();
             //to_compile.ToList().ForEach((s) => {
@@ -146,9 +146,16 @@ namespace IDE {
             //        var index = s.IndexOf(
             //    }
             //});
-            
+            var query = to_compile.Select((s)=>{
+                while(Intellisense.Keys.Any((k)=>s.Contains(k) && ((s.Length > 1)?(s.Take(s.IndexOf(k)-1).First()!='\0'):(true)) )){
+                    var contained = Intellisense.Keys.Where((p)=>s.Contains(p)).First();
+                    s=s.Replace(contained, '\0' + contained);   
+                }
+                return s;
+            });
 
-            //if (OnCompile != null) { OnCompile(this, v); }
+
+            if (OnCompile != null) { OnCompile(this, query.Aggregate((first,second)=>first + second)); }
         }
 
     }

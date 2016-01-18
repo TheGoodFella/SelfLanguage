@@ -37,7 +37,7 @@ namespace IDE {
             }
         }
         private void OnCompile(object sender, string e) {
-            File.WriteAllBytes("C:\\l.a", e.Select((k) => Convert.ToByte(k)).ToArray());
+            File.WriteAllBytes("C:\\lavoro-temp\\l.a", e.Select((k) => Convert.ToByte(k)).ToArray());
             //File.WriteAllText("C:\\kkk.a", e.Where((k) => !to_ignore.Any((s) => k == s)));
         }
     }
