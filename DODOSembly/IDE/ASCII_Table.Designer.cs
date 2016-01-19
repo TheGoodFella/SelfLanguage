@@ -23,43 +23,34 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            this.lstV = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // lstV
             // 
-            this.dataGridView1.AutoGenerateColumns = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.DataSource = this.bindingSource1;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(134, 150);
-            this.dataGridView1.TabIndex = 0;
-            // 
-            // bindingSource1
-            // 
-            this.bindingSource1.CurrentChanged += new System.EventHandler(this.bindingSource1_CurrentChanged);
+            this.lstV.AccessibleName = "";
+            this.lstV.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstV.Location = new System.Drawing.Point(0, 0);
+            this.lstV.Name = "lstV";
+            this.lstV.Size = new System.Drawing.Size(150, 150);
+            this.lstV.TabIndex = 0;
+            this.lstV.UseCompatibleStateImageBehavior = false;
+            this.lstV.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstV_MouseDoubleClick);
             // 
             // ASCII_Table
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.lstV);
             this.Name = "ASCII_Table";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.BindingSource bindingSource1;
+        private System.Windows.Forms.ListView lstV;
+
 
 
 

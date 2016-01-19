@@ -18,8 +18,10 @@ namespace IDE {
                 txtCode.Text = value;
             }
         }
-
-        public EventHandler<string> OnCompile;
+        public void AppendText(string s){
+            txtCode.AppendText(s);
+        }
+        public event EventHandler<string> OnRun;
 
         private char[] NotToIncludeInPointersChar = new char[] { '\t', '\n', '\r' };
         private string[] CommentsStartOfLine = new string[] { "#", "//" };
@@ -147,7 +149,7 @@ namespace IDE {
             });
 
 
-            if (OnCompile != null) { OnCompile(this, query.Aggregate((first,second)=>first + second)); }
+            if (OnRun != null) { OnRun(this, query.Aggregate((first,second)=>first + second)); }
         }
 
         private void txtCode_VScroll(object sender, EventArgs e){
@@ -158,6 +160,10 @@ namespace IDE {
             //}
             //if (k == 0) { return ; }
             //txtPointers.SelectionStart = k;
+        }
+
+        private void runToolStripMenuItem_Click(object sender, EventArgs e) {
+            OnRun(this, txtCode.Text);
         }
 
     }

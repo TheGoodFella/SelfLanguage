@@ -27,9 +27,18 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.textEditor1 = new IDE.TextEditor();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabASCII = new System.Windows.Forms.TabPage();
             this.asciI_Table1 = new IDE.ASCII_Table();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.tabASCII.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -38,7 +47,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1186, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(678, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -65,34 +74,78 @@
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.textEditor1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.tabControl);
+            this.splitContainer1.Size = new System.Drawing.Size(678, 496);
+            this.splitContainer1.SplitterDistance = 527;
+            this.splitContainer1.TabIndex = 2;
+            // 
             // textEditor1
             // 
             this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textEditor1.Location = new System.Drawing.Point(0, 24);
+            this.textEditor1.Location = new System.Drawing.Point(0, 0);
             this.textEditor1.Name = "textEditor1";
-            this.textEditor1.Size = new System.Drawing.Size(1186, 411);
+            this.textEditor1.Size = new System.Drawing.Size(527, 496);
             this.textEditor1.TabIndex = 0;
+            // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tabASCII);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(147, 496);
+            this.tabControl.TabIndex = 1;
+            // 
+            // tabASCII
+            // 
+            this.tabASCII.Controls.Add(this.asciI_Table1);
+            this.tabASCII.Location = new System.Drawing.Point(4, 22);
+            this.tabASCII.Name = "tabASCII";
+            this.tabASCII.Padding = new System.Windows.Forms.Padding(3);
+            this.tabASCII.Size = new System.Drawing.Size(139, 470);
+            this.tabASCII.TabIndex = 0;
+            this.tabASCII.Text = "ASCII Table";
+            this.tabASCII.UseVisualStyleBackColor = true;
             // 
             // asciI_Table1
             // 
-            this.asciI_Table1.Location = new System.Drawing.Point(794, 36);
+            this.asciI_Table1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.asciI_Table1.Location = new System.Drawing.Point(3, 3);
             this.asciI_Table1.Name = "asciI_Table1";
-            this.asciI_Table1.Size = new System.Drawing.Size(150, 150);
-            this.asciI_Table1.TabIndex = 2;
+            this.asciI_Table1.Size = new System.Drawing.Size(133, 464);
+            this.asciI_Table1.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1186, 435);
-            this.Controls.Add(this.asciI_Table1);
-            this.Controls.Add(this.textEditor1);
+            this.ClientSize = new System.Drawing.Size(678, 520);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "VisualDODOSembly";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
+            this.tabASCII.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -105,6 +158,9 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabASCII;
         private ASCII_Table asciI_Table1;
 
     }

@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using SelfLanguage;
 
 namespace IDE {
     public partial class Form1 : Form {
@@ -15,7 +9,11 @@ namespace IDE {
 
         public Form1() {
             InitializeComponent();
-            textEditor1.OnCompile = OnCompile;
+            textEditor1.OnRun += OnRun;
+            asciI_Table1.SomethingPressed = new EventHandler((s,e) => {
+                textEditor1.Select();
+                textEditor1.AppendText(Convert.ToString(Convert.ToInt32(Convert.ToChar(((dynamic)s).Text))));
+            });
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -36,10 +34,10 @@ namespace IDE {
                 textEditor1.Text = File.ReadAllText(v.FileName);
             }
         }
-        private void OnCompile(object sender, string e) {
-            File.WriteAllBytes("C:\\lavoro-temp\\l.a", e.Select((k) => Convert.ToByte(k)).ToArray());
-            //File.WriteAllText("C:\\kkk.a", e.Where((k) => !to_ignore.Any((s) => k == s)));
+        private void OnRun(object sender, string e) {
+            
+            //var v = e.Select((k) => Convert.ToByte(k)).ToArray();
+            
         }
-
     }
 }
