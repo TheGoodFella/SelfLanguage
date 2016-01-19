@@ -28,6 +28,7 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textEditor1 = new IDE.TextEditor();
+            this.asciI_Table1 = new IDE.ASCII_Table();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -37,7 +38,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(509, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1186, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -69,14 +70,22 @@
             this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textEditor1.Location = new System.Drawing.Point(0, 24);
             this.textEditor1.Name = "textEditor1";
-            this.textEditor1.Size = new System.Drawing.Size(509, 298);
+            this.textEditor1.Size = new System.Drawing.Size(1186, 411);
             this.textEditor1.TabIndex = 0;
+            // 
+            // asciI_Table1
+            // 
+            this.asciI_Table1.Location = new System.Drawing.Point(794, 36);
+            this.asciI_Table1.Name = "asciI_Table1";
+            this.asciI_Table1.Size = new System.Drawing.Size(150, 150);
+            this.asciI_Table1.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 322);
+            this.ClientSize = new System.Drawing.Size(1186, 435);
+            this.Controls.Add(this.asciI_Table1);
             this.Controls.Add(this.textEditor1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -96,6 +105,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private ASCII_Table asciI_Table1;
 
     }
 }
