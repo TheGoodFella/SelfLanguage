@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using SelfLanguage;
 
 namespace IDE {
@@ -35,8 +36,8 @@ namespace IDE {
             }
         }
         private void OnRun(object sender, string e) {
-            
-            //var v = e.Select((k) => Convert.ToByte(k)).ToArray();
+            var Debugger1 = new Debugger(e);
+            Debugger1.Show();
             
         }
     }
