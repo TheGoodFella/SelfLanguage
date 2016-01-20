@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,6 +26,9 @@ namespace IDE {
 
         private char[] NotToIncludeInPointersChar = new char[] { '\t', '\n', '\r' };
         private string[] CommentsStartOfLine = new string[] { "#", "//" };
+
+        private const string IntellisenseRegex = "^(\t )*{0}";
+        
         Documentation Intellisense { get; set; }
 
         public TextEditor() {
@@ -56,7 +60,7 @@ namespace IDE {
             }
         }
         private void Pointer_number() {
-            var count_line_l = txtCode.Lines.ToList().Select((line) => CleanPointer(line));
+            var count_line_l = txtCode.Lines.ToList().Select((line) => CleanPointer(ToCommand(line)));
             var int_lines_c = new List<int>();
             Enumerable.Range(1, txtCode.Lines.Length).ToList().ForEach((s) => {
                 int_lines_c.Add(count_line_l.Take(s).Aggregate((n1, n2) => n1 + n2));
@@ -96,9 +100,10 @@ namespace IDE {
             });
         }
 
-        private void fontToolStripMenuItem_Click(object sender, EventArgs e) {
-
-
+        private string ToCommand(string s) {
+            var is_command = Intellisense.Keys.FirstOrDefault((in_t)=>Regex.IsMatch(s,string.Format(IntellisenseRegex,in_t.Replace("\\","\\\\"))));
+            if (is_command == null) { return s; }
+            return Regex.Replace(s, string.Format(IntellisenseRegex, is_command),"\0" + is_command);
         }
 
         private void txtCode_FontChanged(object sender, EventArgs e) {
@@ -107,10 +112,6 @@ namespace IDE {
 
         private void timer1_Tick(object sender, EventArgs e) {
             txtPointers.ZoomFactor = txtCode.ZoomFactor;
-        }
-
-        private void splitter_SplitterMoved(object sender, SplitterEventArgs e) {
-
         }
 
         private void changeSelectionColorToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -140,26 +141,8 @@ namespace IDE {
 
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
             var to_compile = txtCode.Lines.Where((s)=>CleanPointer(s)!=0);
-            var query = to_compile.Select((s)=>{
-                while(Intellisense.Keys.Any((k)=>s.Contains(k) && ((s.Length > 1)?(s.Take(s.IndexOf(k)+1).First()!='\0'):(true)))){
-                    var contained = Intellisense.Keys.Where((p)=>s.Contains(p)).First();
-                    s=s.Replace(contained, '\0' + contained);   
-                }
-                return s;
-            });
-
-
+            var query = to_compile.Select((k) => ToCommand(k));
             if (OnRun != null) { OnRun(this, query.Aggregate((first,second)=>first + second)); }
-        }
-
-        private void txtCode_VScroll(object sender, EventArgs e){
-            //var v = txtCode.GetLineFromCharIndex(txtCode.SelectionStart);
-            //var k = 0;
-            //for (int i = 0; i < txtPointers.Lines.Length; i++) {
-            //    k += txtPointers.Lines[i].Length;
-            //}
-            //if (k == 0) { return ; }
-            //txtPointers.SelectionStart = k;
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e) {

@@ -62,7 +62,6 @@
             this.splitter.SplitterDistance = 88;
             this.splitter.TabIndex = 2;
             this.splitter.TabStop = false;
-            this.splitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitter_SplitterMoved);
             // 
             // txtPointers
             // 
@@ -90,7 +89,6 @@
             this.txtCode.TabIndex = 1;
             this.txtCode.Text = "";
             this.txtCode.WordWrap = false;
-            this.txtCode.VScroll += new System.EventHandler(this.txtCode_VScroll);
             this.txtCode.FontChanged += new System.EventHandler(this.txtCode_FontChanged);
             this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
             // 
