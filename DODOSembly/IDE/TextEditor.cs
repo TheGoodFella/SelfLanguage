@@ -77,7 +77,14 @@ namespace IDE {
             return s.Where((e) => !NotToIncludeInPointersChar.Any((k) => e == k)).Count();
         }
 
-        private void Intellisense_Worker() {
+        private void Intellisense_Worker() { //NEW IDEA, do just the select index, TODO
+            //var commands = txtCode.Lines.Select((k)=>ToCommand(k)).Aggregate((fi,se)=>fi+se);
+            //var v = commands.Take(txtCode.SelectionStart);
+            //var index = v.ToList().LastIndexOf('\0'); //last pre command
+            //var _toRemove = commands.Count((s) => s == '\0');
+            //txtCode.SelectionStart = (index - _toRemove>0?index-_toRemove:0);
+            //txtCode.SelectionLength = 1;
+            //txtCode.SelectionColor = Color.Red;
             return;
 
             var tmp_text = txtCode.Text;
