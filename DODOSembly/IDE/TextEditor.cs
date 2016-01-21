@@ -54,7 +54,7 @@ namespace IDE {
             Intellisense_Worker();
             txtCode.SelectionStart = v;
             if (txtCode.Text.Take(txtCode.SelectionStart).Count() > 0) {
-                txtStatusPointer.Text = string.Format("Currently at pointer: {0}", txtCode.Text.Take(txtCode.SelectionStart).Select((s) => CleanPointer(Convert.ToString(s))).Aggregate((n1, n2) => n1 + n2));
+                txtStatusPointer.Text = string.Format("Currently at pointer: {0}", txtCode.Text.Take(txtCode.SelectionStart).Select((s) => CleanPointer(ToCommand(Convert.ToString(s)))).Aggregate((n1, n2) => n1 + n2));
             } else {
                 txtStatusPointer.Text = string.Format("Currently at pointer: {0}", 0);
             }
@@ -103,7 +103,7 @@ namespace IDE {
         private string ToCommand(string s) {
             var is_command = Intellisense.Keys.FirstOrDefault((in_t)=>Regex.IsMatch(s,string.Format(IntellisenseRegex,in_t.Replace("\\","\\\\"))));
             if (is_command == null) { return s; }
-            return Regex.Replace(s, string.Format(IntellisenseRegex, is_command),"\0" + is_command);
+            return Regex.Replace(s, string.Format(IntellisenseRegex, is_command.Replace("\\","\\\\")),"\0" + is_command);
         }
 
         private void txtCode_FontChanged(object sender, EventArgs e) {

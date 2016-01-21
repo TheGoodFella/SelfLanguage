@@ -31,13 +31,15 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.grpExecution = new System.Windows.Forms.GroupBox();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnAllAndLoad = new System.Windows.Forms.Button();
+            this.btnAll = new System.Windows.Forms.Button();
             this.lblProgramEntryPoint = new System.Windows.Forms.Label();
             this.txtProgramEntryPoint = new System.Windows.Forms.NumericUpDown();
             this.lblMemoryToAlloc = new System.Windows.Forms.Label();
             this.txtMemoryAlloc = new System.Windows.Forms.NumericUpDown();
-            this.btnAll = new System.Windows.Forms.Button();
-            this.btnAllAndLoad = new System.Windows.Forms.Button();
-            this.btnLoad = new System.Windows.Forms.Button();
+            this.grpLogger = new System.Windows.Forms.GroupBox();
+            this.lstLogger = new System.Windows.Forms.ListBox();
             this.grpMemoryAndRam.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -47,6 +49,7 @@
             this.grpExecution.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtProgramEntryPoint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMemoryAlloc)).BeginInit();
+            this.grpLogger.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMemoryAndRam
@@ -121,8 +124,8 @@
             // 
             this.toolStripMenuItem1.Image = global::IDE.Properties.Resources.Go;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(38, 20);
-            this.toolStripMenuItem1.Text = " ";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(70, 20);
+            this.toolStripMenuItem1.Text = "Debug";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // grpExecution
@@ -137,10 +140,40 @@
             this.grpExecution.Dock = System.Windows.Forms.DockStyle.Left;
             this.grpExecution.Location = new System.Drawing.Point(0, 209);
             this.grpExecution.Name = "grpExecution";
-            this.grpExecution.Size = new System.Drawing.Size(200, 218);
+            this.grpExecution.Size = new System.Drawing.Size(221, 218);
             this.grpExecution.TabIndex = 3;
             this.grpExecution.TabStop = false;
             this.grpExecution.Text = "Running options";
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Location = new System.Drawing.Point(7, 142);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(176, 23);
+            this.btnLoad.TabIndex = 6;
+            this.btnLoad.Text = "Load in memory the program";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // btnAllAndLoad
+            // 
+            this.btnAllAndLoad.Location = new System.Drawing.Point(7, 113);
+            this.btnAllAndLoad.Name = "btnAllAndLoad";
+            this.btnAllAndLoad.Size = new System.Drawing.Size(176, 23);
+            this.btnAllAndLoad.TabIndex = 5;
+            this.btnAllAndLoad.Text = "Allocate and load program";
+            this.btnAllAndLoad.UseVisualStyleBackColor = true;
+            this.btnAllAndLoad.Click += new System.EventHandler(this.btnAllAndLoad_Click);
+            // 
+            // btnAll
+            // 
+            this.btnAll.Location = new System.Drawing.Point(7, 84);
+            this.btnAll.Name = "btnAll";
+            this.btnAll.Size = new System.Drawing.Size(176, 23);
+            this.btnAll.TabIndex = 4;
+            this.btnAll.Text = "Allocate";
+            this.btnAll.UseVisualStyleBackColor = true;
+            this.btnAll.Click += new System.EventHandler(this.btnAll_Click);
             // 
             // lblProgramEntryPoint
             // 
@@ -184,41 +217,32 @@
             this.txtMemoryAlloc.Size = new System.Drawing.Size(75, 20);
             this.txtMemoryAlloc.TabIndex = 0;
             // 
-            // btnAll
+            // grpLogger
             // 
-            this.btnAll.Location = new System.Drawing.Point(7, 84);
-            this.btnAll.Name = "btnAll";
-            this.btnAll.Size = new System.Drawing.Size(176, 23);
-            this.btnAll.TabIndex = 4;
-            this.btnAll.Text = "Allocate";
-            this.btnAll.UseVisualStyleBackColor = true;
-            this.btnAll.Click += new System.EventHandler(this.btnAll_Click);
+            this.grpLogger.Controls.Add(this.lstLogger);
+            this.grpLogger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpLogger.Location = new System.Drawing.Point(221, 209);
+            this.grpLogger.Name = "grpLogger";
+            this.grpLogger.Size = new System.Drawing.Size(250, 218);
+            this.grpLogger.TabIndex = 7;
+            this.grpLogger.TabStop = false;
+            this.grpLogger.Text = "Logger";
             // 
-            // btnAllAndLoad
+            // lstLogger
             // 
-            this.btnAllAndLoad.Location = new System.Drawing.Point(7, 113);
-            this.btnAllAndLoad.Name = "btnAllAndLoad";
-            this.btnAllAndLoad.Size = new System.Drawing.Size(176, 23);
-            this.btnAllAndLoad.TabIndex = 5;
-            this.btnAllAndLoad.Text = "Allocate and load program";
-            this.btnAllAndLoad.UseVisualStyleBackColor = true;
-            this.btnAllAndLoad.Click += new System.EventHandler(this.btnAllAndLoad_Click);
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(7, 142);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(176, 23);
-            this.btnLoad.TabIndex = 6;
-            this.btnLoad.Text = "Load in memory the program";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            this.lstLogger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstLogger.FormattingEnabled = true;
+            this.lstLogger.Location = new System.Drawing.Point(3, 16);
+            this.lstLogger.Name = "lstLogger";
+            this.lstLogger.Size = new System.Drawing.Size(244, 199);
+            this.lstLogger.TabIndex = 0;
             // 
             // Debugger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(471, 427);
+            this.Controls.Add(this.grpLogger);
             this.Controls.Add(this.grpExecution);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.grpMemoryAndRam);
@@ -237,6 +261,7 @@
             this.grpExecution.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtProgramEntryPoint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMemoryAlloc)).EndInit();
+            this.grpLogger.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -259,6 +284,8 @@
         private System.Windows.Forms.Button btnAllAndLoad;
         private System.Windows.Forms.Button btnAll;
         private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.GroupBox grpLogger;
+        private System.Windows.Forms.ListBox lstLogger;
 
 
 

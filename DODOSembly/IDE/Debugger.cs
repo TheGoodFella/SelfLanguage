@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using SelfLanguage;
 
@@ -15,7 +16,9 @@ namespace IDE {
         public Debugger(string program) {
             InitializeComponent();
             _program = program;
-            lstMemory.Items.AddRange(program.Select((s)=>new ListViewItem(Convert.ToString(s))).ToArray()); 
+            lstMemory.Items.AddRange(program.Select((s)=>new ListViewItem(Convert.ToString(s))).ToArray());
+            txtMemoryAlloc.Maximum = Int16.MaxValue;
+            txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
         }
 
         private void splitter1_SplitterMoved(object sender, SplitterEventArgs e) {
@@ -23,7 +26,11 @@ namespace IDE {
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e) {
-            l.Run(EntryPoint);
+            l.GenericLog = (s) => {
+                lstLogger.Invoke(new Action(()=>lstLogger.Items.Add(s.Message)));
+            };
+            var v = new Task(()=> l.Run(EntryPoint));
+            v.Start();
         }
 
         private void btnAll_Click(object sender, EventArgs e)
