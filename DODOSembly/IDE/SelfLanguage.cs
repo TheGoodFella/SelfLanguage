@@ -36,8 +36,8 @@ namespace SelfLanguage {
             CommandList.Add("s", () => SetCarry(_pointer));             //Set value carry
             CommandList.Add("n", () => WriteValueCarry());              //Write value carry in logger
             CommandList.Add("m", () => Move(_pointer+2));               //Move&Here;what
+            CommandList.Add("a",()=> Add(_pointer));                    //Add here;so_much
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
-            
         }
         #region Commands
         /// <summary>
@@ -279,6 +279,15 @@ namespace SelfLanguage {
             return to_r;
         }
         #endregion
+        private void Add(int pointer) {
+            var command = GetLitteral(pointer + 2).Split(';');
+            if (command.Length != 2) {
+                throw new InvalidOperationException("The add got called with a not valid litteral statement");
+            }
+            var ptr = Convert.ToInt32(command.ElementAt(0));
+            var how_m = Convert.ToInt32(command.ElementAt(1));
+            Memory[ptr] = Convert.ToChar(Convert.ToInt32(Memory[ptr]) + how_m);
+        }
         #endregion
     }
 }

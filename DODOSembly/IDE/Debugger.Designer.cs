@@ -40,6 +40,9 @@
             this.txtMemoryAlloc = new System.Windows.Forms.NumericUpDown();
             this.grpLogger = new System.Windows.Forms.GroupBox();
             this.lstLogger = new System.Windows.Forms.ListBox();
+            this.fastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.slow1000msDelayPerCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.userF10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpMemoryAndRam.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -123,6 +126,10 @@
             // 
             // toolStripMenuItem1
             // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fastToolStripMenuItem,
+            this.slow1000msDelayPerCommandToolStripMenuItem,
+            this.userF10ToolStripMenuItem});
             this.toolStripMenuItem1.Image = global::IDE.Properties.Resources.Go;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(70, 20);
@@ -240,6 +247,27 @@
             this.lstLogger.Size = new System.Drawing.Size(244, 199);
             this.lstLogger.TabIndex = 0;
             // 
+            // fastToolStripMenuItem
+            // 
+            this.fastToolStripMenuItem.Name = "fastToolStripMenuItem";
+            this.fastToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.fastToolStripMenuItem.Text = "Fast (100ms) delay per command";
+            this.fastToolStripMenuItem.Click += new System.EventHandler(this.fastToolStripMenuItem_Click);
+            // 
+            // slow1000msDelayPerCommandToolStripMenuItem
+            // 
+            this.slow1000msDelayPerCommandToolStripMenuItem.Name = "slow1000msDelayPerCommandToolStripMenuItem";
+            this.slow1000msDelayPerCommandToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.slow1000msDelayPerCommandToolStripMenuItem.Text = "Slow(1000ms) delay per command";
+            this.slow1000msDelayPerCommandToolStripMenuItem.Click += new System.EventHandler(this.slow1000msDelayPerCommandToolStripMenuItem_Click);
+            // 
+            // userF10ToolStripMenuItem
+            // 
+            this.userF10ToolStripMenuItem.Name = "userF10ToolStripMenuItem";
+            this.userF10ToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.userF10ToolStripMenuItem.Text = "User(F10)";
+            this.userF10ToolStripMenuItem.Click += new System.EventHandler(this.userF10ToolStripMenuItem_Click);
+            // 
             // Debugger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,6 +320,9 @@
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.GroupBox grpLogger;
         private System.Windows.Forms.ListBox lstLogger;
+        private System.Windows.Forms.ToolStripMenuItem fastToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem slow1000msDelayPerCommandToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem userF10ToolStripMenuItem;
 
 
 

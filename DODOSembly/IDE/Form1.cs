@@ -14,6 +14,7 @@ namespace IDE {
             asciI_Table1.SomethingPressed = new EventHandler((s,e) => {
                 textEditor1.Select();
                 textEditor1.AppendText(Convert.ToString(Convert.ToInt32(Convert.ToChar(((dynamic)s).Text))));
+                textEditor1.Focus(); 
             });
         }
 
