@@ -93,6 +93,7 @@
             // lstMemory
             // 
             this.lstMemory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstMemory.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstMemory.Location = new System.Drawing.Point(0, 0);
             this.lstMemory.Name = "lstMemory";
             this.lstMemory.Size = new System.Drawing.Size(465, 82);
@@ -230,7 +231,9 @@
             // 
             // lstLogger
             // 
+            this.lstLogger.BackColor = System.Drawing.SystemColors.MenuText;
             this.lstLogger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstLogger.ForeColor = System.Drawing.Color.White;
             this.lstLogger.FormattingEnabled = true;
             this.lstLogger.Location = new System.Drawing.Point(3, 16);
             this.lstLogger.Name = "lstLogger";
@@ -247,9 +250,12 @@
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.grpMemoryAndRam);
             this.Controls.Add(this.menuStrip1);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Debugger";
             this.Text = "Debugger";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Debugger_KeyPress);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Debugger_KeyUp);
             this.grpMemoryAndRam.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

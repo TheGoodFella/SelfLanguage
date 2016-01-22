@@ -10,13 +10,14 @@ namespace IDE {
         private int Memory { get; set; }
         private int EntryPoint { get; set; }
         private string _program { get; set; }
+        private  bool DebugGoOn { get; set; }
         public Debugger() {
             InitializeComponent();
         }
         public Debugger(string program) {
             InitializeComponent();
             _program = program;
-            lstMemory.Items.AddRange(program.Select((s)=>new ListViewItem(Convert.ToString(s))).ToArray());
+            lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
             txtMemoryAlloc.Maximum = Int16.MaxValue;
             txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
         }
@@ -27,30 +28,55 @@ namespace IDE {
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e) {
             l.GenericLog = (s) => {
-                lstLogger.Invoke(new Action(()=>lstLogger.Items.Add(s.Message)));
+                try {
+                    lstLogger.Invoke(new Action(() => lstLogger.Items.Add(s.Message)));
+                } catch (ObjectDisposedException) {
+                    //Disposed, nothing to bother about it
+                }
             };
-            var v = new Task(()=> l.Run(EntryPoint));
+            l.Debug = (k) => {
+                try {
+                    lstMemory.Invoke(new Action(() => {
+                        DebugGoOn = false;
+                        for (int i = 0; i < lstMemory.Items.Count; i++) {
+                            lstMemory.Items[i].BackColor = lstMemory.BackColor;
+                        }
+                        lstMemory.Items[k.Pointer + 1].BackColor = System.Drawing.Color.LightBlue;
+                    }));
+                    while (!DebugGoOn) { System.Threading.Thread.Sleep(100); }
+                } catch (ObjectDisposedException) {
+                    //Disposed, nothing to bother about it
+                }
+            };
+            var v = new Task(() => l.Run(EntryPoint, true));
             v.Start();
         }
 
-        private void btnAll_Click(object sender, EventArgs e)
-        {
+        private void btnAll_Click(object sender, EventArgs e) {
             Memory = Convert.ToInt32(txtMemoryAlloc.Value);
             EntryPoint = Convert.ToInt32(txtProgramEntryPoint.Value);
             l = new Language(Memory);
         }
 
-        private void btnAllAndLoad_Click(object sender, EventArgs e)
-        {
+        private void btnAllAndLoad_Click(object sender, EventArgs e) {
             Memory = Convert.ToInt32(txtMemoryAlloc.Value);
             EntryPoint = Convert.ToInt32(txtProgramEntryPoint.Value);
             l = new Language(Memory);
             l.LoadInMemory(_program, EntryPoint);
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
-        {
+        private void btnLoad_Click(object sender, EventArgs e) {
             l.LoadInMemory(_program, EntryPoint);
+        }
+
+        private void Debugger_KeyPress(object sender, KeyPressEventArgs e) {
+
+        }
+
+        private void Debugger_KeyUp(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.F10) {
+                DebugGoOn = true;
+            }
         }
     }
 }
