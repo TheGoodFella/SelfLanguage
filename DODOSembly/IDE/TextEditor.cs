@@ -26,7 +26,7 @@ namespace IDE {
 
         private char[] NotToIncludeInPointersChar = new char[] { '\t', '\n', '\r' };
         private string[] CommentsStartOfLine = new string[] { "#", "//" };
-
+        
         private const string IntellisenseRegex = "^(\t )*{0}";
         
         Documentation Intellisense { get; set; }
@@ -52,6 +52,7 @@ namespace IDE {
             //txtCode.SelectionStart = 0;
             //txtCode.SelectionLength = txtCode.Text.Length;
             //txtCode.SelectionBackColor = txtCode.BackColor;
+            
             Intellisense_Worker();
             txtCode.SelectionStart = v;
             if (txtCode.Text.Take(txtCode.SelectionStart).Count() > 0) {
