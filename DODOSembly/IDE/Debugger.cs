@@ -69,8 +69,13 @@ namespace IDE {
                 try {
                     lstMemory.Invoke(new Action(() => {
                         DebugGoOn = false;
+                        var tmp = new ListViewItem[lstMemory.Items.Count];
+                        tmp = ItemsToArray(lstMemory);
                         lstMemory.Items.Clear();
                         lstMemory.Items.AddRange(l.Memory.Select((theStuff) => new ListViewItem(Convert.ToString(theStuff))).ToArray());
+                        Enumerable.Range(0, lstMemory.Items.Count).Where((s) => tmp[s].Text != lstMemory.Items[s].Text).ToList()
+                            .ForEach(
+                                (lll) => lstMemory.Items[lll].BackColor = System.Drawing.Color.PaleVioletRed);
                         for (int i = 0; i < lstMemory.Items.Count; i++) {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
@@ -83,6 +88,10 @@ namespace IDE {
             };
             var v = new Task(() => l.Run(EntryPoint, true));
             v.Start();
+        }
+
+        private ListViewItem[] ItemsToArray(ListView l) {
+            return Enumerable.Range(0, l.Items.Count).Select((k) => l.Items[k]).ToArray();
         }
 
         private void slow1000msDelayPerCommandToolStripMenuItem_Click(object sender, EventArgs e) {
