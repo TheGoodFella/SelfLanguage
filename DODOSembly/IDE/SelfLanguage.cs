@@ -37,9 +37,48 @@ namespace SelfLanguage {
             CommandList.Add("n", () => WriteValueCarry());              //Write value carry in logger
             CommandList.Add("m", () => Move(_pointer+2));               //Move&Here;what
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
+            
         }
         #region Commands
-        #region Move
+        /// <summary>
+        /// Start the program
+        /// </summary>
+        /// <param name="ProgramEntryPoint">Where to start</param>
+        public void Run(int ProgramEntryPoint,bool debug=false) {
+            var end_o_P = false;
+            _pointer = ProgramEntryPoint;
+            if (Memory[ProgramEntryPoint] != PreCommand) { throw new InvalidProgramEntryPointException(); }
+            while (!end_o_P) {
+                if (Memory[_pointer] == PreCommand) {
+                    if (debug) { Debug(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
+                    CommandList[Convert.ToString(Memory[_pointer + 1])]();
+                }
+                _pointer++;
+                if (_pointer < 0 || _pointer > Memory.Length) {
+                    return;
+                }
+            }
+        }
+        /// <summary>
+        /// Load in the memory the string s overwriting from the EntryPoint to s.Length
+        /// </summary>
+        public void LoadInMemory(string s, int EntryPoint) {
+            if (EntryPoint + s.Length > Memory.Length) {
+                throw new OutOfMemoryException(string.Format("The memory from {0} to {1} do not fit the string that is {2} char long", EntryPoint, Memory.Length, s.Length));
+            } else {
+                for (int i = 0; i < s.Length; i++) {
+                    Memory[EntryPoint + i] = s[i];
+                }
+            }
+        }
+        /// <summary>
+        /// Moves pointer to a new point, like the assembly jmp
+        /// </summary>
+        /// <param name="pointer"></param>
+        private void JumpCommand(int pointer) {
+            _pointer = GetNFrom(pointer += 2) - 1;
+        }
+        #region <Move>
         public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)
             var v = GetLitteral(pointer);
             var targets = v.Split(';');
@@ -118,7 +157,7 @@ namespace SelfLanguage {
             }
         }
         #endregion
-        #region Generation
+        #region <Generation>
         private object GenerateFromString(Type type, string generator) {
             object o = new object();
             if (TryCreateFromStringConstructor(type, generator, out o)) { return o; } else if (TryCreateFromStringConvert(type, generator, out o)) { return o; } else {
@@ -147,12 +186,31 @@ namespace SelfLanguage {
             }
         }
         #endregion
+        #region <Interrupt>
         public void DefineInterrupt(Action f, int where) {
             for (var i = 0; RegisterInterrupt.Count <= where; i++) {
                 if (RegisterInterrupt.Count < i) { RegisterInterrupt.Add(EmptyInterrupt); }
             }
             RegisterInterrupt[where] = f;
         }
+        /// <summary>
+        /// Not defined interrupt
+        /// </summary>
+        private void EmptyInterrupt() {
+            throw new EmptyInterruptException();
+        }
+        private void Interrupt(int i) {
+            RegisterInterrupt[GetNFrom(i + 2)]();
+        }
+        /// <summary>
+        /// Popa is 0, pusha is 1
+        /// </summary>
+        /// <param name="i"></param>
+        #endregion
+        #region <Working_with_command_carry>
+        /// <summary>
+        /// Write using the GenericLog a Log Object
+        /// </summary>
         private void WriteValueCarry() {
             GenericLog(new Logging(Convert.ToString((char)CommandValueCarry), _pointer));
         }
@@ -163,34 +221,11 @@ namespace SelfLanguage {
         private void SetCarry(int i) {
             CommandValueCarry = GetNFrom(i + 2);
         }
-        /// <summary>
-        /// Not defined interrupt
-        /// </summary>
-        private void EmptyInterrupt() {
-            throw new EmptyInterruptException();
-        }
-        /// <summary>
-        /// Load in the memory the string s overwriting from the EntryPoint to s.Length
-        /// </summary>
-        public void LoadInMemory(string s, int EntryPoint) {
-            if (EntryPoint + s.Length > Memory.Length) {
-                throw new OutOfMemoryException(string.Format("The memory from {0} to {1} do not fit the string that is {2} char long", EntryPoint, Memory.Length, s.Length));
-            } else {
-                for (int i = 0; i < s.Length; i++) {
-                    Memory[EntryPoint + i] = s[i];
-                }
-            }
-        }
+        #endregion
+        #region <Pop_and_push>
         /// <summary>
         /// Calls the interrupt defined after the i command
         /// </summary>
-        private void Interrupt(int i) {
-            RegisterInterrupt[GetNFrom(i + 2)]();
-        }
-        /// <summary>
-        /// Popa is 0, pusha is 1
-        /// </summary>
-        /// <param name="i"></param>
         private void PopOrPush(int i) {
             if (GetNFrom(i + 2) == 0) { Popa(); } else { Pusha(); }
         }
@@ -206,32 +241,8 @@ namespace SelfLanguage {
         private void Pusha() {
             Temp_mem = Memory;
         }
-        /// <summary>
-        /// Start the program
-        /// </summary>
-        /// <param name="ProgramEntryPoint">Where to start</param>
-        public void Run(int ProgramEntryPoint,bool debug=false) {
-            var end_o_P = false;
-            _pointer = ProgramEntryPoint;
-            if (Memory[ProgramEntryPoint] != PreCommand) { throw new InvalidProgramEntryPointException(); }
-            while (!end_o_P) {
-                if (Memory[_pointer] == PreCommand) {
-                    if (debug) { Debug(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
-                    CommandList[Convert.ToString(Memory[_pointer + 1])]();
-                }
-                _pointer++;
-                if (_pointer < 0 || _pointer > Memory.Length) {
-                    return;
-                }
-            }
-        }
-        /// <summary>
-        /// Moves pointer to a new point, like the assembly jmp
-        /// </summary>
-        /// <param name="pointer"></param>
-        private void JumpCommand(int pointer) {
-            _pointer = GetNFrom(pointer += 2) - 1;
-        }
+        #endregion
+        #region <Get_values_from_pointer>
         /// <summary>
         /// Parse the pointer from
         /// </summary>
@@ -267,6 +278,7 @@ namespace SelfLanguage {
             }
             return to_r;
         }
+        #endregion
         #endregion
     }
 }
