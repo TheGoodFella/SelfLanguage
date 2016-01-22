@@ -38,6 +38,8 @@ namespace IDE {
                 try {
                     lstMemory.Invoke(new Action(() => {
                         DebugGoOn = false;
+                        lstMemory.Items.Clear();
+                        lstMemory.Items.AddRange(l.Memory.Select((theStuff) => new ListViewItem(Convert.ToString(theStuff))).ToArray());
                         for (int i = 0; i < lstMemory.Items.Count; i++) {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
