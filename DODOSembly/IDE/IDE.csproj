@@ -108,6 +108,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Samples\advanced_move_and_edit.das" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
