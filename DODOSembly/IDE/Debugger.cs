@@ -62,6 +62,9 @@ namespace IDE {
             return Enumerable.Range(0, l.Items.Count).Select((k) => l.Items[k]).ToArray();
         }
         #region Debug
+        /// <summary>
+        /// Fast debugger, adding 100ms delay between each debug event
+        /// </summary>       
         private void fastToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => System.Threading.Thread.Sleep(100));
             var task = new Task(() => l.Run(EntryPoint, true));
