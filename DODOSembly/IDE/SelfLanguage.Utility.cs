@@ -4,9 +4,11 @@ namespace SelfLanguage.Utility {
     class Logging {
         public string Message;
         public int Pointer;
-        public Logging(string message = "", int pointer = -1) {
+        public Exception RisedException;
+        public Logging(string message = "", int pointer = -1,Exception rised = default(Exception)) {
             Message = message;
             Pointer = pointer;
+            RisedException = rised;
         }
     }
     /// <summary>

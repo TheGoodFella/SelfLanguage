@@ -20,6 +20,7 @@ namespace SelfLanguage {
 
         public Action<Logging> Debug { get; set; }
         public Action<Logging> GenericLog { get; set; }
+        public event Action<Logging> ExceptionRised;
 
         public readonly char PreCommand = '\0';
         public readonly char PointerIndicator = '&';
@@ -47,16 +48,20 @@ namespace SelfLanguage {
         public void Run(int ProgramEntryPoint,bool debug=false) {
             var end_o_P = false;
             _pointer = ProgramEntryPoint;
-            if (Memory[ProgramEntryPoint] != PreCommand) { throw new InvalidProgramEntryPointException(); }
-            while (!end_o_P) {
-                if (Memory[_pointer] == PreCommand) {
-                    if (debug) { Debug(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
-                    CommandList[Convert.ToString(Memory[_pointer + 1])]();
+            try {
+                if (Memory[ProgramEntryPoint] != PreCommand) { throw new InvalidProgramEntryPointException(); }
+                while (!end_o_P) {
+                    if (Memory[_pointer] == PreCommand) {
+                        if (debug) { Debug(new Logging(Convert.ToString(Memory[_pointer + 1]), _pointer)); }
+                        CommandList[Convert.ToString(Memory[_pointer + 1])]();
+                    }
+                    _pointer++;
+                    if (_pointer < 0 || _pointer > Memory.Length) {
+                        return;
+                    }
                 }
-                _pointer++;
-                if (_pointer < 0 || _pointer > Memory.Length) {
-                    return;
-                }
+            } catch (Exception e) {
+                ExceptionRised(new Logging(e.Message,_pointer,e));
             }
         }
         /// <summary>
