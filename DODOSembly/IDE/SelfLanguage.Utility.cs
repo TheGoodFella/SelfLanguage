@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Reflection;
 
 namespace SelfLanguage.Utility {
     class Logging {
         public string Message;
         public int Pointer;
         public Exception RisedException;
-        public Logging(string message = "", int pointer = -1,Exception rised = default(Exception)) {
+        public Logging(string message = "", int pointer = -1, Exception rised = default(Exception)) {
             Message = message;
             Pointer = pointer;
             RisedException = rised;
@@ -42,7 +43,20 @@ namespace SelfLanguage.Utility {
     }
 }
 namespace SelfLanguage.Attributes {
-    class SelfPropertyAttribute : Attribute {
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    class SelfPropertyAttributeCode : Attribute {
+
+    }
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    class SelfPropertyAttributeEntryPoint : Attribute {
+
+    }
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    class SelfPropertyAttributeMemoryToAlloc : Attribute {
+
+    }
+    [AttributeUsage(AttributeTargets.Method,AllowMultiple=false)]
+    class SelfMethodAttributeRun : Attribute {
 
     }
 }
