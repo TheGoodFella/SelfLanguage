@@ -13,9 +13,12 @@ namespace IDE {
 
         private int[] ASCII_Offset = new int[] { 36, 90 };
         private List<char> ls_char { get; set; }
-        bool _CTRLpressed = false;
 
         public EventHandler SomethingPressed { get; set; }
+
+        protected override void Select(bool directed, bool forward) {
+            lstV.Select();
+        }
 
         public ASCII_Table() {
             InitializeComponent();
@@ -31,23 +34,15 @@ namespace IDE {
             SomethingPressed(lstV.SelectedItems[0], e);
         }
 
-        private void lstV_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Control) {
-                _CTRLpressed = true;
-            } 
-        }
-
-        private void lstV_KeyUp(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Control) {
-                _CTRLpressed = false;
-            }
-        }
 
         private void lstV_KeyPress(object sender, KeyPressEventArgs e) {
-            if ((e.KeyChar == '-' || e.KeyChar == '-')&&_CTRLpressed) {
-                //TODO;
-            } else if ((e.KeyChar == '+' || e.KeyChar == '+')&&_CTRLpressed) { 
-            
+        }
+
+        private void lstV_KeyDown(object sender, KeyEventArgs e) {
+            if ((e.KeyCode == Keys.Subtract || e.KeyCode == Keys.OemMinus)&&e.Control) {
+                lstV.Font = new Font(lstV.Font.FontFamily, (lstV.Font.Size - 1>1?lstV.Font.Size-1:1));
+            } else if (e.KeyCode == Keys.Add && e.Control) {
+                lstV.Font = new Font(lstV.Font.FontFamily, (lstV.Font.Size + 1 < 100 ? lstV.Font.Size + 1 : 100));
             }
         }
     }

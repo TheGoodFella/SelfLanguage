@@ -54,5 +54,10 @@ namespace IDE {
             Debugger1.Show();
             
         }
+
+        private void tabControl_Click(object sender, EventArgs e) {
+            asciI_Table1.Select();
+        }
+
     }
 }
