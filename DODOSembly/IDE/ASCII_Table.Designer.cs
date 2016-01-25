@@ -35,6 +35,9 @@
             this.lstV.Size = new System.Drawing.Size(150, 150);
             this.lstV.TabIndex = 0;
             this.lstV.UseCompatibleStateImageBehavior = false;
+            this.lstV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstV_KeyDown);
+            this.lstV.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.lstV_KeyPress);
+            this.lstV.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lstV_KeyUp);
             this.lstV.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstV_MouseDoubleClick);
             // 
             // ASCII_Table
