@@ -52,10 +52,12 @@ namespace SelfLanguage.Compiler
             List<string> Assemblyes= container.Replace("\r","").Split('\n').Where((s)=>s.IndexOf("using")!=-1).Select((w)=>w.Split(' ').ElementAt(1)).ToList();
             return false;
         }
+        //https://msdn.microsoft.com/it-it/library/system.codedom.compiler.codedomprovider.compileassemblyfromsource(v=vs.110).aspx
         //private Assembly BuildAssembly(string code,string[] assembly) {
         //    CSharpCodeProvider provider = new CSharpCodeProvider();
-        //    var parameters 
-        //    return provider.CompileAssemblyFromSource(assembly, code).CompiledAssembly;
+        //    var parameters = new System.CodeDom.Compiler.CompilerParameters(assembly);
+        //    Environment.SpecialFolder.
+        //    return provider.CompileAssemblyFromSource(parameters, code).CompiledAssembly;
         //}
     }
 }
