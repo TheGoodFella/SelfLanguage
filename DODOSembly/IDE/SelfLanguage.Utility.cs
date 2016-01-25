@@ -41,3 +41,8 @@ namespace SelfLanguage.Utility {
         }
     }
 }
+namespace SelfLanguage.Attributes {
+    class SelfPropertyAttribute : Attribute {
+
+    }
+}

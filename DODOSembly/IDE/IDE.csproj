@@ -114,6 +114,7 @@
     <None Include="Samples\edit_command_simple.das" />
     <None Include="Samples\hello.das" />
     <None Include="Samples\hello_using_stack.das" />
+    <Compile Include="SelfLanguage.Compiler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
