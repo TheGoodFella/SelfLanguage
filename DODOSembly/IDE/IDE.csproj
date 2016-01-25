@@ -111,6 +111,8 @@
     <None Include="Samples\advanced_move_and_edit.das">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Samples\edit_command_simple.das" />
+    <None Include="Samples\hello.das" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

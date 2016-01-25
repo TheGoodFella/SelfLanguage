@@ -82,6 +82,13 @@ namespace IDE {
         }
         #endregion
         private void GenericCreateLanguageDebug(Action whatDebug) {
+            if (l == null) {
+                MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to be loaded in the position 0, an it is going to be allocated {0} bytes of memory",_program.Length));
+                EntryPoint = 0;
+                Memory = _program.Length;
+                l = new Language(Memory);
+                l.LoadInMemory(_program, 0);
+            }
             l.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
                 this.Invoke(new Action(() => MessageBox.Show(a.Message)));
             });
