@@ -9,7 +9,7 @@ using SelfLanguage.Exceptions;
 namespace SelfLanguage {
     class Language {
         private List<Action> RegisterInterrupt { get; set; }
-        private int CommandValueCarry { get; set; }
+        private Stack<int> CommandStackCarry { get; set; }
         private int _pointer { get; set; }
         private char[] Temp_mem { get; set; }
         private List<Variable> Ram { get; set; }
@@ -26,6 +26,7 @@ namespace SelfLanguage {
         public readonly char PointerIndicator = '&';
 
         public Language(int _memorySize) {
+            CommandStackCarry = new Stack<int>();
             Memory = new char[_memorySize];
             Memory = Memory.Select((s) => '\\').ToArray();
             RegisterInterrupt = new List<Action>();
@@ -217,14 +218,14 @@ namespace SelfLanguage {
         /// Write using the GenericLog a Log Object
         /// </summary>
         private void WriteValueCarry() {
-            GenericLog(new Logging(Convert.ToString((char)CommandValueCarry), _pointer));
+            GenericLog(new Logging(Convert.ToString((char)CommandStackCarry.Pop()), _pointer));
         }
         /// <summary>
         /// Set the CommandValueCarry
         /// </summary>
         /// <param name="i">Pointer</param>
         private void SetCarry(int i) {
-            CommandValueCarry = GetNFrom(i + 2);
+            CommandStackCarry.Push(GetNFrom(i + 2));
         }
         #endregion
         #region <Pop_and_push>
