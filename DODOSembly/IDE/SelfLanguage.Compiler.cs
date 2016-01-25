@@ -29,17 +29,24 @@ namespace SelfLanguage.Compiler
 		/// <summary>
 		/// Regex for getting the property line of the string Code property
 		/// </summary>
-        private const Regex RegexPropertyForCode = new Regex(@"^(\t| )*((private | |const ))* *(string |String ) *[A-z\d]*");
+        private Regex RegexPropertyForCode = new Regex(@"^(\t| )*((private | |const ))* *(string |String ) *[A-z\d]*");
 		/// <summary>
 		/// Regex for getting the property line of entryPoint
 		/// </summary>
-        private const Regex RegexPropertyNameForEntryPointOrMemory = new Regex(@"^(\t| )*((private | |const ))* *(int |Int32 ) *[A-z\d]*");
+        private Regex RegexPropertyNameForEntryPointOrMemory = new Regex(@"^(\t| )*((private | |const ))* *(int |Int32 ) *[A-z\d]*");
 		/// <summary>
 		/// Regex for getting the method name of the Run, just 1 run per class is allowed
 		/// </summary>
-        private const Regex RegexMethodName = new Regex(@"^(\t| )*((private | |void |public |static |abstract ))* *[A-z\d]*\(\){(\n)*}");
+        private Regex RegexMethodName = new Regex(@"^(\t| )*((private | |void |public |static |abstract ))* *[A-z\d]*\(\){(\n)*}");
 	#endregion
 
+        public readonly string ValidRun = 
+@"        public void Run() {
+            var l = new Language({0});
+            l.Debug = (s) => { };
+            l.GenericLog = (s) => Console.WriteLine(s);
+            l.Run({1}, false);
+          }";
         public string StandardTemplatePath { get; set; }
         public string[] FoldersToAddForCompilation { get; set; }
         public SelfCompiler(){}
@@ -50,32 +57,42 @@ namespace SelfLanguage.Compiler
         public bool Compile(string output_path,string[] selfLanguage,string container) {
             // List<string> Assemblyes= container.Replace("\r","").Split('\n').Where((s)=>s.IndexOf("using")!=-1).Select((w)=>w.Split(' ').ElementAt(1)).ToList();
             selfLanguage = selfLanguage.ToList().Where((s) => s.Replace(" ", "").Replace("\t", "").Length != 0).ToArray();
-     
+            var containerArray = container.Replace("\r","").Split('\n');
             if (selfLanguage[0].IndexOf('#') != -1 && selfLanguage[1].IndexOf('#') != -1) {
                 var entry = Convert.ToInt32(selfLanguage[0].Split('=')[1]);
                 var memory = Convert.ToInt32(selfLanguage[1].Split('=')[1]);
-                var toCompile = new List<string>();
-                for (var i = 2; i < selfLanguage.Length; i++) {
-                    if (selfLanguage[i].Contains(SelfLanguageEntrypoint)) {
-                        var regex_extracted = RegexPropertyNameForEntryPointOrMemory.Match(selfLanguage[i++]).Value;
-                        selfLanguage[i].Replace(regex_extracted, regex_extracted + "=" + entry);
-                        i = selfLanguage.Length;
+                var entryVariableName = "";
+                var memoryVariableName = "";
+                for (var i = 0; i < containerArray.Length; i++) {
+                    if (containerArray[i].Contains(SelfLanguageEntrypoint)) {
+                        var regex_extracted = RegexPropertyNameForEntryPointOrMemory.Match(containerArray[i++]).Value;
+                        containerArray[i].Replace(regex_extracted, regex_extracted + "=" + entry);
+                        entryVariableName = regex_extracted.Split(' ').Last();
+                        i = containerArray.Length;
                     }
                 }
-                for (var i = 2; i < selfLanguage.Length; i++) {
-                    if (selfLanguage[i].Contains(SelfLanguageMemory)) {
-                        var regex_extracted = RegexPropertyNameForEntryPointOrMemory.Match(selfLanguage[i++]).Value;
-                        selfLanguage[i].Replace(regex_extracted, regex_extracted + "=" + memory);
+                for (var i = 0; i < containerArray.Length; i++) {
+                    if (containerArray[i].Contains(SelfLanguageMemory)) {
+                        var regex_extracted = RegexPropertyNameForEntryPointOrMemory.Match(containerArray[i++]).Value;
+                        containerArray[i].Replace(regex_extracted, regex_extracted + "=" + memory);
+                        memoryVariableName = regex_extracted.Split(' ').Last();
+                        i = containerArray.Length;
+                    }
+                }
+                for (var i = 2; i < containerArray.Length; i++) {
+                    if (containerArray[i].Contains(SelfLanguageCode)) {
+                        var regex_ext = RegexPropertyForCode.Match(containerArray[i++]).Value;
+                        containerArray[i].Replace(regex_ext, string.Format(ValidRun,entryVariableName,memoryVariableName));
                     }
                 }
                 var cec= new CompilerErrorCollection();
-                BuildAssembly(selfLanguage.ToList().Aggregate((s1, s2) => s1 + s2), output_path, out cec);
-                return true;
+                var result = BuildAssembly(containerArray.ToList().Aggregate((s1, s2) => s1 + s2), output_path, out cec);
+                return result;
             } else {
                 return false;
             }
         }
-        //https://msdn.microsoft.com/it-it/library/system.codedom.compiler.codedomprovider.compileassemblyfromsource(v=vs.110).aspx
+        
         private bool BuildAssembly(string code, string path, out CompilerErrorCollection Errors) {
             CSharpCodeProvider provider = new CSharpCodeProvider();
             var parameters = new CompilerParameters { GenerateExecutable = true, OutputAssembly = path};
