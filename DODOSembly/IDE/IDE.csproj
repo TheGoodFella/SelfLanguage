@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelfLanguage.Attributes.cs" />
     <Compile Include="SelfLanguage.cs" />
     <Compile Include="SelfLanguage.Exceptions.cs" />
     <Compile Include="SelfLanguage.Interfaces.cs" />

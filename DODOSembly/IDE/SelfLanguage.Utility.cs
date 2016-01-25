@@ -42,21 +42,3 @@ namespace SelfLanguage.Utility {
         }
     }
 }
-namespace SelfLanguage.Attributes {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    class SelfPropertyAttributeCode : Attribute {
-
-    }
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    class SelfPropertyAttributeEntryPoint : Attribute {
-
-    }
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    class SelfPropertyAttributeMemoryToAlloc : Attribute {
-
-    }
-    [AttributeUsage(AttributeTargets.Method,AllowMultiple=false)]
-    class SelfMethodAttributeRun : Attribute {
-
-    }
-}
