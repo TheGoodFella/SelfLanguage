@@ -5,20 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SelfLanguage.Attributes {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    class SelfPropertyAttributeCode : Attribute {
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
+    public class SelfPropertyAttributeCode : Attribute {
 
     }
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    class SelfPropertyAttributeEntryPoint : Attribute {
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
+    public class SelfPropertyAttributeEntryPoint : Attribute {
 
     }
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    class SelfPropertyAttributeMemoryToAlloc : Attribute {
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
+    public class SelfPropertyAttributeMemoryToAlloc : Attribute {
 
     }
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    class SelfMethodAttributeRun : Attribute {
+    public class SelfMethodAttributeRun : Attribute {
 
     }
 }

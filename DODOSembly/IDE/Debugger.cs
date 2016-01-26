@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SelfLanguage;
+using System.IO;
 
 namespace IDE {
     public partial class Debugger : Form {
@@ -117,6 +118,11 @@ namespace IDE {
                     //Disposed, nothing to bother about it
                 }
             };
+        }
+
+        private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
+            var selfC = new SelfLanguage.Compiler.SelfCompiler();
+            selfC.Compile(Path.Combine(@"C:\Users\Alessandra\Source\Repos\SelfLanguage\DODOSembly\IDE", "l.exe"), "#e=0\n" + "#m=100\n" + _program, File.ReadAllText(@"../../ProjectTemplates/ConsoleTmp.cs"));
         }
     }
 }

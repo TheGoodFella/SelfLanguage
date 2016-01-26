@@ -7,7 +7,7 @@ using SelfLanguage.Utility;
 using SelfLanguage.Exceptions;
 
 namespace SelfLanguage {
-    class Language {
+    public class Language {
         private List<Action> RegisterInterrupt { get; set; }
         private Stack<int> CommandStackCarry { get; set; }
         private int _pointer { get; set; }

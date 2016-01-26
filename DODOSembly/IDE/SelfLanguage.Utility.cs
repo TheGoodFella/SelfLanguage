@@ -2,7 +2,7 @@
 using System.Reflection;
 
 namespace SelfLanguage.Utility {
-    class Logging {
+    public class Logging {
         public string Message;
         public int Pointer;
         public Exception RisedException;
