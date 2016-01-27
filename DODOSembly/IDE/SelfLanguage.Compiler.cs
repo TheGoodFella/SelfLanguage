@@ -96,7 +96,7 @@ namespace SelfLanguage.Compiler
             CSharpCodeProvider provider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion","v4.0"}});
             var executionAssembly = Assembly.GetExecutingAssembly();
             var parameters = new CompilerParameters { GenerateExecutable = true,GenerateInMemory=true, OutputAssembly = path};
-            parameters.ReferencedAssemblies.AddRange(new string[]{"System.dll","mscorlib.dll","System.Data.dll","System.Core.dll",executionAssembly.Location});
+            parameters.ReferencedAssemblies.AddRange(new string[] { "", "System.dll", "mscorlib.dll", "System.Data.dll", "System.Core.dll", "SelfDLL.dll", executionAssembly.Location });
             parameters.TreatWarningsAsErrors = false;
             parameters.CompilerOptions = "/optimize";
             var v = provider.CompileAssemblyFromSource(parameters, code);

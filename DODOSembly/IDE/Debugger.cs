@@ -1,9 +1,19 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SelfLanguage;
 using System.IO;
+using System.Collections;
+using System.Collections.Generic;
+#if DEBUG
+using System.CodeDom.Compiler;
+using System.Diagnostics;
+using Microsoft.CSharp;
+#endif
+
 
 namespace IDE {
     public partial class Debugger : Form {
@@ -62,6 +72,7 @@ namespace IDE {
         private ListViewItem[] ItemsToArray(ListView l) {
             return Enumerable.Range(0, l.Items.Count).Select((k) => l.Items[k]).ToArray();
         }
+
         #region Debug
         /// <summary>
         /// Fast debugger, adding 100ms delay between each debug event
@@ -82,6 +93,7 @@ namespace IDE {
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         #endregion
+
         private void GenericCreateLanguageDebug(Action whatDebug) {
             if (l == null) {
                 MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to be loaded in the position 0, an it is going to be allocated {0} bytes of memory",_program.Length));
@@ -121,8 +133,45 @@ namespace IDE {
         }
 
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
+#if DEBUG
+            createDLL();
+#endif   
             var selfC = new SelfLanguage.Compiler.SelfCompiler();
-            selfC.Compile(Path.Combine(@"C:\Users\Alessandra\Source\Repos\SelfLanguage\DODOSembly\IDE", "l.exe"), "#e=0\n" + "#m=100\n" + _program, File.ReadAllText(@"../../ProjectTemplates/ConsoleTmp.cs"));
+            selfC.Compile(Path.Combine(@"C:\lavoro-temp", "l.exe"), "#e=0\n#m=100\n" + _program, File.ReadAllText(@"../../ProjectTemplates/ConsoleTmp.cs"));
         }
+#if DEBUG
+        private bool createDLL(){
+            CompilerParameters parameters = new CompilerParameters();
+            parameters.GenerateExecutable = false;
+            parameters.OutputAssembly = "SelfDLL.dll";
+            parameters.ReferencedAssemblies.AddRange(new string[] { "System.dll", "mscorlib.dll", "System.Data.dll", "System.Core.dll"});
+            var files_name = Directory.GetFiles("../../").Where((s) => s.Contains("SelfLanguage") && s.Contains(".cs"));
+            var all_files = files_name.ToList()
+                .Select((w) => File.ReadAllLines(w));
+            var all_usings = noDuplicates(all_files.Select((k)=>k.Where((l)=>l.IndexOf("using")!=-1)).Aggregate((first,second)=>{
+                first.ToList().AddRange(second.ToList());
+                return first;
+            }).ToArray());
+            var code = all_files.Select((l)=>l.Where((z)=>z.IndexOf("using")==-1).ToList()).Aggregate((first,second)=>{
+                first.ToList().AddRange(second.ToList());
+                return first;
+            }) ;
+            var _united_code = all_usings.Aggregate((a, b) => a + b) + code.Aggregate((a, b) => a + b);
+            var er = new CSharpCodeProvider((new Dictionary<string, string> {{"CompilerVersion","v4.0"}}));
+            var r = er.CompileAssemblyFromSource(parameters, _united_code);
+            Enumerable.Range(0, r.Errors.Count).ToList().ForEach((k) => MessageBox.Show(r.Errors[k].ErrorText));
+            return r.Errors.Count == 0;
+        }
+        private string[] noDuplicates(string[] s) {
+            var tmp = new System.Collections.Generic.List<string>();
+            s.ToList().ForEach((k) => {
+                if (!tmp.Contains(k)) {
+                    tmp.Add(k);
+                }
+            });
+            return tmp.ToArray();
+        }
+#endif
+        
     }
 }
