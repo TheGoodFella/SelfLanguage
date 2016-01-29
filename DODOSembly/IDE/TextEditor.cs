@@ -34,14 +34,14 @@ namespace IDE {
         public TextEditor() {
             InitializeComponent();
             Intellisense = new Documentation();
-            Intellisense.Add("j", Color.Red, "Jump >j&Where");
-            Intellisense.Add("p", Color.Red, "Pop >p&0||1  o is pop, 1 is push");
-            Intellisense.Add("i", Color.Red, "Interrupt >i&Which");
-            Intellisense.Add("s", Color.Red, "Set value carry >s&GetFrom Get value from here");
-            Intellisense.Add("n", Color.Red, "Write value carry >n  Pops from the stack");
-            Intellisense.Add("m", Color.Red, "Move >m&here;what \n\tR:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)");
+            Intellisense.Add("j", Color.Red, "Jump \n\tj&Where");
+            Intellisense.Add("p", Color.Red, "Pop \n\tp&0||1  o is pop, 1 is push");
+            Intellisense.Add("i", Color.Red, "Interrupt \n\ti&Which");
+            Intellisense.Add("s", Color.Red, "Set value carry \n\ts&GetFrom Get value from here");
+            Intellisense.Add("n", Color.Red, "Write value carry \n\tn  Pops from the stack");
+            Intellisense.Add("m", Color.Red, "Move \n\tm&here;what \n\tR:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)");
             Intellisense.Add("\\", Color.Red, "End of program");
-            Intellisense.Add("a", Color.Red, "");
+            Intellisense.Add("a", Color.Red, "Add \n\ta&here:how_much");
             txtCode.AddPeer(txtPointers);
         }
 
@@ -52,7 +52,6 @@ namespace IDE {
             //txtCode.SelectionStart = 0;
             //txtCode.SelectionLength = txtCode.Text.Length;
             //txtCode.SelectionBackColor = txtCode.BackColor;
-            
             Intellisense_Worker();
             txtCode.SelectionStart = v;
             if (txtCode.Text.Take(txtCode.SelectionStart).Count() > 0) {
@@ -80,12 +79,20 @@ namespace IDE {
         }
 
         private void Intellisense_Worker() { //NEW IDEA, do just the select index, TODO
-            var _char = txtCode.Text[txtCode.SelectionStart-1];
+            this.SuspendLayout();
+            if (txtCode.Text.Length < 1) { return; }
+            var first_line = txtCode.GetLineFromCharIndex(txtCode.GetCharIndexFromPosition(new Point(0, 0)));
+            var _char = txtCode.Text[txtCode.SelectionStart-1>0?txtCode.SelectionStart-1:0];
             var query = Intellisense.Keys.Where((s)=>s==Convert.ToString(_char));
             if (query.Count() == 1) {
                 txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0));
                 pnlIntellisense.Visible = true;
+                pnlIntellisense.Top = txtCode.Parent.Top + (txtCode.GetLineFromCharIndex(txtCode.SelectionStart)-first_line) * txtCode.Font.Height;
+                //MessageBox.Show(Convert.ToString(pnlIntellisense.Top) + " " + Convert.ToString(txtCode.GetLineFromCharIndex(txtCode.SelectionStart)) + " " + Convert.ToString(first_line));
+            } else{
+                pnlIntellisense.Visible = false;
             }
+            this.ResumeLayout();
             //var commands = txtCode.Lines.Select((k)=>ToCommand(k)).Aggregate((fi,se)=>fi+se);
             //var v = commands.Take(txtCode.SelectionStart);
             //var index = v.ToList().LastIndexOf('\0'); //last pre command
@@ -132,6 +139,7 @@ namespace IDE {
             } else {
                 txtStatusPointer.Text = string.Format("Currently at pointer: {0}", 0);
             }
+            Intellisense_Worker();
         }
 
         private void changeSelectionColorToolStripMenuItem_Click(object sender, EventArgs e) {

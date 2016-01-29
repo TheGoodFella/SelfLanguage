@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace IDE {
     class CustomTextBox:System.Windows.Forms.RichTextBox {
-        public const int WM_VSCROLL = 0x115;
-        public const int WM_HSCROLL = 0x114;
-        public const int WM_MOUSEWHEEL = 0x20A;
-        public const int WM_COMMAND = 0x111;
-        public const int WM_USER = 0x400;
+        private const int WM_VSCROLL = 0x115;
+        private const int WM_MOUSEWHEEL = 0x20A;
+        private const int WM_USER = 0x400;
+        private const int SB_VERT = 1;
+        private const int EM_SETSCROLLPOS = WM_USER + 222;
+        private const int EM_GETSCROLLPOS = WM_USER + 221;
+        private List<int> lst = new List<int>();
 
         List<CustomTextBox> peers = new List<CustomTextBox>();
 
@@ -25,7 +27,10 @@ namespace IDE {
 
         protected override void WndProc(ref Message m) {
             var j= m;
-            if (new int[]{ WM_VSCROLL,WM_HSCROLL,WM_MOUSEWHEEL,WM_USER,WM_COMMAND }.Any((s)=>s == j.Msg)) {
+            if (!lst.Contains(m.Msg)) {
+                lst.Add(m.Msg);
+            }
+            if (new int[] { WM_VSCROLL, WM_MOUSEWHEEL, WM_USER, SB_VERT, EM_SETSCROLLPOS, EM_GETSCROLLPOS }.Any((s) => s == j.Msg)) {
                 foreach (var peer in this.peers) {
                     var peerMessage = Message.Create(peer.Handle, m.Msg, m.WParam, m.LParam);
                     peer.DirectWndProc(ref peerMessage);
@@ -33,6 +38,9 @@ namespace IDE {
             }
 
             base.WndProc(ref m);
+        }
+        public CustomTextBox() {
+            lst.AddRange((new int[] { }));
         }
     }
 }
