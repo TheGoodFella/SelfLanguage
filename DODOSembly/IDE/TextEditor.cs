@@ -34,12 +34,12 @@ namespace IDE {
         public TextEditor() {
             InitializeComponent();
             Intellisense = new Documentation();
-            Intellisense.Add("j", Color.Red, "Jump");
-            Intellisense.Add("p", Color.Red, "Pop");
-            Intellisense.Add("i", Color.Red, "Interrupt");
-            Intellisense.Add("s", Color.Red, "Set value carry");
-            Intellisense.Add("n", Color.Red, "Write value carry");
-            Intellisense.Add("m", Color.Red, "Move");
+            Intellisense.Add("j", Color.Red, "Jump >j&Where");
+            Intellisense.Add("p", Color.Red, "Pop >p&0||1  o is pop, 1 is push");
+            Intellisense.Add("i", Color.Red, "Interrupt >i&Which");
+            Intellisense.Add("s", Color.Red, "Set value carry >s&GetFrom Get value from here");
+            Intellisense.Add("n", Color.Red, "Write value carry >n  Pops from the stack");
+            Intellisense.Add("m", Color.Red, "Move >m&here;what \n\tR:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)");
             Intellisense.Add("\\", Color.Red, "End of program");
             txtCode.AddPeer(txtPointers);
         }
@@ -78,6 +78,12 @@ namespace IDE {
         }
 
         private void Intellisense_Worker() { //NEW IDEA, do just the select index, TODO
+            var _char = txtCode.Text[txtCode.SelectionStart-1];
+            var query = Intellisense.Keys.Where((s)=>s==Convert.ToString(_char));
+            if (query.Count() == 1) {
+                txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0));
+                pnlIntellisense.Visible = true;
+            }
             //var commands = txtCode.Lines.Select((k)=>ToCommand(k)).Aggregate((fi,se)=>fi+se);
             //var v = commands.Take(txtCode.SelectionStart);
             //var index = v.ToList().LastIndexOf('\0'); //last pre command
@@ -165,6 +171,9 @@ namespace IDE {
             get {
                 return doc.First((k) => k.Item1 == s).Item2;
             }
+        }
+        public string GetDocOfCommand(string s) {
+            return doc.First((k) => k.Item1 == s).Item3;
         }
         public bool Any(Func<string, bool> s) {
             return Keys.Any(s);

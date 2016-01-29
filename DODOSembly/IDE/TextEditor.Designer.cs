@@ -26,6 +26,7 @@
             this.components = new System.ComponentModel.Container();
             this.splitter = new System.Windows.Forms.SplitContainer();
             this.txtPointers = new IDE.CustomTextBox();
+            this.pnlIntellisense = new System.Windows.Forms.Panel();
             this.txtCode = new IDE.CustomTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,10 +38,12 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatusPointer = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmrZoom = new System.Windows.Forms.Timer(this.components);
+            this.txtIntellisense = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
             this.splitter.Panel1.SuspendLayout();
             this.splitter.Panel2.SuspendLayout();
             this.splitter.SuspendLayout();
+            this.pnlIntellisense.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -57,9 +60,10 @@
             // 
             // splitter.Panel2
             // 
+            this.splitter.Panel2.Controls.Add(this.pnlIntellisense);
             this.splitter.Panel2.Controls.Add(this.txtCode);
-            this.splitter.Size = new System.Drawing.Size(583, 264);
-            this.splitter.SplitterDistance = 88;
+            this.splitter.Size = new System.Drawing.Size(603, 285);
+            this.splitter.SplitterDistance = 91;
             this.splitter.TabIndex = 2;
             this.splitter.TabStop = false;
             // 
@@ -73,11 +77,20 @@
             this.txtPointers.ReadOnly = true;
             this.txtPointers.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtPointers.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.txtPointers.Size = new System.Drawing.Size(88, 264);
+            this.txtPointers.Size = new System.Drawing.Size(91, 285);
             this.txtPointers.TabIndex = 0;
             this.txtPointers.TabStop = false;
             this.txtPointers.Text = "";
             this.txtPointers.WordWrap = false;
+            // 
+            // pnlIntellisense
+            // 
+            this.pnlIntellisense.Controls.Add(this.txtIntellisense);
+            this.pnlIntellisense.Location = new System.Drawing.Point(125, 56);
+            this.pnlIntellisense.Name = "pnlIntellisense";
+            this.pnlIntellisense.Size = new System.Drawing.Size(200, 100);
+            this.pnlIntellisense.TabIndex = 5;
+            this.pnlIntellisense.Visible = false;
             // 
             // txtCode
             // 
@@ -85,7 +98,7 @@
             this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCode.Location = new System.Drawing.Point(0, 0);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(491, 264);
+            this.txtCode.Size = new System.Drawing.Size(508, 285);
             this.txtCode.TabIndex = 1;
             this.txtCode.Text = "";
             this.txtCode.WordWrap = false;
@@ -99,7 +112,7 @@
             this.codeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(583, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(603, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -145,7 +158,7 @@
             // compileToolStripMenuItem
             // 
             this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.compileToolStripMenuItem.Text = "Run";
             this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
@@ -153,9 +166,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.txtStatusPointer});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 288);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 309);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(583, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(603, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -170,6 +183,16 @@
             this.tmrZoom.Enabled = true;
             this.tmrZoom.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // txtIntellisense
+            // 
+            this.txtIntellisense.BackColor = System.Drawing.SystemColors.Control;
+            this.txtIntellisense.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtIntellisense.Location = new System.Drawing.Point(0, 0);
+            this.txtIntellisense.Name = "txtIntellisense";
+            this.txtIntellisense.Size = new System.Drawing.Size(200, 100);
+            this.txtIntellisense.TabIndex = 0;
+            this.txtIntellisense.Text = "";
+            // 
             // TextEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,11 +201,12 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "TextEditor";
-            this.Size = new System.Drawing.Size(583, 310);
+            this.Size = new System.Drawing.Size(603, 331);
             this.splitter.Panel1.ResumeLayout(false);
             this.splitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).EndInit();
             this.splitter.ResumeLayout(false);
+            this.pnlIntellisense.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -207,5 +231,7 @@
         private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
         private CustomTextBox txtCode;
         private CustomTextBox txtPointers;
+        private System.Windows.Forms.Panel pnlIntellisense;
+        private System.Windows.Forms.RichTextBox txtIntellisense;
     }
 }
