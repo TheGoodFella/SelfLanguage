@@ -16,6 +16,10 @@ namespace IDE {
 
         public EventHandler SomethingPressed { get; set; }
 
+        protected override void Select(bool directed, bool forward) {
+            lstV.Select();
+        }
+
         public ASCII_Table() {
             InitializeComponent();
             ls_char = new List<char>();
@@ -30,5 +34,16 @@ namespace IDE {
             SomethingPressed(lstV.SelectedItems[0], e);
         }
 
+
+        private void lstV_KeyPress(object sender, KeyPressEventArgs e) {
+        }
+
+        private void lstV_KeyDown(object sender, KeyEventArgs e) {
+            if ((e.KeyCode == Keys.Subtract || e.KeyCode == Keys.OemMinus)&&e.Control) {
+                lstV.Font = new Font(lstV.Font.FontFamily, (lstV.Font.Size - 1>1?lstV.Font.Size-1:1));
+            } else if (e.KeyCode == Keys.Add && e.Control) {
+                lstV.Font = new Font(lstV.Font.FontFamily, (lstV.Font.Size + 1 < 100 ? lstV.Font.Size + 1 : 100));
+            }
+        }
     }
 }

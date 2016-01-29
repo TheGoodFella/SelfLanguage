@@ -26,7 +26,7 @@ namespace IDE {
 
         private char[] NotToIncludeInPointersChar = new char[] { '\t', '\n', '\r' };
         private string[] CommentsStartOfLine = new string[] { "#", "//" };
-
+        
         private const string IntellisenseRegex = "^(\t )*{0}";
         
         Documentation Intellisense { get; set; }
@@ -41,6 +41,7 @@ namespace IDE {
             Intellisense.Add("n", Color.Red, "Write value carry >n  Pops from the stack");
             Intellisense.Add("m", Color.Red, "Move >m&here;what \n\tR:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)");
             Intellisense.Add("\\", Color.Red, "End of program");
+            Intellisense.Add("a", Color.Red, "");
             txtCode.AddPeer(txtPointers);
         }
 
@@ -51,6 +52,7 @@ namespace IDE {
             //txtCode.SelectionStart = 0;
             //txtCode.SelectionLength = txtCode.Text.Length;
             //txtCode.SelectionBackColor = txtCode.BackColor;
+            
             Intellisense_Worker();
             txtCode.SelectionStart = v;
             if (txtCode.Text.Take(txtCode.SelectionStart).Count() > 0) {
@@ -114,7 +116,7 @@ namespace IDE {
         }
 
         private string ToCommand(string s) {
-            var is_command = Intellisense.Keys.FirstOrDefault((in_t)=>Regex.IsMatch(s,string.Format(IntellisenseRegex,in_t.Replace("\\","\\\\"))));
+            var is_command = Intellisense.Keys.FirstOrDefault((in_t)=>Regex.IsMatch(s,string.Format(IntellisenseRegex,in_t.Replace("\\","\\\\")))); //Replace is because \ is used to escape char in regex
             if (is_command == null) { return s; }
             return Regex.Replace(s, string.Format(IntellisenseRegex, is_command.Replace("\\","\\\\")),"\0" + is_command);
         }
@@ -125,6 +127,11 @@ namespace IDE {
 
         private void timer1_Tick(object sender, EventArgs e) {
             txtPointers.ZoomFactor = txtCode.ZoomFactor;
+            if (txtCode.Text.Take(txtCode.SelectionStart).Count() > 0) {
+                txtStatusPointer.Text = string.Format("Currently at pointer: {0}", txtCode.Text.Take(txtCode.SelectionStart).Select((s) => CleanPointer(ToCommand(Convert.ToString(s)))).Aggregate((n1, n2) => n1 + n2));
+            } else {
+                txtStatusPointer.Text = string.Format("Currently at pointer: {0}", 0);
+            }
         }
 
         private void changeSelectionColorToolStripMenuItem_Click(object sender, EventArgs e) {
