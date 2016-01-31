@@ -38,7 +38,7 @@ namespace SelfLanguage {
             CommandList.Add("s", () => SetCarry(_pointer));             //Set value carry
             CommandList.Add("n", () => WriteValueCarry());              //Write value carry in logger
             CommandList.Add("m", () => Move(_pointer+2));               //Move&Here;what
-            CommandList.Add("a", ()=> Add(_pointer));                    //Add here;so_much
+            CommandList.Add("a", ()=> Add(_pointer));                   //Add here;so_much
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
         }
         #region Commands

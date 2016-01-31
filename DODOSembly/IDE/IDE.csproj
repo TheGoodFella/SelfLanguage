@@ -76,6 +76,12 @@
     <Compile Include="SelfLanguage.Exceptions.cs" />
     <Compile Include="SelfLanguage.Interfaces.cs" />
     <Compile Include="SelfLanguage.Utility.cs" />
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="TextEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -101,6 +107,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TextEditor.resx">
       <DependentUpon>TextEditor.cs</DependentUpon>
     </EmbeddedResource>
