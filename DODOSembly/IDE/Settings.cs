@@ -326,5 +326,15 @@ namespace IDE {
             }
         }
         #endregion
+        private Color _foreColor;
+        public Color ForeColor {
+            get {
+                return _foreColor;
+            }
+            set {
+                _foreColor = value;
+            }
+        }
+        public event EventHandler<Color> OnColorChanged;
     }
 }
