@@ -48,26 +48,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASCII_Table.cs">
+    <Compile Include="Utility\ASCII_Table.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ASCII_Table.Designer.cs">
+    <Compile Include="Utility\ASCII_Table.Designer.cs">
       <DependentUpon>ASCII_Table.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustomTextBox.cs">
+    <Compile Include="Utility\CustomTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Debugger.cs">
+    <Compile Include="Forms\Debugger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Debugger.Designer.cs">
+    <Compile Include="Forms\Debugger.Designer.cs">
       <DependentUpon>Debugger.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastBitmap.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Utility\FastBitmap.cs" />
+    <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -78,25 +78,25 @@
     <Compile Include="SelfLanuage\SelfLanguage.Exceptions.cs" />
     <Compile Include="SelfLanuage\SelfLanguage.Interfaces.cs" />
     <Compile Include="SelfLanuage\SelfLanguage.Utility.cs" />
-    <Compile Include="Settings.cs">
+    <Compile Include="Forms\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Settings.Designer.cs">
+    <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="TextEditor.cs">
+    <Compile Include="Utility\TextEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TextEditor.Designer.cs">
+    <Compile Include="Utility\TextEditor.Designer.cs">
       <DependentUpon>TextEditor.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ASCII_Table.resx">
+    <EmbeddedResource Include="Utility\ASCII_Table.resx">
       <DependentUpon>ASCII_Table.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Debugger.resx">
+    <EmbeddedResource Include="Forms\Debugger.resx">
       <DependentUpon>Debugger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -109,10 +109,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Settings.resx">
+    <EmbeddedResource Include="Forms\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextEditor.resx">
+    <EmbeddedResource Include="Utility\TextEditor.resx">
       <DependentUpon>TextEditor.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
