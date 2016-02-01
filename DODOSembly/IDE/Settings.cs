@@ -25,14 +25,6 @@ namespace IDE {
             
             prpTEXT.SelectedObject = serialize;
         }
-
-        void serialize_BackColorChanged(object sender, Color e) {
-            try {
-                //propertyTextBox1.BackColor = e;
-            } catch(Exception a){
-                MessageBox.Show(a.Message);
-            }
-        }
     }
     class SerializeRichTextBox {
         #region Font
