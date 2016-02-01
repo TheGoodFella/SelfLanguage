@@ -59,5 +59,11 @@ namespace IDE {
             asciI_Table1.Select();
         }
 
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e) {
+            var form = new Settings(new EventHandler<SerializeRichTextBox>((o, s) => {
+                
+            }));
+        }
+
     }
 }

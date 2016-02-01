@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace IDE {
     public partial class Settings : Form {
         SerializeRichTextBox serialize { get; set; }
+        EventHandler<SerializeRichTextBox> Close;
+        public Settings(EventHandler<SerializeRichTextBox> e):this() {
+            Close = e;
+        }
         public Settings() {
             InitializeComponent();
             serialize = new SerializeRichTextBox();
@@ -19,22 +21,47 @@ namespace IDE {
             serialize.ForeColor = richTextBox1.ForeColor;
             serialize.BackColor = richTextBox1.BackColor;
             serialize.Borders = richTextBox1.BorderStyle;
-            serialize.OnBackColorChanged += (a, b) => { richTextBox1.BackColor = b; };
-            serialize.OnBorderStyleChanged += (a, b) => { richTextBox1.BorderStyle = b; };
-            serialize.OnFontChanged += (a, b) => { richTextBox1.Font = b; };
-            serialize.OnForeColorChanged += (a, b) => { richTextBox1.ForeColor = b; };
+            serialize.OnBackColorChanged += (y,k)=>SafeSet<Color>((a, b) => { richTextBox1.BackColor = b; },y,k);
+            serialize.OnBorderStyleChanged += (y,k)=>SafeSet<BorderStyle>((a, b) => { richTextBox1.BorderStyle = b; },y,k);
+            serialize.OnFontChanged += (y,k)=>SafeSet<Font>((a, b) => { richTextBox1.Font = b; },y,k);
+            serialize.OnForeColorChanged += (y,k)=>SafeSet<Color>((a, b) => { richTextBox1.ForeColor = b; },y,k);
             #endregion
             #region Form
             serialize.FormBorderStyle = this.FormBorderStyle;
             serialize.FormBackColor = this.BackColor;
-            serialize.OnFormBackColorChanged += (a, b) => { this.BackColor = b; };
-            serialize.OnFormBorderStyleChanged += (a, b) => { this.FormBorderStyle = b; };
-
+            serialize.OnFormBackColorChanged += (y,k)=>SafeSet<Color>((a, b) => { this.BackColor = b; },y,k);
+            serialize.OnFormBorderStyleChanged += (y,k)=>SafeSet<FormBorderStyle>((a, b) => { this.FormBorderStyle = b; },y,k);
             #endregion
             prpTEXT.SelectedObject = serialize;
+
         }
+        protected bool SafeSet<T>(Action<object,T> a,object sender, T value) {
+            try {
+                a(sender, value);
+                return true;
+            } catch (Exception e) {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+        }
+
+        //private void exportToolStripMenuItem_Click(object sender, EventArgs e) {
+        //    var path = "";
+        //    var save = new SaveFileDialog() { 
+        //        DefaultExt = "xml",FileName="settings"
+        //    };
+        //    var result = save.ShowDialog();
+        //    if (result != System.Windows.Forms.DialogResult.OK) {
+        //        return;
+        //    } else {
+        //        path = save.FileName;
+        //    }
+        //    var xml = new XmlSerializer(typeof(SerializeRichTextBox));
+        //    xml.Serialize(new StreamWriter(path), serialize);            
+        //}
     }
-    class SerializeRichTextBox {
+    public class SerializeRichTextBox {
+        public SerializeRichTextBox() { }
         #region TEXT
         #region Font
         private Font _font;
@@ -50,6 +77,11 @@ namespace IDE {
             set {
                 (OnFontChanged ?? ((a, b) => { })).Invoke(this, value); //GG no C# 6
                 _font = value;
+            }
+        }
+        public string FontToSerialize {
+            get {
+                return _font.ToString();
             }
         }
         #endregion
@@ -105,7 +137,7 @@ namespace IDE {
         public event EventHandler<BorderStyle> OnBorderStyleChanged;
         #endregion
         #endregion
-        #region Form
+        #region FORM
         #region FormBackColor
         private Color _formBackColor;
         [

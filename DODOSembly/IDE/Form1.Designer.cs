@@ -28,13 +28,13 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.samplesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.textEditor1 = new IDE.TextEditor();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabASCII = new System.Windows.Forms.TabPage();
-            this.asciI_Table1 = new IDE.ASCII_Table();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabASCII = new System.Windows.Forms.TabPage();
+            this.textEditor1 = new IDE.TextEditor();
+            this.asciI_Table1 = new IDE.ASCII_Table();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -85,6 +85,21 @@
             this.samplesToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.samplesToolStripMenuItem.Text = "Samples";
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.preferencesToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // preferencesToolStripMenuItem
+            // 
+            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.preferencesToolStripMenuItem.Text = "Preferences";
+            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -101,14 +116,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(678, 496);
             this.splitContainer1.SplitterDistance = 527;
             this.splitContainer1.TabIndex = 2;
-            // 
-            // textEditor1
-            // 
-            this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textEditor1.Location = new System.Drawing.Point(0, 0);
-            this.textEditor1.Name = "textEditor1";
-            this.textEditor1.Size = new System.Drawing.Size(527, 496);
-            this.textEditor1.TabIndex = 0;
             // 
             // tabControl
             // 
@@ -132,6 +139,14 @@
             this.tabASCII.Text = "ASCII Table";
             this.tabASCII.UseVisualStyleBackColor = true;
             // 
+            // textEditor1
+            // 
+            this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textEditor1.Location = new System.Drawing.Point(0, 0);
+            this.textEditor1.Name = "textEditor1";
+            this.textEditor1.Size = new System.Drawing.Size(527, 496);
+            this.textEditor1.TabIndex = 0;
+            // 
             // asciI_Table1
             // 
             this.asciI_Table1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -140,20 +155,6 @@
             this.asciI_Table1.Size = new System.Drawing.Size(133, 464);
             this.asciI_Table1.SomethingPressed = null;
             this.asciI_Table1.TabIndex = 0;
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.preferencesToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // preferencesToolStripMenuItem
-            // 
-            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.preferencesToolStripMenuItem.Text = "Preferences";
             // 
             // Form1
             // 

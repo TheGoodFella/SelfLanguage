@@ -13,7 +13,7 @@ namespace IDE {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Settings());
+            Application.Run(new Form1());
         }
     }
 }
