@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageFromSelfCode.cs" />
     <Compile Include="Utility\ASCII_Table.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -63,7 +64,6 @@
     <Compile Include="Forms\Debugger.Designer.cs">
       <DependentUpon>Debugger.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility\FastBitmap.cs" />
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +84,7 @@
     <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\FastBitmap.cs" />
     <Compile Include="Utility\TextEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

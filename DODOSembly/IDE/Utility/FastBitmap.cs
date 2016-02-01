@@ -3,13 +3,22 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace FastDrawing {
+    class ColorIsChanged {
+        private Color _color;
+        public Color Color { get { return _color; } set { Changed = true; _color = value; } }
+        public bool Changed { get; set; }
+        public ColorIsChanged() { }
+        public ColorIsChanged(Color c, bool b) { Color = c; Changed = b; }
+        public static implicit operator ColorIsChanged(bool l) { return new ColorIsChanged(Color.Black, l); }
+        public static implicit operator ColorIsChanged(Color c) { return new ColorIsChanged(c, true); }
+    }
     class FastBitmap {
         public int Width { get { return _innerBitmap.Count; } }
         public int Height { get { return _innerBitmap[0].Count; } }
-        List<List<Color>> _innerBitmap { get; set; } //x = width, y = height
-        List<List<bool>> _innerChanged {get; set; }
+        List<List<ColorIsChanged>> _innerBitmap { get; set; } //x = width, y = height
         Bitmap _oldBitmap { get; set; }
         /// <summary>
         /// Generates a new FastBitmap from a bitmap, keep in mind that Fast bitmap is implicitly 
@@ -21,16 +30,7 @@ namespace FastDrawing {
             init();
         }
         void init() {
-            this._innerBitmap = new List<List<Color>>();
-            this._innerChanged = new List<List<bool>>();
-            for (int x = 0; x < _oldBitmap.Height; x++) {
-                if (_innerBitmap.Count < _oldBitmap.Width) {
-                    _innerChanged.Add(new List<bool>());
-                }
-                for (int y = 0; y < _oldBitmap.Width; y++) {
-                    _innerChanged[x].Add(false);
-                }
-            }
+            this._innerBitmap = new List<List<ColorIsChanged>>();
             _innerBitmap = this.GetListColor();
         }
         /// <summary>
@@ -40,13 +40,12 @@ namespace FastDrawing {
         /// <param name="y">If is greater than the img height, the img will be expanded</param>
         /// <returns></returns>
         public Color this[int x, int y] {
-            get { return _innerBitmap[x][y]; }
+            get { return _innerBitmap[x][y].Color; }
             set {
                 if (!((x < _innerBitmap.Count) && (y < _innerBitmap[0].Count))) {
                     Expand(x - _innerBitmap.Count + 1, y - _innerBitmap[0].Count + 1);
                 }
                 _innerBitmap[x][y] = value;
-                _innerChanged[x][y] = true;
             }
         }
         /// <summary>
@@ -56,9 +55,9 @@ namespace FastDrawing {
         public Bitmap ToBitmap() {
             if (_oldBitmap == null || _innerBitmap.Count != _oldBitmap.Height || _innerBitmap[0].Count != _oldBitmap.Width) {
                 _oldBitmap = new Bitmap(_innerBitmap[0].Count, _innerBitmap.Count);
-                for (int i = 0; i < _innerChanged.Count; i++) {
-                    for (int x = 0; x < _innerChanged[i].Count; x++) {
-                        _innerChanged[i][x] = true;
+                for (int i = 0; i < _innerBitmap.Count; i++) {
+                    for (int x = 0; x < _innerBitmap[i].Count; x++) {
+                        _innerBitmap[i][x].Changed = true;
                     }
                 }
             }
@@ -66,7 +65,7 @@ namespace FastDrawing {
             return _oldBitmap;
         }
         #region Private Gesture
-        private List<List<Color>> GetListColor() {
+        private List<List<ColorIsChanged>> GetListColor() {
             BitmapData bitmapData = _oldBitmap.LockBits(new Rectangle(0, 0, _oldBitmap.Width, _oldBitmap.Height), ImageLockMode.ReadWrite, _oldBitmap.PixelFormat);
             int bytesPerPixel = Bitmap.GetPixelFormatSize(_oldBitmap.PixelFormat) / 8;
             int byteCount = bitmapData.Stride * _oldBitmap.Height;
@@ -87,7 +86,7 @@ namespace FastDrawing {
                 }
             }
             _oldBitmap.UnlockBits(bitmapData);
-            return lsC;
+            return lsC.Select((s) => s.Select((k) => new ColorIsChanged(k, true)).ToList()).ToList();
         }
         private void SetAllColor() {
             BitmapData bd = _oldBitmap.LockBits(new Rectangle(0, 0, _oldBitmap.Width, _oldBitmap.Height), ImageLockMode.ReadWrite, _oldBitmap.PixelFormat);
@@ -101,11 +100,11 @@ namespace FastDrawing {
             for (int x = 0; x < heightInPixels; x++) {
                 int currentLine = x * bd.Stride;
                 for (int y = 0,z=0; y < widthInBytes; y = y + bytesPerPixel,z++) {
-                    if (_innerChanged[x][z]) {
-                        pixels[currentLine + y] = (byte)_innerBitmap[x][z].B;
-                        pixels[currentLine + y + 1] = (byte)_innerBitmap[x][z].G;
-                        pixels[currentLine + y + 2] = (byte)_innerBitmap[x][z].R;
-                        _innerChanged[x][z] = false;
+                    if (_innerBitmap[x][z].Changed) {
+                        pixels[currentLine + y] = (byte)_innerBitmap[x][z].Color.B;
+                        pixels[currentLine + y + 1] = (byte)_innerBitmap[x][z].Color.G;
+                        pixels[currentLine + y + 2] = (byte)_innerBitmap[x][z].Color.R;
+                        _innerBitmap[x][z].Changed = false;
                     }
                 }
             }
@@ -114,14 +113,12 @@ namespace FastDrawing {
         }
         private void Expand(int xp, int yp) {
             for (int x = 0; x < xp; x++) {
-                _innerBitmap.Add(new List<Color>());
-                _innerChanged.Add(new List<bool>());
+                _innerBitmap.Add(new List<ColorIsChanged>());
             }
             int minCy = (_innerBitmap[0].Count + (yp < 0 ? 0 : yp));
             for (int x = 0; x < _innerBitmap.Count; x++) {
                 for (int y = _innerBitmap[x].Count; y < minCy; y++) {
                     _innerBitmap[x].Add(Color.Black);
-                    _innerChanged[x].Add(true);
                 }
             }
         }
@@ -138,7 +135,7 @@ namespace FastDrawing {
                 for (int y = 0, uy = 0; y < _innerBitmap[x].Count; y++, uy += factor) {
                     for (int ix = 0; ix < factor; ix++) {
                         for (int iy = 0; iy < factor; iy++) {
-                            toReturn[ux + ix, uy + iy] = _innerBitmap[x][y];
+                            toReturn[ux + ix, uy + iy] = _innerBitmap[x][y].Color;
                         }
                     }
                 }
@@ -150,7 +147,7 @@ namespace FastDrawing {
         /// something, it just wont be changed
         /// </summary>
         /// <param name="toDo">Action to be done for each line</param>
-        public void ForEach(Action<List<Color>> toDo) {
+        public void ForEach(Action<List<ColorIsChanged>> toDo) {
             _innerBitmap.ForEach(toDo);
         }
         #endregion
@@ -163,7 +160,7 @@ namespace FastDrawing {
         }
         public static explicit operator List<List<Color>>(FastBitmap c) {
             c.ToBitmap();
-            return c._innerBitmap;
+            return c._innerBitmap.Select((s)=>s.Select((k)=>k.Color).ToList()).ToList();
         }
         #endregion
     }
