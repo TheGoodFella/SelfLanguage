@@ -26,7 +26,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.prpTEXT = new System.Windows.Forms.PropertyGrid();
-            this.propertyTextBox1 = new IDE.PropertyTextBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -53,10 +53,10 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.propertyTextBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.richTextBox1);
             this.splitContainer1.Size = new System.Drawing.Size(780, 534);
             this.splitContainer1.SplitterDistance = 260;
-            this.splitContainer1.TabIndex = 3;
+            this.splitContainer1.TabIndex = 0;
             // 
             // prpTEXT
             // 
@@ -67,14 +67,14 @@
             this.prpTEXT.Size = new System.Drawing.Size(260, 534);
             this.prpTEXT.TabIndex = 1;
             // 
-            // propertyTextBox1
+            // richTextBox1
             // 
-            this.propertyTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.propertyTextBox1.Name = "propertyTextBox1";
-            this.propertyTextBox1.Size = new System.Drawing.Size(516, 534);
-            this.propertyTextBox1.TabIndex = 0;
-            this.propertyTextBox1.Text = "";
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(516, 534);
+            this.richTextBox1.TabIndex = 2;
+            this.richTextBox1.Text = "";
             // 
             // Settings
             // 
@@ -100,7 +100,7 @@
         private System.Windows.Forms.PropertyGrid prpTEXT;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private PropertyTextBox propertyTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
 
     }
 }
