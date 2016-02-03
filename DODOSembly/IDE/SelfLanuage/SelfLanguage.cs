@@ -32,14 +32,14 @@ namespace SelfLanguage {
             RegisterInterrupt = new List<Action>();
             Ram = new List<Variable>();
             CommandList = new Dictionary<string, Action>();
-            CommandList.Add("j", () => JumpCommand(_pointer));          //Jump
-            CommandList.Add("p", () => PopOrPush(_pointer));            //pop is 0 or push that is 1
-            CommandList.Add("i", () => Interrupt(_pointer));            //Interrupt n
-            CommandList.Add("s", () => SetCarry(_pointer));             //Set value carry
-            CommandList.Add("n", () => WriteValueCarry());              //Write value carry in logger
-            CommandList.Add("m", () => Move(_pointer+2));               //Move&Here;what
-            CommandList.Add("a", ()=> Add(_pointer));                   //Add here;so_much
-            CommandList.Add("\\", () => _pointer = int.MaxValue - 1);   //End of program
+            CommandList.Add("j" , () => JumpCommand(_pointer));          //Jump
+            CommandList.Add("p" , () => PopOrPush(_pointer));            //pop is 0 or push that is 1
+            CommandList.Add("i" , () => Interrupt(_pointer));            //Interrupt n
+            CommandList.Add("s" , () => SetCarry(_pointer));             //Set value carry
+            CommandList.Add("n" , () => WriteValueCarry());              //Write value carry in logger
+            CommandList.Add("m" , () => Move(_pointer+2));               //Move&Here;what
+            CommandList.Add("a" , ()=> Add(_pointer));                   //Add here;so_much
+            CommandList.Add("\\", () => _pointer = int.MaxValue - 1);    //End of program
         }
         #region Commands
         /// <summary>

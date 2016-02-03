@@ -8,6 +8,7 @@ using SelfLanguage;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 #if DEBUG
 using System.CodeDom.Compiler;
 using System.Diagnostics;
@@ -21,16 +22,21 @@ namespace IDE {
         private int Memory { get; set; }
         private int EntryPoint { get; set; }
         private string _program { get; set; }
-        private  bool DebugGoOn { get; set; }
+        private bool DebugGoOn { get; set; }
+        private bool DebugErrorColor { get; set; }
+        private Color DebugColor { get; set; }
+        private Color ErrorColor { get; set; }
         public Debugger() {
             InitializeComponent();
-        }
-        public Debugger(string program) {
-            InitializeComponent();
-            _program = program;
-            lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
+            DebugColor = Color.LightBlue;
+            ErrorColor = Color.Red;
             txtMemoryAlloc.Maximum = Int16.MaxValue;
+            DebugErrorColor = false;
+        }
+        public Debugger(string program):this() {
+            _program = program;
             txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
+            lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
         }
 
         private void splitter1_SplitterMoved(object sender, SplitterEventArgs e) {
@@ -103,7 +109,12 @@ namespace IDE {
                 l.LoadInMemory(_program, 0);
             }
             l.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
-                this.Invoke(new Action(() => MessageBox.Show(a.Message)));
+                DebugErrorColor = true;
+                this.Invoke(new Action(() =>{
+                    MessageBox.Show(a.Message  + " at " + a.Pointer);
+                    lstMemory.Items[a.Pointer].BackColor = ErrorColor;
+                }));
+                
             });
             l.GenericLog = (s) => {
                 try {
@@ -115,6 +126,7 @@ namespace IDE {
             l.Debug = (k) => {
                 try {
                     lstMemory.Invoke(new Action(() => {
+                        if (DebugErrorColor) { return; }
                         DebugGoOn = false;
                         lstMemory.SuspendLayout();
                         lstMemory.Items.Clear();
@@ -122,7 +134,7 @@ namespace IDE {
                         for (int i = 0; i < lstMemory.Items.Count; i++) {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
-                        lstMemory.Items[k.Pointer + 1].BackColor = System.Drawing.Color.LightBlue;
+                        lstMemory.Items[k.Pointer + 1].BackColor = DebugColor;
                         lstMemory.ResumeLayout();
                     }));
                     whatDebug();

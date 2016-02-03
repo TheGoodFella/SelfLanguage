@@ -33,6 +33,7 @@ namespace IDE {
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             var v = new SaveFileDialog();
+            v.FileName = Environment.UserName + " " + DateTime.Now.Date.ToString().Split(' ').First();
             v.DefaultExt = ".das";
             v.AddExtension = true;
             var out_p= v.ShowDialog();
