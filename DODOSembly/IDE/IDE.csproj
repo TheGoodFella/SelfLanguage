@@ -132,6 +132,7 @@
     <None Include="Samples\hello.das" />
     <None Include="Samples\hello_using_stack.das" />
     <Compile Include="SelfLanuage\SelfLanguage.Compiler.cs" />
+    <None Include="Samples\move_value.das" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -94,7 +94,9 @@ namespace SelfLanguage {
             var to_move = "";
             if (source.Contains("R")) { //is a Ram source
                 to_move = HandleFromRam(source);
-            } else {
+            }else if(source.Contains("^")){
+                to_move = source.Replace("^", "");
+            }else {
                 to_move = HandleFromMemory(Convert.ToInt32(source));
             }
             if (destination.Contains("R")) {
