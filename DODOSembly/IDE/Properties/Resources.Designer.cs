@@ -61,12 +61,84 @@ namespace IDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add \n\ta&amp;here:how_much.
+        /// </summary>
+        internal static string a {
+            get {
+                return ResourceManager.GetString("a", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Go {
             get {
                 object obj = ResourceManager.GetObject("Go", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interrupt \n\ti&amp;Which.
+        /// </summary>
+        internal static string i {
+            get {
+                return ResourceManager.GetString("i", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jump \n\tj&amp;Where.
+        /// </summary>
+        internal static string j {
+            get {
+                return ResourceManager.GetString("j", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move \n\tm&amp;here;what \n\tR:name:[value]:[type=string]\n\tFor memory is a N(0, Memory.Lenght)\n\t ^    means pointer(here).
+        /// </summary>
+        internal static string m {
+            get {
+                return ResourceManager.GetString("m", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write value carry \n\tn  Pops from the stack.
+        /// </summary>
+        internal static string n {
+            get {
+                return ResourceManager.GetString("n", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pop \n\tp&amp;0||1  o is pop, 1 is push.
+        /// </summary>
+        internal static string p {
+            get {
+                return ResourceManager.GetString("p", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set value carry \n\ts&amp;GetFrom Get value from here.
+        /// </summary>
+        internal static string s {
+            get {
+                return ResourceManager.GetString("s", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End of program.
+        /// </summary>
+        internal static string slash {
+            get {
+                return ResourceManager.GetString("slash", resourceCulture);
             }
         }
     }

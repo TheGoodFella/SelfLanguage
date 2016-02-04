@@ -34,14 +34,14 @@ namespace IDE {
         public TextEditor() {
             InitializeComponent();
             Intellisense = new Documentation();
-            Intellisense.Add("j", Color.Red, "Jump \n\tj&Where");
-            Intellisense.Add("p", Color.Red, "Pop \n\tp&0||1  o is pop, 1 is push");
-            Intellisense.Add("i", Color.Red, "Interrupt \n\ti&Which");
-            Intellisense.Add("s", Color.Red, "Set value carry \n\ts&GetFrom Get value from here");
-            Intellisense.Add("n", Color.Red, "Write value carry \n\tn  Pops from the stack");
-            Intellisense.Add("m", Color.Red, "Move \n\tm&here;what \n\tR:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)");
-            Intellisense.Add("\\", Color.Red, "End of program");
-            Intellisense.Add("a", Color.Red, "Add \n\ta&here:how_much");
+            Intellisense.Add("j", Color.Red, IDE.Properties.Resources.j);
+            Intellisense.Add("p", Color.Red, IDE.Properties.Resources.p);
+            Intellisense.Add("i", Color.Red, IDE.Properties.Resources.i);
+            Intellisense.Add("s", Color.Red, IDE.Properties.Resources.s);
+            Intellisense.Add("n", Color.Red, IDE.Properties.Resources.n);
+            Intellisense.Add("m", Color.Red, IDE.Properties.Resources.m);
+            Intellisense.Add("\\", Color.Red, IDE.Properties.Resources.slash);
+            Intellisense.Add("a", Color.Red, IDE.Properties.Resources.a);
             txtCode.AddPeer(txtPointers);
         }
 

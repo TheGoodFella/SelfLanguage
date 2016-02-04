@@ -117,8 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="a" xml:space="preserve">
+    <value>Add \n\ta&amp;here:how_much</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Go" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\DebuggerIcons\Go.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="i" xml:space="preserve">
+    <value>Interrupt \n\ti&amp;Which</value>
+  </data>
+  <data name="j" xml:space="preserve">
+    <value>Jump \n\tj&amp;Where</value>
+  </data>
+  <data name="m" xml:space="preserve">
+    <value>Move \n\tm&amp;here;what \n\tR:name:[value]:[type=string]\n\tFor memory is a N(0, Memory.Lenght)\n\t ^    means pointer(here)</value>
+  </data>
+  <data name="n" xml:space="preserve">
+    <value>Write value carry \n\tn  Pops from the stack</value>
+  </data>
+  <data name="p" xml:space="preserve">
+    <value>Pop \n\tp&amp;0||1  o is pop, 1 is push</value>
+  </data>
+  <data name="s" xml:space="preserve">
+    <value>Set value carry \n\ts&amp;GetFrom Get value from here</value>
+  </data>
+  <data name="slash" xml:space="preserve">
+    <value>End of program</value>
   </data>
 </root>

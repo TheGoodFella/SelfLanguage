@@ -263,8 +263,10 @@ namespace SelfLanguage {
                 if (Memory[i] != PointerIndicator && Memory[i] != PreCommand) {
                     cumulate += Memory[i];
                 } else {
+                    if (cumulate.Contains("^")) { return _pointer; }
                     return Convert.ToInt32(cumulate);
                 }
+                if (cumulate.Contains("^")) { return _pointer; }
                 if (!int.TryParse(cumulate, out v)) { throw new InvalidPointerException(); }
             }
             return Convert.ToInt32(cumulate);
