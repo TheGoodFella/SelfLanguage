@@ -12,3 +12,10 @@ This is specifically created to make the program hard to read even to those who 
 **Disadvantages**
 - Really hard to read(ment to)
 - Runs on the .NET Framework so it is not Sonic-Fast
+
+#Common quotes
+> This is mad (*Someone who dont undestand ~~sht~~*)<br />
+
+> We can do hard question on this project (*Some teachers*)
+
+> I'll provide hard answer (*Me, aka god*) 
