@@ -135,6 +135,7 @@ namespace IDE {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
                         lstMemory.Items[k.Pointer + 1].BackColor = DebugColor;
+                        lstRam.Items.AddRange(l.Ram.Select((s) =>string.Format("Value> {0}, Name> {1}, Type> {2}",s.IncapsulatedValue,s.Name,s.GetType().Name)).ToArray());
                         lstMemory.ResumeLayout();
                     }));
                     whatDebug();
