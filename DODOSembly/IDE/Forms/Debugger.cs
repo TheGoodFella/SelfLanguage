@@ -18,7 +18,7 @@ using Microsoft.CSharp;
 
 namespace IDE {
     public partial class Debugger : Form {
-        Language l { get; set; }
+        Language language { get; set; }
         private int Memory { get; set; }
         private int EntryPoint { get; set; }
         private string _program { get; set; }
@@ -50,18 +50,18 @@ namespace IDE {
         private void btnAll_Click(object sender, EventArgs e) {
             Memory = Convert.ToInt32(txtMemoryAlloc.Value);
             EntryPoint = Convert.ToInt32(txtProgramEntryPoint.Value);
-            l = new Language(Memory);
+            language = new Language(Memory);
         }
 
         private void btnAllAndLoad_Click(object sender, EventArgs e) {
             Memory = Convert.ToInt32(txtMemoryAlloc.Value);
             EntryPoint = Convert.ToInt32(txtProgramEntryPoint.Value);
-            l = new Language(Memory);
-            l.LoadInMemory(_program, EntryPoint);
+            language = new Language(Memory);
+            language.LoadInMemory(_program, EntryPoint);
         }
 
         private void btnLoad_Click(object sender, EventArgs e) {
-            l.LoadInMemory(_program, EntryPoint);
+            language.LoadInMemory(_program, EntryPoint);
         }
 
         private void Debugger_KeyPress(object sender, KeyPressEventArgs e) {
@@ -85,30 +85,30 @@ namespace IDE {
         /// </summary>       
         private void fastToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => System.Threading.Thread.Sleep(100));
-            var task = new Task(() => l.Run(EntryPoint, true));
+            var task = new Task(() => language.Run(EntryPoint, true));
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         private void slow1000msDelayPerCommandToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => System.Threading.Thread.Sleep(1000));
-            var task = new Task(() => l.Run(EntryPoint, true) );
+            var task = new Task(() => language.Run(EntryPoint, true) );
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         private void userF10ToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => { while (!DebugGoOn) { System.Threading.Thread.Sleep(100); } });
-            var task = new Task(() => l.Run(EntryPoint, true) );
+            var task = new Task(() => language.Run(EntryPoint, true) );
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         #endregion
 
         private void GenericCreateLanguageDebug(Action whatDebug) {
-            if (l == null) {
+            if (language == null) {
                 MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to get loaded in the position 0, an it is going to get allocated {0} bytes of memory",_program.Length));
                 EntryPoint = 0;
                 Memory = _program.Length;
-                l = new Language(Memory);
-                l.LoadInMemory(_program, 0);
+                language = new Language(Memory);
+                language.LoadInMemory(_program, 0);
             }
-            l.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
+            language.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
                 DebugErrorColor = true;
                 this.Invoke(new Action(() =>{
                     MessageBox.Show(a.Message  + " at " + a.Pointer);
@@ -116,26 +116,29 @@ namespace IDE {
                 }));
                 
             });
-            l.GenericLog = (s) => {
+            language.GenericLog = (s) => {
                 try {
                     lstLogger.Invoke(new Action(() => lstLogger.Items.Add(s.Message)));
                 } catch (ObjectDisposedException) {
                     //Disposed, nothing to bother about it
                 }
             };
-            l.Debug = (k) => {
+            language.Debug = (k) => {
                 try {
                     lstMemory.Invoke(new Action(() => {
                         if (DebugErrorColor) { return; }
                         DebugGoOn = false;
                         lstMemory.SuspendLayout();
                         lstMemory.Items.Clear();
-                        lstMemory.Items.AddRange(l.Memory.Select((theStuff) => new ListViewItem(Convert.ToString(theStuff))).ToArray());
+                        lstMemory.Items.AddRange(language.Memory.Select((theStuff) => new ListViewItem(Convert.ToString(theStuff))).ToArray());
                         for (int i = 0; i < lstMemory.Items.Count; i++) {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
                         lstMemory.Items[k.Pointer + 1].BackColor = DebugColor;
-                        lstRam.Items.AddRange(l.Ram.Select((s) =>string.Format("Value> {0}, Name> {1}, Type> {2}",s.IncapsulatedValue,s.Name,s.GetType().Name)).ToArray());
+                        lstRam.Items.Clear();
+                        lstRam.Items.AddRange(language.Ram.Select((s) =>string.Format("Value> {0}, Name> {1}, Type> {2}",s.IncapsulatedValue,s.Name,s.GetType().Name)).ToArray());
+                        lstStack.Items.Clear();
+                        lstStack.Items.AddRange(language.CommandStackCarry.Select((ma) => ma.ToString()).ToArray());
                         lstMemory.ResumeLayout();
                     }));
                     whatDebug();
