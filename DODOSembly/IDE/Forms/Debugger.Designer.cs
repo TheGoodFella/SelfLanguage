@@ -33,6 +33,7 @@
             this.fastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slow1000msDelayPerCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userF10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpExecution = new System.Windows.Forms.GroupBox();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnAllAndLoad = new System.Windows.Forms.Button();
@@ -43,7 +44,6 @@
             this.txtMemoryAlloc = new System.Windows.Forms.NumericUpDown();
             this.grpLogger = new System.Windows.Forms.GroupBox();
             this.lstLogger = new System.Windows.Forms.ListBox();
-            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpMemoryAndRam.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -159,6 +159,14 @@
             this.userF10ToolStripMenuItem.Text = "User(F10)";
             this.userF10ToolStripMenuItem.Click += new System.EventHandler(this.userF10ToolStripMenuItem_Click);
             // 
+            // compileToolStripMenuItem
+            // 
+            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.compileToolStripMenuItem.Text = "Compile";
+            this.compileToolStripMenuItem.Visible = false;
+            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
+            // 
             // grpExecution
             // 
             this.grpExecution.Controls.Add(this.btnLoad);
@@ -269,13 +277,6 @@
             this.lstLogger.Name = "lstLogger";
             this.lstLogger.Size = new System.Drawing.Size(244, 199);
             this.lstLogger.TabIndex = 0;
-            // 
-            // compileToolStripMenuItem
-            // 
-            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
-            this.compileToolStripMenuItem.Text = "Compile";
-            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // Debugger
             // 

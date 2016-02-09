@@ -79,10 +79,9 @@ namespace IDE {
         }
 
         private void Intellisense_Worker() { //NEW IDEA, do just the select index, TODO
-            this.SuspendLayout();
             if (txtCode.Text.Length < 1) { return; }
             var first_line = txtCode.GetLineFromCharIndex(txtCode.GetCharIndexFromPosition(new Point(0, 0)));
-            var _char = txtCode.Text[txtCode.SelectionStart-1>0?txtCode.SelectionStart-1:0];
+            var _char = txtCode.Lines[txtCode.GetLineFromCharIndex(txtCode.SelectionStart)].Replace("\t", "").Replace(" ", "").FirstOrDefault();
             var query = Intellisense.Keys.Where((s)=>s==Convert.ToString(_char));
             if (query.Count() == 1) {
                 txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0));
@@ -92,7 +91,6 @@ namespace IDE {
             } else{
                 pnlIntellisense.Visible = false;
             }
-            this.ResumeLayout();
             //var commands = txtCode.Lines.Select((k)=>ToCommand(k)).Aggregate((fi,se)=>fi+se);
             //var v = commands.Take(txtCode.SelectionStart);
             //var index = v.ToList().LastIndexOf('\0'); //last pre command
