@@ -25,7 +25,6 @@
         private void InitializeComponent() {
             this.grpMemoryAndRam = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.lstRam = new System.Windows.Forms.ListView();
             this.lstMemory = new System.Windows.Forms.ListView();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -44,6 +43,9 @@
             this.txtMemoryAlloc = new System.Windows.Forms.NumericUpDown();
             this.grpLogger = new System.Windows.Forms.GroupBox();
             this.lstLogger = new System.Windows.Forms.ListBox();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.lstRam = new System.Windows.Forms.ListBox();
+            this.lstStack = new System.Windows.Forms.ListBox();
             this.grpMemoryAndRam.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -54,6 +56,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtProgramEntryPoint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMemoryAlloc)).BeginInit();
             this.grpLogger.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMemoryAndRam
@@ -65,7 +71,7 @@
             this.grpMemoryAndRam.Size = new System.Drawing.Size(471, 182);
             this.grpMemoryAndRam.TabIndex = 0;
             this.grpMemoryAndRam.TabStop = false;
-            this.grpMemoryAndRam.Text = "Memory and Ram";
+            this.grpMemoryAndRam.Text = "Memory, Ram and Stack";
             // 
             // splitContainer1
             // 
@@ -76,7 +82,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.lstRam);
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
@@ -84,15 +90,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(465, 163);
             this.splitContainer1.SplitterDistance = 77;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // lstRam
-            // 
-            this.lstRam.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstRam.Location = new System.Drawing.Point(0, 0);
-            this.lstRam.Name = "lstRam";
-            this.lstRam.Size = new System.Drawing.Size(465, 77);
-            this.lstRam.TabIndex = 0;
-            this.lstRam.UseCompatibleStateImageBehavior = false;
             // 
             // lstMemory
             // 
@@ -164,7 +161,6 @@
             this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
             this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.compileToolStripMenuItem.Text = "Compile";
-            this.compileToolStripMenuItem.Visible = false;
             this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // grpExecution
@@ -278,6 +274,41 @@
             this.lstLogger.Size = new System.Drawing.Size(244, 199);
             this.lstLogger.TabIndex = 0;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.lstRam);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.lstStack);
+            this.splitContainer2.Size = new System.Drawing.Size(465, 77);
+            this.splitContainer2.SplitterDistance = 353;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // lstRam
+            // 
+            this.lstRam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstRam.FormattingEnabled = true;
+            this.lstRam.Location = new System.Drawing.Point(0, 0);
+            this.lstRam.Name = "lstRam";
+            this.lstRam.Size = new System.Drawing.Size(353, 77);
+            this.lstRam.TabIndex = 0;
+            // 
+            // lstStack
+            // 
+            this.lstStack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstStack.FormattingEnabled = true;
+            this.lstStack.Location = new System.Drawing.Point(0, 0);
+            this.lstStack.Name = "lstStack";
+            this.lstStack.Size = new System.Drawing.Size(108, 77);
+            this.lstStack.TabIndex = 1;
+            // 
             // Debugger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,6 +337,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtProgramEntryPoint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMemoryAlloc)).EndInit();
             this.grpLogger.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,7 +351,6 @@
         private System.Windows.Forms.GroupBox grpMemoryAndRam;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListView lstRam;
         private System.Windows.Forms.ListView lstMemory;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
@@ -334,6 +368,9 @@
         private System.Windows.Forms.ToolStripMenuItem slow1000msDelayPerCommandToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem userF10ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.ListBox lstRam;
+        private System.Windows.Forms.ListBox lstStack;
 
 
 

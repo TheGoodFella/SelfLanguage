@@ -15,7 +15,7 @@ namespace SelfLanguage.Utility {
     /// <summary>
     /// Variable type used in the language
     /// </summary>
-    class Variable {
+    public class Variable {
         /// <summary>
         /// The variable name
         /// </summary>

@@ -9,10 +9,11 @@ using SelfLanguage.Exceptions;
 namespace SelfLanguage {
     public class Language {
         private List<Action> RegisterInterrupt { get; set; }
-        private Stack<int> CommandStackCarry { get; set; }
         private int _pointer { get; set; }
         private char[] Temp_mem { get; set; }
-        private List<Variable> Ram { get; set; }
+
+        public List<Variable> Ram { get; private set; }
+        public Stack<int> CommandStackCarry { get; private set; }
 
         public Dictionary<string, Action> CommandList { get; private set; } //int is where the pointer is when calling the command
         public char[] Memory { get; private set; }
