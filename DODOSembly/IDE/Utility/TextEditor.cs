@@ -87,6 +87,9 @@ namespace IDE {
                 txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0)).Replace("\\t","\t").Replace("\\n",Environment.NewLine);
                 pnlIntellisense.Visible = true;
                 pnlIntellisense.Top = txtCode.Parent.Top + (txtCode.GetLineFromCharIndex(txtCode.SelectionStart)-first_line) * txtCode.Font.Height;
+                if (pnlIntellisense.Top > pnlIntellisense.Parent.Height - pnlIntellisense.Height) {
+                    pnlIntellisense.Top = pnlIntellisense.Parent.Height - pnlIntellisense.Height;
+                }
                 //MessageBox.Show(Convert.ToString(pnlIntellisense.Top) + " " + Convert.ToString(txtCode.GetLineFromCharIndex(txtCode.SelectionStart)) + " " + Convert.ToString(first_line));
             } else{
                 pnlIntellisense.Visible = false;
