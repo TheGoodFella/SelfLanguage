@@ -43,6 +43,7 @@ namespace SelfLanguage {
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);    //End of program
         }
         #region Commands
+        #region <Misc>
         /// <summary>
         /// Start the program
         /// </summary>
@@ -85,21 +86,25 @@ namespace SelfLanguage {
         private void JumpCommand(int pointer) {
             _pointer = GetNFrom(pointer += 2) - 1;
         }
+        private void Add(int pointer) {
+            var command = GetLitteral(pointer + 2).Split(';');
+            if (command.Length != 2) {
+                throw new InvalidOperationException("The add got called with a not valid litteral statement");
+            }
+            var ptr = Convert.ToInt32(command.ElementAt(0));
+            var how_m = Convert.ToInt32(command.ElementAt(1));
+            Memory[ptr] = Convert.ToChar(Convert.ToInt32(Memory[ptr]) + how_m);
+        }
+        #endregion
         #region <Move>
-        public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)
+        public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght) || compare is (type:toC1:toC2)
             var v = GetLitteral(pointer);
             var targets = v.Split(';');
             if (targets.Length != 2) { throw new InvalidMoveException(); }
             var destination = targets[0];
             var source = targets[1];
             var to_move = "";
-            if (source.Contains("R")) { //is a Ram source
-                to_move = HandleFromRam(source);
-            }else if(source.Contains("^")){
-                to_move = source.Replace("^", "");
-            }else {
-                to_move = HandleFromMemory(Convert.ToInt32(source));
-            }
+            to_move = variableGetter(source);
             if (destination.Contains("R")) {
                 var dst = destination.Split(':');
                 var name = dst.ElementAtOrDefault(1);
@@ -110,6 +115,33 @@ namespace SelfLanguage {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
             }
         }
+        private string variableGetter(string source) {
+            if (source.Contains("R")) { //is a Ram source
+                return HandleFromRam(source);
+            } else if (source.Contains("^")) {
+                return source.Replace("^", "");
+            } else if (source.Contains("-")) { //Could be buggy cause of a R containing a -? keep the order this way 
+                return Convert.ToString(CommandStackCarry.Pop());
+            } else {
+                return HandleFromMemory(Convert.ToInt32(source));
+            }
+        }
+        private int Compare(string therms){
+            var elemtents = therms.Replace("(", "").Replace(")", "").Split(':');
+            var cmp_type = elemtents.ElementAtOrDefault(0);
+            var first = elemtents.ElementAtOrDefault(1);
+            var second = elemtents.ElementAtOrDefault(2);
+            first = variableGetter(first);
+            second = variableGetter(second);
+            var type = Type.GetType(cmp_type);
+            if ((GetVariableOfType(type) is IComparable)&&(GetVariableOfType(type) is IConvertible)) {
+                var new_f = Convert.ChangeType(first, type);
+                var new_s = Convert.ChangeType(second, type);
+                return ((dynamic)new_f).CompareTo(new_s);
+            }
+            return 0;
+        }
+        
         private void HandleToRam(string generator) {
             var dst1 = generator.Split(':');
             var name = dst1.ElementAtOrDefault(0); //Name
@@ -290,15 +322,6 @@ namespace SelfLanguage {
             return to_r;
         }
         #endregion
-        private void Add(int pointer) {
-            var command = GetLitteral(pointer + 2).Split(';');
-            if (command.Length != 2) {
-                throw new InvalidOperationException("The add got called with a not valid litteral statement");
-            }
-            var ptr = Convert.ToInt32(command.ElementAt(0));
-            var how_m = Convert.ToInt32(command.ElementAt(1));
-            Memory[ptr] = Convert.ToChar(Convert.ToInt32(Memory[ptr]) + how_m);
-        }
         #endregion
     }
 }
