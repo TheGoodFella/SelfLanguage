@@ -84,7 +84,7 @@ namespace IDE {
             var _char = txtCode.Lines[txtCode.GetLineFromCharIndex(txtCode.SelectionStart)].Replace("\t", "").Replace(" ", "").FirstOrDefault();
             var query = Intellisense.Keys.Where((s)=>s==Convert.ToString(_char));
             if (query.Count() == 1) {
-                txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0));
+                txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0)).Replace("\\t","\t").Replace("\\n",Environment.NewLine);
                 pnlIntellisense.Visible = true;
                 pnlIntellisense.Top = txtCode.Parent.Top + (txtCode.GetLineFromCharIndex(txtCode.SelectionStart)-first_line) * txtCode.Font.Height;
                 //MessageBox.Show(Convert.ToString(pnlIntellisense.Top) + " " + Convert.ToString(txtCode.GetLineFromCharIndex(txtCode.SelectionStart)) + " " + Convert.ToString(first_line));
