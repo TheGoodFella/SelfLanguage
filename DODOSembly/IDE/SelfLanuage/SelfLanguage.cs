@@ -104,18 +104,25 @@ namespace SelfLanguage {
             var destination = targets[0];
             var source = targets[1];
             var to_move = "";
-            to_move = variableGetter(source);
-            if (destination.Contains("R")) {
+            to_move = Getter(source);
+            Setter(destination, to_move);
+        }
+
+        private void Setter(string destination, string to_move) {
+            if ((destination.IndexOf("R") < destination.IndexOf("-")) && destination.Contains("R")) {
                 var dst = destination.Split(':');
                 var name = dst.ElementAtOrDefault(1);
                 var value = dst.ElementAtOrDefault(2);
                 var type = dst.ElementAtOrDefault(3);
-                HandleToRam(string.Concat(name,":",to_move,":",type));
-            } else {
+                HandleToRam(string.Concat(name, ":", to_move, ":", type));
+            }else if(destination.Contains("-")){
+                CommandStackCarry.Push(Convert.ToInt32(to_move));
+            }else {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
             }
         }
-        private string variableGetter(string source) {
+        
+        private string Getter(string source) {
             if (source.Contains("R")) { //is a Ram source
                 return HandleFromRam(source);
             } else if (source.Contains("^")) {
@@ -126,13 +133,26 @@ namespace SelfLanguage {
                 return HandleFromMemory(Convert.ToInt32(source));
             }
         }
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <returns></returns>
+        private string RecogniseMoveAction() {
+            return ""; 
+        }
+
+        /// <summary>
+        /// Compares 2 therms in assuming they are in the given type
+        /// </summary>
+        /// <param name="therms">(type:th1:th2)</param>
+        /// <returns>Starndard CompareTo Output</returns>
         private int Compare(string therms){
             var elemtents = therms.Replace("(", "").Replace(")", "").Split(':');
             var cmp_type = elemtents.ElementAtOrDefault(0);
             var first = elemtents.ElementAtOrDefault(1);
             var second = elemtents.ElementAtOrDefault(2);
-            first = variableGetter(first);
-            second = variableGetter(second);
+            first = Getter(first);
+            second = Getter(second);
             var type = Type.GetType(cmp_type);
             if ((GetVariableOfType(type) is IComparable)&&(GetVariableOfType(type) is IConvertible)) {
                 var new_f = Convert.ChangeType(first, type);
