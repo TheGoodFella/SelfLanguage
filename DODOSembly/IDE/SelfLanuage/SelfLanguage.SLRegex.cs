@@ -10,7 +10,7 @@ namespace SelfLanguage.SLRegex {
         private const string MatchRam = @"\s*R\s*:\s*[^\^]*:[^\0&]*";
         private const string MatchStack = @"\s*^-$\s*";
         private const string MatchStackMultiChar = @"\s*-{2}\s*";
-        private const string MatchNumber = @"\d*";
+        private const string MatchNumber = @"^\d+$";
         private const string MatchHere = @"\s*^[^\0&]*";
         private Regex Ram { get; set; }
         private Regex Stack { get; set; }

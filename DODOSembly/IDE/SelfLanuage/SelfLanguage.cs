@@ -121,7 +121,7 @@ namespace SelfLanguage {
             }else if(dest == SelfLanguageDestination.Stack){
                 CommandStackCarry.Push(Convert.ToInt32(to_move));
             }else if(dest == SelfLanguageDestination.StackMultiChar){
-                destination.ToList().ForEach((s) => CommandStackCarry.Push(Convert.ToInt32(s)));
+                to_move.ToList().ForEach((s) => CommandStackCarry.Push(Convert.ToInt32(s)));
             }else if(dest == SelfLanguageDestination.Number) {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
             } else if(dest == SelfLanguageDestination.None){
