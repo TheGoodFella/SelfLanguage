@@ -23,7 +23,7 @@ namespace SelfLanguage {
 
         public Action<Logging> Debug { get; set; }
         public Action<Logging> GenericLog { get; set; }
-        public event Action<Logging> ExceptionRised;
+        public event Action<Logging> ExceptionRised; 
 
         public readonly char PreCommand = '\0';
         public readonly char PointerIndicator = '&';
@@ -200,7 +200,7 @@ namespace SelfLanguage {
             var name = new_source.ElementAtOrDefault(1); //Name
             var value = new_source.ElementAtOrDefault(2);//Value
             var type = new_source.ElementAtOrDefault(3); //Type
-            var to_put = Ram.FirstOrDefault((s) => s.Name == name);
+            var to_put = Ram.FirstOrDefault(s => s.Name == name);
             if (to_put == null) { throw new NotDefinedVariableException(string.Format("The varible {0} is not defined", name)); } else {
                 if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(to_put.GetType()))) {
                     dynamic c = to_put;
