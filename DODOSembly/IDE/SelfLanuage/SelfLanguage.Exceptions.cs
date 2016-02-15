@@ -77,17 +77,12 @@ namespace SelfLanguage.Exceptions {
 
     }
     class InvalidMoveException : Exception {
-        private string _Message { get; set; }
-        public override string Message {
-            get {
-                return _Message;
-            }
-        }
-        public InvalidMoveException() {
-            _Message = "The move is not well formed, invalid target or source"; 
-        }
-        public InvalidMoveException(string s) {
-            _Message = s;
-        }
+        public InvalidMoveException(string s):base(s) { }
+    }
+    class InvalidSetterException : Exception {
+        public InvalidSetterException(string s):base(s){ }
+    }
+    class InvalidGetterException : Exception {
+        public InvalidGetterException(string s): base(s) { }
     }
 }

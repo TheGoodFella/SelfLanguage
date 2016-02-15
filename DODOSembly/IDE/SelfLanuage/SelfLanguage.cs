@@ -103,11 +103,10 @@ namespace SelfLanguage {
         public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght) || compare is (type:toC1:toC2)
             var v = GetLitteral(pointer);
             var targets = v.Split(';');
-            if (targets.Length != 2) { throw new InvalidMoveException(); }
+            if (targets.Length != 2) { throw new InvalidMoveException(string.Format("The move is not well formed, {0} is not a valid move argument",targets)); }
             var destination = targets[0];
             var source = targets[1];
-            var to_move = "";
-            to_move = Getter(source);
+            var to_move = Getter(source);
             Setter(destination, to_move);
         }
 
@@ -125,28 +124,28 @@ namespace SelfLanguage {
                 destination.ToList().ForEach((s) => CommandStackCarry.Push(Convert.ToInt32(s)));
             }else if(dest == SelfLanguageDestination.Number) {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
-            } else {
+            } else if(dest == SelfLanguageDestination.None){
                 throw new InvalidMoveException(string.Format("The destination {0} is not well formed",destination));
+            } else {
+                throw new NotImplementedException(); //HTF
             }
         }
         
         private string Getter(string source) {
-            if (source.Contains("R")) { //is a Ram source
+            var dest = DestinationSelecter.IsCommand(source);
+            if (dest == SelfLanguageDestination.Ram) { //is a Ram source
                 return HandleFromRam(source);
-            } else if (source.Contains("^")) {
+            } else if (dest == SelfLanguageDestination.Here) { //TODO
                 return source.Replace("^", "");
-            } else if (source.Contains("-")) { //Could be buggy cause of a R containing a -? keep the order this way 
+            } else if (dest == SelfLanguageDestination.Stack) { //Could be buggy cause of a R containing a -? keep the order this way 
                 return Convert.ToString(CommandStackCarry.Pop());
-            } else {
+            } else if(dest == SelfLanguageDestination.Number){
                 return HandleFromMemory(Convert.ToInt32(source));
+            } else if(dest == SelfLanguageDestination.None){
+                throw new InvalidGetterException(string.Format("The get operation with the > {0} < source is not valid", source));
+            }else{
+                throw new NotImplementedException(); //HTF
             }
-        }
-        /// <summary>
-        /// TODO
-        /// </summary>
-        /// <returns></returns>
-        private string RecogniseMoveAction() {
-            return ""; 
         }
 
         /// <summary>
