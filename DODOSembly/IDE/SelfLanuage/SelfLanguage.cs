@@ -5,12 +5,14 @@ using System.Linq;
 using SelfLanguage.Interfaces;
 using SelfLanguage.Utility;
 using SelfLanguage.Exceptions;
+using SelfLanguage.SLRegex;
 
 namespace SelfLanguage {
     public class Language {
         private List<Action> RegisterInterrupt { get; set; }
         private int _pointer { get; set; }
         private char[] Temp_mem { get; set; }
+        private RegexContainer DestinationSelecter { get; set; }
 
         public List<Variable> Ram { get; private set; }
         public Stack<int> CommandStackCarry { get; private set; }
@@ -27,6 +29,7 @@ namespace SelfLanguage {
         public readonly char PointerIndicator = '&';
 
         public Language(int _memorySize) {
+            DestinationSelecter = new RegexContainer();
             CommandStackCarry = new Stack<int>();
             Memory = new char[_memorySize];
             Memory = Memory.Select((s) => '\\').ToArray();
@@ -109,16 +112,21 @@ namespace SelfLanguage {
         }
 
         private void Setter(string destination, string to_move) {
-            if ((destination.IndexOf("R") < destination.IndexOf("-")) && destination.Contains("R")) {
+            var dest = DestinationSelecter.IsCommand(destination);
+            if (dest == SelfLanguageDestination.Ram) {
                 var dst = destination.Split(':');
                 var name = dst.ElementAtOrDefault(1);
                 var value = dst.ElementAtOrDefault(2);
                 var type = dst.ElementAtOrDefault(3);
                 HandleToRam(string.Concat(name, ":", to_move, ":", type));
-            }else if(destination.Contains("-")){
+            }else if(dest == SelfLanguageDestination.Stack){
                 CommandStackCarry.Push(Convert.ToInt32(to_move));
-            }else {
+            }else if(dest == SelfLanguageDestination.StackMultiChar){
+                
+            }else if(dest == SelfLanguageDestination.Number) {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
+            } else {
+                throw new InvalidMoveException(string.Format("The destination {0} is not well formed",destination));
             }
         }
         
