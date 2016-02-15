@@ -46,6 +46,7 @@
             this.txtMemoryAlloc = new System.Windows.Forms.NumericUpDown();
             this.grpLogger = new System.Windows.Forms.GroupBox();
             this.lstLogger = new System.Windows.Forms.ListBox();
+            this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpMemoryAndRam.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -161,6 +162,7 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.runToolStripMenuItem,
             this.fastToolStripMenuItem,
             this.slow1000msDelayPerCommandToolStripMenuItem,
             this.userF10ToolStripMenuItem});
@@ -310,6 +312,13 @@
             this.lstLogger.Size = new System.Drawing.Size(244, 199);
             this.lstLogger.TabIndex = 0;
             // 
+            // runToolStripMenuItem
+            // 
+            this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
+            // 
             // Debugger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -372,6 +381,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ListBox lstRam;
         private System.Windows.Forms.ListBox lstStack;
+        private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
 
 
 
