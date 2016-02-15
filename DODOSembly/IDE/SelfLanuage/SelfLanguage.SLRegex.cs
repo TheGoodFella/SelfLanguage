@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace SelfLanguage.SLRegex {
     class RegexContainer {
         private const string MatchRam = @"\s*R\s*:\s*[^\^]*:[^\0&]*";
-        private const string MatchStack = @"\s*-\s*";
+        private const string MatchStack = @"\s*^-$\s*";
         private const string MatchStackMultiChar = @"\s*-{2}\s*";
         private const string MatchNumber = @"\d*";
         private Regex Ram { get; set; }
