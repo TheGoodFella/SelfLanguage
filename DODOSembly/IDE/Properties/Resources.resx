@@ -130,9 +130,6 @@
   <data name="j" xml:space="preserve">
     <value>Jump \n\tj&amp;Where</value>
   </data>
-  <data name="m" xml:space="preserve">
-    <value>Move \n\tm&amp;here;what \n\tR:name:[value]:[type=string]\n\tFor memory is a N(0, Memory.Lenght)\n\t ^    means pointer(here)</value>
-  </data>
   <data name="n" xml:space="preserve">
     <value>Write value carry \n\tn  Pops from the stack</value>
   </data>
@@ -144,5 +141,8 @@
   </data>
   <data name="slash" xml:space="preserve">
     <value>End of program</value>
+  </data>
+  <data name="m" xml:space="preserve">
+    <value>Move \n\tm&amp;here;what \n\tR:name:[value]:[type=string]\n\tFor memory is a Number\n\t ^What is here</value>
   </data>
 </root>

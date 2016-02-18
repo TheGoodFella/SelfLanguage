@@ -84,9 +84,12 @@ namespace IDE {
             var _char = txtCode.Lines[txtCode.GetLineFromCharIndex(txtCode.SelectionStart)].Replace("\t", "").Replace(" ", "").FirstOrDefault();
             var query = Intellisense.Keys.Where((s)=>s==Convert.ToString(_char));
             if (query.Count() == 1) {
-                txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0));
+                txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0)).Replace("\\t","\t").Replace("\\n",Environment.NewLine);
                 pnlIntellisense.Visible = true;
                 pnlIntellisense.Top = txtCode.Parent.Top + (txtCode.GetLineFromCharIndex(txtCode.SelectionStart)-first_line) * txtCode.Font.Height;
+                if (pnlIntellisense.Top > pnlIntellisense.Parent.Height - pnlIntellisense.Height) {
+                    pnlIntellisense.Top = pnlIntellisense.Parent.Height - pnlIntellisense.Height;
+                }
                 //MessageBox.Show(Convert.ToString(pnlIntellisense.Top) + " " + Convert.ToString(txtCode.GetLineFromCharIndex(txtCode.SelectionStart)) + " " + Convert.ToString(first_line));
             } else{
                 pnlIntellisense.Visible = false;
@@ -99,25 +102,24 @@ namespace IDE {
             //txtCode.SelectionLength = 1;
             //txtCode.SelectionColor = Color.Red;
             return;
-
-            var tmp_text = txtCode.Text;
-            var accumulator = "";
-            int firstVisibleChar = txtCode.GetCharIndexFromPosition(new Point(0, 0));
-            var lastVisibleChar = txtCode.SelectionStart;
-            Enumerable.Range(firstVisibleChar, lastVisibleChar).ToList().ForEach((s) => { //Fuck this, took me 30 minutes
-                accumulator += tmp_text[s];
-                if (Intellisense.Any((k) => k == accumulator)) {
-                    txtCode.SelectionStart = s - (accumulator.Length - 1);
-                    txtCode.SelectionLength = accumulator.Length;
-                    txtCode.SelectionBackColor = Intellisense[accumulator];
-                    txtCode.SelectionStart = txtCode.Text.Length;
-                    txtCode.SelectionLength = 0;
-                    txtCode.SelectionBackColor = txtCode.BackColor;
-                    accumulator = "";
-                } else if (!Intellisense.Any((k) => k.Contains(accumulator))) {
-                    accumulator = (accumulator.Length == 1) ? "" : accumulator.Skip(1).ToList().Select((e) => Convert.ToString(e)).Aggregate((first, second) => first + second);
-                }
-            });
+            //var tmp_text = txtCode.Text;
+            //var accumulator = "";
+            //int firstVisibleChar = txtCode.GetCharIndexFromPosition(new Point(0, 0));
+            //var lastVisibleChar = txtCode.SelectionStart;
+            //Enumerable.Range(firstVisibleChar, lastVisibleChar).ToList().ForEach((s) => { //Fuck this, took me 30 minutes
+            //    accumulator += tmp_text[s];
+            //    if (Intellisense.Any((k) => k == accumulator)) {
+            //        txtCode.SelectionStart = s - (accumulator.Length - 1);
+            //        txtCode.SelectionLength = accumulator.Length;
+            //        txtCode.SelectionBackColor = Intellisense[accumulator];
+            //        txtCode.SelectionStart = txtCode.Text.Length;
+            //        txtCode.SelectionLength = 0;
+            //        txtCode.SelectionBackColor = txtCode.BackColor;
+            //        accumulator = "";
+            //    } else if (!Intellisense.Any((k) => k.Contains(accumulator))) {
+            //        accumulator = (accumulator.Length == 1) ? "" : accumulator.Skip(1).ToList().Select((e) => Convert.ToString(e)).Aggregate((first, second) => first + second);
+            //    }
+            //});
         }
 
         private string ToCommand(string s) {

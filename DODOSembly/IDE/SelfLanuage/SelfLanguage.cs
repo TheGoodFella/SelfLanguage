@@ -2,15 +2,20 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+
 using SelfLanguage.Interfaces;
 using SelfLanguage.Utility;
 using SelfLanguage.Exceptions;
+using SelfLanguage.SLRegex;
+using SelfLanguage.TypeAlias;
 
 namespace SelfLanguage {
     public class Language {
         private List<Action> RegisterInterrupt { get; set; }
         private int _pointer { get; set; }
         private char[] Temp_mem { get; set; }
+        private RegexContainer DestinationSelecter { get; set; }
+        private SelfTypes TypeAliasContainer { get; set; }
 
         public List<Variable> Ram { get; private set; }
         public Stack<int> CommandStackCarry { get; private set; }
@@ -21,13 +26,15 @@ namespace SelfLanguage {
 
         public Action<Logging> Debug { get; set; }
         public Action<Logging> GenericLog { get; set; }
-        public event Action<Logging> ExceptionRised;
+        public event Action<Logging> ExceptionRised; 
 
         public readonly char PreCommand = '\0';
         public readonly char PointerIndicator = '&';
 
         public Language(int _memorySize) {
+            DestinationSelecter = new RegexContainer();
             CommandStackCarry = new Stack<int>();
+            TypeAliasContainer = new SelfTypes();
             Memory = new char[_memorySize];
             Memory = Memory.Select((s) => '\\').ToArray();
             RegisterInterrupt = new List<Action>();
@@ -43,6 +50,7 @@ namespace SelfLanguage {
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);    //End of program
         }
         #region Commands
+        #region <Misc>
         /// <summary>
         /// Start the program
         /// </summary>
@@ -85,31 +93,86 @@ namespace SelfLanguage {
         private void JumpCommand(int pointer) {
             _pointer = GetNFrom(pointer += 2) - 1;
         }
+        private void Add(int pointer) {
+            var command = GetLitteral(pointer + 2).Split(';');
+            if (command.Length != 2) {
+                throw new InvalidOperationException("The add got called with a not valid litteral statement");
+            }
+            var ptr = Convert.ToInt32(command.ElementAt(0));
+            var how_m = Convert.ToInt32(command.ElementAt(1));
+            Memory[ptr] = Convert.ToChar(Convert.ToInt32(Memory[ptr]) + how_m);
+        }
+        #endregion
         #region <Move>
-        public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght)
+        public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght) || compare is (type:toC1:toC2)
             var v = GetLitteral(pointer);
             var targets = v.Split(';');
-            if (targets.Length != 2) { throw new InvalidMoveException(); }
+            if (targets.Length != 2) { throw new InvalidMoveException(string.Format("The move is not well formed, {0} is not a valid move argument",targets)); }
             var destination = targets[0];
             var source = targets[1];
-            var to_move = "";
-            if (source.Contains("R")) { //is a Ram source
-                to_move = HandleFromRam(source);
-            }else if(source.Contains("^")){
-                to_move = source.Replace("^", "");
-            }else {
-                to_move = HandleFromMemory(Convert.ToInt32(source));
-            }
-            if (destination.Contains("R")) {
+            var to_move = Getter(source);
+            Setter(destination, to_move);
+        }
+
+        private void Setter(string destination, string to_move) {
+            var dest = DestinationSelecter.IsCommand(destination);
+            if (dest == SelfLanguageDestination.Ram) {
                 var dst = destination.Split(':');
                 var name = dst.ElementAtOrDefault(1);
                 var value = dst.ElementAtOrDefault(2);
                 var type = dst.ElementAtOrDefault(3);
-                HandleToRam(string.Concat(name,":",to_move,":",type));
-            } else {
+                HandleToRam(string.Concat(name, ":", to_move, ":", type));
+            }else if(dest == SelfLanguageDestination.Stack){
+                CommandStackCarry.Push(Convert.ToInt32(to_move));
+            }else if(dest == SelfLanguageDestination.StackMultiChar){
+                to_move.ToList().ForEach((s) => CommandStackCarry.Push(Convert.ToInt32(s)));
+            }else if(dest == SelfLanguageDestination.Number) {
                 LoadInMemory(to_move, Convert.ToInt32(destination));
+            } else if(dest == SelfLanguageDestination.None){
+                throw new InvalidMoveException(string.Format("The destination {0} is not well formed",destination));
+            } else {
+                throw new NotImplementedException(); //HTF
             }
         }
+        
+        private string Getter(string source) {
+            var dest = DestinationSelecter.IsCommand(source);
+            if (dest == SelfLanguageDestination.Ram) { //is a Ram source
+                return HandleFromRam(source);
+            } else if (dest == SelfLanguageDestination.Here) { //TODO
+                return source.Replace("^", "");
+            } else if (dest == SelfLanguageDestination.Stack) { //Could be buggy cause of a R containing a -? keep the order this way 
+                return Convert.ToString(CommandStackCarry.Pop());
+            } else if(dest == SelfLanguageDestination.Number){
+                return HandleFromMemory(Convert.ToInt32(source));
+            } else if(dest == SelfLanguageDestination.None){
+                throw new InvalidGetterException(string.Format("The get operation with the > {0} < source is not valid", source));
+            }else{
+                throw new NotImplementedException(); //HTF
+            }
+        }
+
+        /// <summary>
+        /// Compares 2 therms in assuming they are in the given type
+        /// </summary>
+        /// <param name="therms">(type:th1:th2)</param>
+        /// <returns>Starndard CompareTo Output</returns>
+        private int Compare(string therms){
+            var elemtents = therms.Replace("(", "").Replace(")", "").Split(':');
+            var cmp_type = elemtents.ElementAtOrDefault(0);
+            var first = elemtents.ElementAtOrDefault(1);
+            var second = elemtents.ElementAtOrDefault(2);
+            first = Getter(first);
+            second = Getter(second);
+            var type = Type.GetType(cmp_type);
+            if ((GetVariableOfType(type) is IComparable)&&(GetVariableOfType(type) is IConvertible)) {
+                var new_f = Convert.ChangeType(first, type);
+                var new_s = Convert.ChangeType(second, type);
+                return ((dynamic)new_f).CompareTo(new_s);
+            }
+            return 0;
+        }
+        
         private void HandleToRam(string generator) {
             var dst1 = generator.Split(':');
             var name = dst1.ElementAtOrDefault(0); //Name
@@ -118,21 +181,29 @@ namespace SelfLanguage {
             //Remove if exsists the variable from ram
             if(Ram.Any((s) => s.Name == name)){ Ram.Remove(Ram.First((s) => s.Name == name));}
             //The variable is not in ram and has to be created
-            var actual_type = Type.GetType(type);
+            var actual_type = Type.GetType(type) ?? TypeAliasContainer.GetFromAlias(type);
+            if (actual_type == null) { throw new InvalidVariableTypeException(string.Format("The type {0} is not a valid .Net or SelfLanguage type",type)); }
             //var obj = actual_type.GetConstructors().First((s) => s.GetParameters().Length == 0 ).Invoke(new object[] { });
             var obj = GetVariableOfType(actual_type);
             if (obj!=null && actual_type.GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(obj.GetType()))) {
                 dynamic o = obj;
                 Ram.Add(new Variable(o.FromString(value), name));
-                return;
             } else if (actual_type.GetInterfaces().Any((e) => e == typeof(IConvertible))) {
                 var o = Convert.ChangeType(value, obj.GetType());
                 Ram.Add(new Variable(o, name));
-                return;
             } else if (actual_type.GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
                 var o = obj.GetType().GetConstructors().First((s) => s.GetParameters().Length == 1 && s.GetParameters().First().GetType() == typeof(string));
                 Ram.Add(new Variable(o, name));
-                return;
+            } else if (actual_type.GetMethods().Where((s) => s.Name.Contains("op_Implicit"))
+                .Any( s => s.GetParameters().Length==1 && s.GetParameters().Any( k => k.ParameterType == typeof(string)))) 
+            {//is the type implicitally convertible from string
+                obj = value;
+                Ram.Add(new Variable(obj, name));
+            }else if(obj.GetType() is object){
+                obj = value;
+                Ram.Add(new Variable(obj, name));
+            }else {
+                throw new InvalidVariableTypeException("The type {0} is not castable or convertible from string, and it does not have a constructor using one string argument");
             }
             
         }
@@ -141,7 +212,7 @@ namespace SelfLanguage {
             var name = new_source.ElementAtOrDefault(1); //Name
             var value = new_source.ElementAtOrDefault(2);//Value
             var type = new_source.ElementAtOrDefault(3); //Type
-            var to_put = Ram.FirstOrDefault((s) => s.Name == name);
+            var to_put = Ram.FirstOrDefault(s => s.Name == name);
             if (to_put == null) { throw new NotDefinedVariableException(string.Format("The varible {0} is not defined", name)); } else {
                 if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(to_put.GetType()))) {
                     dynamic c = to_put;
@@ -290,15 +361,6 @@ namespace SelfLanguage {
             return to_r;
         }
         #endregion
-        private void Add(int pointer) {
-            var command = GetLitteral(pointer + 2).Split(';');
-            if (command.Length != 2) {
-                throw new InvalidOperationException("The add got called with a not valid litteral statement");
-            }
-            var ptr = Convert.ToInt32(command.ElementAt(0));
-            var how_m = Convert.ToInt32(command.ElementAt(1));
-            Memory[ptr] = Convert.ToChar(Convert.ToInt32(Memory[ptr]) + how_m);
-        }
         #endregion
     }
 }

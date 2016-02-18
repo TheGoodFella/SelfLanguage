@@ -25,9 +25,8 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.splitter = new System.Windows.Forms.SplitContainer();
-            this.txtPointers = new IDE.CustomTextBox();
             this.pnlIntellisense = new System.Windows.Forms.Panel();
-            this.txtCode = new IDE.CustomTextBox();
+            this.txtIntellisense = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSelectionColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,7 +37,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatusPointer = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmrZoom = new System.Windows.Forms.Timer(this.components);
-            this.txtIntellisense = new System.Windows.Forms.RichTextBox();
+            this.txtPointers = new IDE.CustomTextBox();
+            this.txtCode = new IDE.CustomTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
             this.splitter.Panel1.SuspendLayout();
             this.splitter.Panel2.SuspendLayout();
@@ -67,22 +67,6 @@
             this.splitter.TabIndex = 2;
             this.splitter.TabStop = false;
             // 
-            // txtPointers
-            // 
-            this.txtPointers.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtPointers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPointers.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.txtPointers.Location = new System.Drawing.Point(0, 0);
-            this.txtPointers.Name = "txtPointers";
-            this.txtPointers.ReadOnly = true;
-            this.txtPointers.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtPointers.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.txtPointers.Size = new System.Drawing.Size(91, 285);
-            this.txtPointers.TabIndex = 0;
-            this.txtPointers.TabStop = false;
-            this.txtPointers.Text = "";
-            this.txtPointers.WordWrap = false;
-            // 
             // pnlIntellisense
             // 
             this.pnlIntellisense.Controls.Add(this.txtIntellisense);
@@ -92,18 +76,15 @@
             this.pnlIntellisense.TabIndex = 5;
             this.pnlIntellisense.Visible = false;
             // 
-            // txtCode
+            // txtIntellisense
             // 
-            this.txtCode.AcceptsTab = true;
-            this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtCode.Location = new System.Drawing.Point(0, 0);
-            this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(508, 285);
-            this.txtCode.TabIndex = 1;
-            this.txtCode.Text = "";
-            this.txtCode.WordWrap = false;
-            this.txtCode.FontChanged += new System.EventHandler(this.txtCode_FontChanged);
-            this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
+            this.txtIntellisense.BackColor = System.Drawing.SystemColors.Control;
+            this.txtIntellisense.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtIntellisense.Location = new System.Drawing.Point(0, 0);
+            this.txtIntellisense.Name = "txtIntellisense";
+            this.txtIntellisense.Size = new System.Drawing.Size(200, 100);
+            this.txtIntellisense.TabIndex = 0;
+            this.txtIntellisense.Text = "";
             // 
             // menuStrip1
             // 
@@ -183,15 +164,36 @@
             this.tmrZoom.Enabled = true;
             this.tmrZoom.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // txtIntellisense
+            // txtPointers
             // 
-            this.txtIntellisense.BackColor = System.Drawing.SystemColors.Control;
-            this.txtIntellisense.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtIntellisense.Location = new System.Drawing.Point(0, 0);
-            this.txtIntellisense.Name = "txtIntellisense";
-            this.txtIntellisense.Size = new System.Drawing.Size(200, 100);
-            this.txtIntellisense.TabIndex = 0;
-            this.txtIntellisense.Text = "";
+            this.txtPointers.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPointers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPointers.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
+            this.txtPointers.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.txtPointers.Location = new System.Drawing.Point(0, 0);
+            this.txtPointers.Name = "txtPointers";
+            this.txtPointers.ReadOnly = true;
+            this.txtPointers.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtPointers.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.txtPointers.Size = new System.Drawing.Size(91, 285);
+            this.txtPointers.TabIndex = 0;
+            this.txtPointers.TabStop = false;
+            this.txtPointers.Text = "";
+            this.txtPointers.WordWrap = false;
+            // 
+            // txtCode
+            // 
+            this.txtCode.AcceptsTab = true;
+            this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCode.Location = new System.Drawing.Point(0, 0);
+            this.txtCode.Name = "txtCode";
+            this.txtCode.Size = new System.Drawing.Size(508, 285);
+            this.txtCode.TabIndex = 1;
+            this.txtCode.Text = "";
+            this.txtCode.WordWrap = false;
+            this.txtCode.FontChanged += new System.EventHandler(this.txtCode_FontChanged);
+            this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
             // 
             // TextEditor
             // 

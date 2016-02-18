@@ -88,6 +88,11 @@ namespace IDE {
             var task = new Task(() => language.Run(EntryPoint, true));
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
+        private void runToolStripMenuItem_Click(object sender, EventArgs e) {
+            GenericCreateLanguageDebug(() => { });
+            var task = new Task(() => language.Run(EntryPoint, true));
+            task.Start(); //This is done in 2 rows(dec+run) for clarity
+        }
         private void slow1000msDelayPerCommandToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => System.Threading.Thread.Sleep(1000));
             var task = new Task(() => language.Run(EntryPoint, true) );
@@ -187,6 +192,8 @@ namespace IDE {
             });
             return tmp.ToArray();
         }
+
+
 #endif
         
     }

@@ -11,8 +11,6 @@ namespace IDE {
         /// </summary>
         [STAThread]
         static void Main() {
-            //var img = new ImageFromSelfCode();
-            //img.CreateImage("asdfasdfasdfasd");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
