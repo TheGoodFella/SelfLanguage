@@ -85,4 +85,7 @@ namespace SelfLanguage.Exceptions {
     class InvalidGetterException : Exception {
         public InvalidGetterException(string s): base(s) { }
     }
+    class InvalidVariableTypeException : Exception {
+        public InvalidVariableTypeException(string s): base(s) { }
+    }
 }

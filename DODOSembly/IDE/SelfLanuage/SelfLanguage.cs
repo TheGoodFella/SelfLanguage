@@ -2,10 +2,12 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+
 using SelfLanguage.Interfaces;
 using SelfLanguage.Utility;
 using SelfLanguage.Exceptions;
 using SelfLanguage.SLRegex;
+using SelfLanguage.TypeAlias;
 
 namespace SelfLanguage {
     public class Language {
@@ -13,6 +15,7 @@ namespace SelfLanguage {
         private int _pointer { get; set; }
         private char[] Temp_mem { get; set; }
         private RegexContainer DestinationSelecter { get; set; }
+        private SelfTypes TypeAliasContainer { get; set; }
 
         public List<Variable> Ram { get; private set; }
         public Stack<int> CommandStackCarry { get; private set; }
@@ -31,6 +34,7 @@ namespace SelfLanguage {
         public Language(int _memorySize) {
             DestinationSelecter = new RegexContainer();
             CommandStackCarry = new Stack<int>();
+            TypeAliasContainer = new SelfTypes();
             Memory = new char[_memorySize];
             Memory = Memory.Select((s) => '\\').ToArray();
             RegisterInterrupt = new List<Action>();
@@ -177,21 +181,29 @@ namespace SelfLanguage {
             //Remove if exsists the variable from ram
             if(Ram.Any((s) => s.Name == name)){ Ram.Remove(Ram.First((s) => s.Name == name));}
             //The variable is not in ram and has to be created
-            var actual_type = Type.GetType(type);
+            var actual_type = Type.GetType(type) ?? TypeAliasContainer.GetFromAlias(type);
+            if (actual_type == null) { throw new InvalidVariableTypeException(string.Format("The type {0} is not a valid .Net or SelfLanguage type",type)); }
             //var obj = actual_type.GetConstructors().First((s) => s.GetParameters().Length == 0 ).Invoke(new object[] { });
             var obj = GetVariableOfType(actual_type);
             if (obj!=null && actual_type.GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(obj.GetType()))) {
                 dynamic o = obj;
                 Ram.Add(new Variable(o.FromString(value), name));
-                return;
             } else if (actual_type.GetInterfaces().Any((e) => e == typeof(IConvertible))) {
                 var o = Convert.ChangeType(value, obj.GetType());
                 Ram.Add(new Variable(o, name));
-                return;
             } else if (actual_type.GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
                 var o = obj.GetType().GetConstructors().First((s) => s.GetParameters().Length == 1 && s.GetParameters().First().GetType() == typeof(string));
                 Ram.Add(new Variable(o, name));
-                return;
+            } else if (actual_type.GetMethods().Where((s) => s.Name.Contains("op_Implicit"))
+                .Any( s => s.GetParameters().Length==1 && s.GetParameters().Any( k => k.ParameterType == typeof(string)))) 
+            {//is the type implicitally convertible from string
+                obj = value;
+                Ram.Add(new Variable(obj, name));
+            }else if(obj.GetType() is object){
+                obj = value;
+                Ram.Add(new Variable(obj, name));
+            }else {
+                throw new InvalidVariableTypeException("The type {0} is not castable or convertible from string, and it does not have a constructor using one string argument");
             }
             
         }

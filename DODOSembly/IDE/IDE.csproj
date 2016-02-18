@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ImageFromSelfCode.cs" />
     <Compile Include="SelfLanuage\SelfLanguage.SLRegex.cs" />
+    <Compile Include="SelfLanuage\SelfLanguage.TypeAlias.cs" />
     <Compile Include="Utility\ASCII_Table.cs">
       <SubType>UserControl</SubType>
     </Compile>
