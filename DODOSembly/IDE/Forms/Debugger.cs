@@ -124,6 +124,7 @@ namespace IDE {
             language.GenericLog = (s) => {
                 try {
                     lstLogger.Invoke(new Action(() => lstLogger.Items.Add(s.Message)));
+                    //lstLogger.Invoke(new Action(() => MessageBox.Show(s.Message)));
                 } catch (ObjectDisposedException) {
                     //Disposed, nothing to bother about it
                 }
@@ -152,7 +153,6 @@ namespace IDE {
                 }
             };
         }
-
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
 #if DEBUG
             createDLL();
@@ -192,6 +192,7 @@ namespace IDE {
             });
             return tmp.ToArray();
         }
+
 
 
 #endif

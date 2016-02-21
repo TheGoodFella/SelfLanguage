@@ -145,6 +145,8 @@ namespace SelfLanguage {
                 return Convert.ToString(CommandStackCarry.Pop());
             } else if(dest == SelfLanguageDestination.Number){
                 return HandleFromMemory(Convert.ToInt32(source));
+            }else if(dest == SelfLanguageDestination.Compare){
+                return Convert.ToString(Compare(source));
             } else if(dest == SelfLanguageDestination.None){
                 throw new InvalidGetterException(string.Format("The get operation with the > {0} < source is not valid", source));
             }else{
@@ -158,13 +160,13 @@ namespace SelfLanguage {
         /// <param name="therms">(type:th1:th2)</param>
         /// <returns>Starndard CompareTo Output</returns>
         private int Compare(string therms){
-            var elemtents = therms.Replace("(", "").Replace(")", "").Split(':');
-            var cmp_type = elemtents.ElementAtOrDefault(0);
-            var first = elemtents.ElementAtOrDefault(1);
-            var second = elemtents.ElementAtOrDefault(2);
+            var elemtents = therms.Replace("(", "").Replace(")", "").Split('|');
+            var cmp_type = elemtents.ElementAtOrDefault(0); //Type
+            var first = elemtents.ElementAtOrDefault(1);    //First
+            var second = elemtents.ElementAtOrDefault(2);   //Second
             first = Getter(first);
             second = Getter(second);
-            var type = Type.GetType(cmp_type);
+            var type = Type.GetType(cmp_type) ?? TypeAliasContainer.GetFromAlias(cmp_type);
             if ((GetVariableOfType(type) is IComparable)&&(GetVariableOfType(type) is IConvertible)) {
                 var new_f = Convert.ChangeType(first, type);
                 var new_s = Convert.ChangeType(second, type);
@@ -214,7 +216,7 @@ namespace SelfLanguage {
             var type = new_source.ElementAtOrDefault(3); //Type
             var to_put = Ram.FirstOrDefault(s => s.Name == name);
             if (to_put == null) { throw new NotDefinedVariableException(string.Format("The varible {0} is not defined", name)); } else {
-                if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(to_put.GetType()))) {
+                if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IStringable))) {
                     dynamic c = to_put;
                     return c.ToMemoryString();
                 } else if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IConvertible))) {

@@ -7,22 +7,27 @@ using System.Text.RegularExpressions;
 
 namespace SelfLanguage.SLRegex {
     class RegexContainer {
-        private const string MatchRam = @"\s*R\s*:\s*[^\^]*:[^\0&]*";
-        private const string MatchStack = @"\s*^-$\s*";
-        private const string MatchStackMultiChar = @"\s*-{2}\s*";
-        private const string MatchNumber = @"^\d+$";
-        private const string MatchHere = @"\s*^[^\0&]*";
+        private const string MatchRam = @"^R\s*:\s*[^\^]*:[^\0&]*";
         private Regex Ram { get; set; }
+        private const string MatchCompare = @"^\((.*|){2}.*\)";
+        private Regex Compare { get; set; }
+        private const string MatchStack = @"^-$";
         private Regex Stack { get; set; }
+        private const string MatchStackMultiChar = @"^-{2}";
         private Regex StackMultiChar { get; set; }
+        private const string MatchNumber = @"^\d+$";
         private Regex Number { get; set; }
+        private const string MatchHere = @"^\^[^\0&]*";
         private Regex Here { get; set; }
+        
+
         public RegexContainer() {
             Ram = new Regex(MatchRam);
             Stack = new Regex(MatchStack);
             StackMultiChar = new Regex(MatchStackMultiChar);
             Number = new Regex(MatchNumber);
             Here = new Regex(MatchHere);
+            Compare = new Regex(MatchCompare);
         }
         public SelfLanguageDestination IsCommand(string s) {
             if (Ram.Match(s).Success) {
@@ -35,6 +40,8 @@ namespace SelfLanguage.SLRegex {
                 return SelfLanguageDestination.Number;
             }else if(Here.Match(s).Success){
                 return SelfLanguageDestination.Here;
+            } else if (Compare.Match(s).Success) {
+                return SelfLanguageDestination.Compare;
             }else {
                 return SelfLanguageDestination.None;
             }
@@ -46,6 +53,7 @@ namespace SelfLanguage.SLRegex {
         Stack,
         StackMultiChar,
         Number,
+        Compare,
         Here,
         None
     }
