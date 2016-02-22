@@ -16,6 +16,7 @@ namespace SelfLanguage {
         private char[] Temp_mem { get; set; }
         private RegexContainer DestinationSelecter { get; set; }
         private SelfTypes TypeAliasContainer { get; set; }
+        private ConversionSelector Conversion { get; set; }
 
         public List<Variable> Ram { get; private set; }
         public Stack<int> CommandStackCarry { get; private set; }
@@ -185,22 +186,22 @@ namespace SelfLanguage {
             //The variable is not in ram and has to be created
             var actual_type = Type.GetType(type) ?? TypeAliasContainer.GetFromAlias(type);
             if (actual_type == null) { throw new InvalidVariableTypeException(string.Format("The type {0} is not a valid .Net or SelfLanguage type",type)); }
-            //var obj = actual_type.GetConstructors().First((s) => s.GetParameters().Length == 0 ).Invoke(new object[] { });
+            var convert = Conversion.GetConversion(actual_type);
             var obj = GetVariableOfType(actual_type);
-            if (obj!=null && actual_type.GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(obj.GetType()))) {
+            if (convert.Any(s => s== PossibleConversion.IStringable)) {
                 dynamic o = obj;
                 Ram.Add(new Variable(o.FromString(value), name));
-            } else if (actual_type.GetInterfaces().Any((e) => e == typeof(IConvertible))) {
+            } else if (convert.Any(s=>s== PossibleConversion.IConvertible)) {
                 var o = Convert.ChangeType(value, obj.GetType());
                 Ram.Add(new Variable(o, name));
-            } else if (actual_type.GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
+            } else if (convert.Any(s=>s== PossibleConversion.Constructor)) {
                 var o = obj.GetType().GetConstructors().First((s) => s.GetParameters().Length == 1 && s.GetParameters().First().GetType() == typeof(string));
                 Ram.Add(new Variable(o, name));
-            } else if (actual_type.GetMethods().Where((s) => s.Name.Contains("op_Implicit"))
-                .Any( s => s.GetParameters().Length==1 && s.GetParameters().Any( k => k.ParameterType == typeof(string)))) 
-            {//is the type implicitally convertible from string
+            } else if (convert.Any(s=>s == PossibleConversion.FromStringImplicit)) {//is the type implicitally convertible from string
                 obj = value;
                 Ram.Add(new Variable(obj, name));
+            }else if(convert.Any(s=> s== PossibleConversion.FromStringExplicit)){
+                obj = value; //TODO
             }else if(obj.GetType() is object){
                 obj = value;
                 Ram.Add(new Variable(obj, name));
@@ -215,11 +216,12 @@ namespace SelfLanguage {
             var value = new_source.ElementAtOrDefault(2);//Value
             var type = new_source.ElementAtOrDefault(3); //Type
             var to_put = Ram.FirstOrDefault(s => s.Name == name);
+            var convert = Conversion.GetConversion(Type.GetType(type));
             if (to_put == null) { throw new NotDefinedVariableException(string.Format("The varible {0} is not defined", name)); } else {
-                if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IStringable))) {
+                if (convert.Any(s=>s== PossibleConversion.IStringable)) {
                     dynamic c = to_put;
                     return c.ToMemoryString();
-                } else if (to_put.GetType().GetInterfaces().Any((s) => s == typeof(IConvertible))) {
+                } else if (convert.Any(s=> s== PossibleConversion.IConvertible)) {
                     return Convert.ToString(to_put.IncapsulatedValue);
                 } else {
                     return to_put.IncapsulatedValue.ToString();
@@ -236,35 +238,6 @@ namespace SelfLanguage {
                 return "";
             } else { 
                 return null; 
-            }
-        }
-        #endregion
-        #region <Generation>
-        private object GenerateFromString(Type type, string generator) {
-            object o = new object();
-            if (TryCreateFromStringConstructor(type, generator, out o)) { return o; } else if (TryCreateFromStringConvert(type, generator, out o)) { return o; } else {
-                throw new InvalidTypeGeneratorException();
-            }
-        }
-        private bool TryCreateFromStringConvert(Type t, string generator, out object o) {
-            if (t.GetInterfaces().Any((s) => s == typeof(IStringable<>).MakeGenericType(new Type[] { t }))) { //Fanculo al runtime
-
-                o = t.GetMethod("FromString", BindingFlags.Static | BindingFlags.Public).Invoke(null, new object[] { generator });
-                return true;
-            }
-            o = null;
-            return false;
-        }
-        private bool TryCreateFromStringConstructor(Type type, string generator, out object o) {
-            var v = type.GetConstructors();
-            var string_constructor = v.Where((s) => s.GetParameters().Length == 1 && s.GetParameters().FirstOrDefault().GetType() == typeof(string));
-            if (string_constructor.Count() == 0) {
-                o = null;
-                return false;
-            } else {
-                object to_r = string_constructor.First().Invoke(new object[] { generator });
-                o = to_r;
-                return true;
             }
         }
         #endregion

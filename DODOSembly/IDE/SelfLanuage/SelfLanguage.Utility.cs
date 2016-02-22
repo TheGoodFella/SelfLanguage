@@ -51,7 +51,7 @@ namespace SelfLanguage.Utility {
     public class ConversionSelector {
         public PossibleConversion[] GetConversion(Type t) {
             var to_r = new List<PossibleConversion>();
-            if(t.GetInterfaces().Any(x=>x == typeof(IStringable)){
+            if(t.GetInterfaces().Any(x=>x == typeof(IStringable))){
                 to_r.Add(PossibleConversion.IStringable);
             }
             if(t.GetMethods().Where(s => s.Name == "op_Implicit") //Is a implicit operator
@@ -85,6 +85,9 @@ namespace SelfLanguage.Utility {
             if(t.GetInterfaces().Any(s => s == typeof(IConvertible))){
                 to_r.Add(PossibleConversion.IConvertible);
             }
+            if (t.GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
+                to_r.Add(PossibleConversion.Constructor);
+            }
             return to_r.ToArray();
         }
     }
@@ -98,5 +101,6 @@ namespace SelfLanguage.Utility {
         FromStringImplicit = 3,
         FromStringExplicit = 2,
         IConvertible=1,
+        Constructor=1,
     }
 }
