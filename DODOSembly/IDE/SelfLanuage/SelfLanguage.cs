@@ -92,7 +92,22 @@ namespace SelfLanguage {
         /// </summary>
         /// <param name="pointer"></param>
         private void JumpCommand(int pointer) {
-            _pointer = GetNFrom(pointer += 2) - 1;
+            var v = GetLitteral(pointer +2);
+            if (v.Contains(';')) {
+                var where = Convert.ToInt32(v.Split(';').ElementAt(0));
+                var condition = v.Split(';').ElementAt(1);
+                if (!DestinationSelecter.IsConditionalJump(condition)) {
+                    throw new InvalidJumpException(string.Format("The condition > {0} < is not well formed",condition));
+                }
+                var expect = condition.First();
+                var compare = condition.Skip(1).Select(s=>Convert.ToString(s)).Aggregate((a,b) => a+b);
+                var returned = Getter(compare);
+                if (DestinationSelecter.JumpIntToBool(Convert.ToInt32(returned), Convert.ToString(expect))) {
+                    _pointer = where-1;
+                }
+            } else {
+                _pointer = Convert.ToInt32(v) -1 ;
+            }
         }
         private void Add(int pointer) {
             var command = GetLitteral(pointer + 2).Split(';');
@@ -159,7 +174,7 @@ namespace SelfLanguage {
         /// Compares 2 therms in assuming they are in the given type
         /// </summary>
         /// <param name="therms">(type:th1:th2)</param>
-        /// <returns>Starndard CompareTo Output</returns>
+        /// <returns>Equals, 1 is false and 0 is true; Compare \< is 1, \> is 2, 0 is = </returns>
         private int Compare(string therms){
             var elemtents = therms.Replace("(", "").Replace(")", "").Split('|');
             var cmp_type = elemtents.ElementAtOrDefault(0); //Type
@@ -168,12 +183,19 @@ namespace SelfLanguage {
             first = Getter(first);
             second = Getter(second);
             var type = Type.GetType(cmp_type) ?? TypeAliasContainer.GetFromAlias(cmp_type);
-            if ((GetVariableOfType(type) is IComparable)&&(GetVariableOfType(type) is IConvertible)) {
+            var variable = GetVariableOfType(type);
+            if ((variable is IComparable)&& (variable is IConvertible)) {
                 var new_f = Convert.ChangeType(first, type);
                 var new_s = Convert.ChangeType(second, type);
-                return ((dynamic)new_f).CompareTo(new_s);
+                var compared = ((dynamic)new_f).CompareTo(new_s);
+                return compared ==0 ? 0 : compared == -1?1:compared == 1?2:-1;
+            } else if(variable is IConvertible) {
+                var new_f = Convert.ChangeType(first, type);
+                var new_s = Convert.ChangeType(second, type);
+                return new_f.Equals(new_s) ? 0 : 1;
+            } else {
+                return ((object)first).Equals((object)second) ? 0 : 1;
             }
-            return 0;
         }
         
         private void HandleToRam(string generator) {

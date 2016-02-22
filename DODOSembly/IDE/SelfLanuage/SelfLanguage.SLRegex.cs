@@ -19,7 +19,11 @@ namespace SelfLanguage.SLRegex {
         private Regex Number { get; set; }
         private const string MatchHere = @"^\^[^\0&]*";
         private Regex Here { get; set; }
-        
+
+        private const string MatchJumpCondition = @"^(<|!|>|=){1}(\(.*\|).*\)";
+        private Regex JumpCondition { get; set; }
+        private Dictionary<string, int[]> JumpExpect { get; set; }
+
 
         public RegexContainer() {
             Ram = new Regex(MatchRam);
@@ -28,6 +32,13 @@ namespace SelfLanguage.SLRegex {
             Number = new Regex(MatchNumber);
             Here = new Regex(MatchHere);
             Compare = new Regex(MatchCompare);
+
+            JumpCondition = new Regex(MatchJumpCondition);
+            JumpExpect = new Dictionary<string, int[]>();
+            JumpExpect.Add("<", new int[]{ 1 });
+            JumpExpect.Add("=", new int[]{ 0 });
+            JumpExpect.Add(">", new int[]{ 2 });
+            JumpExpect.Add("!", new int[]{ 1, 2 });
         }
         public SelfLanguageDestination IsCommand(string s) {
             if (Ram.Match(s).Success) {
@@ -46,7 +57,12 @@ namespace SelfLanguage.SLRegex {
                 return SelfLanguageDestination.None;
             }
         }
-        
+        public bool IsConditionalJump(string s) {
+            return JumpCondition.Match(s).Success;
+        }
+        public bool JumpIntToBool(int i, string s) {
+            return JumpExpect[s].Any(k => k == i);
+        }
     }
     public enum SelfLanguageDestination {
         Ram,
