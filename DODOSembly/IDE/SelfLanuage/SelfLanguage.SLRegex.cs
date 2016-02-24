@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace SelfLanguage.SLRegex {
+    /// <summary>
+    /// SelfLanguage Regex container
+    /// </summary>
     class RegexContainer {
         private const string MatchRam = @"^R\s*:\s*[^\^]*:[^\0&]*";
         private Regex Ram { get; set; }
@@ -24,7 +27,9 @@ namespace SelfLanguage.SLRegex {
         private Regex JumpCondition { get; set; }
         private Dictionary<string, int[]> JumpExpect { get; set; }
 
-
+        /// <summary>
+        /// Creates a new RegexContainer, this is made for performance sake
+        /// </summary>
         public RegexContainer() {
             Ram = new Regex(MatchRam);
             Stack = new Regex(MatchStack);
@@ -40,6 +45,11 @@ namespace SelfLanguage.SLRegex {
             JumpExpect.Add(">", new int[]{ 2 });
             JumpExpect.Add("!", new int[]{ 1, 2 });
         }
+        /// <summary>
+        /// Return wich Destination is the parameter
+        /// </summary>
+        /// <param name="s">To parse</param>
+        /// <returns>The actual destination</returns>
         public SelfLanguageDestination IsCommand(string s) {
             if (Ram.Match(s).Success) {
                 return SelfLanguageDestination.Ram;
@@ -57,13 +67,27 @@ namespace SelfLanguage.SLRegex {
                 return SelfLanguageDestination.None;
             }
         }
+        /// <summary>
+        /// Parse the jump
+        /// </summary>
+        /// <param name="s">Jump to be parsed</param>
+        /// <returns>Standard Parser output</returns>
         public bool IsConditionalJump(string s) {
             return JumpCondition.Match(s).Success;
         }
+        /// <summary>
+        /// True or false according to the jump expected and returned value
+        /// </summary>
+        /// <param name="i">Number to be made as boolean</param>
+        /// <param name="s"> \<, \>, = or ! </param>
+        /// <returns>true for \< on 1, true for = on 0, true for ! on 1 or 2, true for \> on 2</returns>
         public bool JumpIntToBool(int i, string s) {
             return JumpExpect[s].Any(k => k == i);
         }
     }
+    /// <summary>
+    /// All the possible destinations
+    /// </summary>
     public enum SelfLanguageDestination {
         Ram,
         Stack,

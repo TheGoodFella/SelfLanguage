@@ -10,6 +10,9 @@ using SelfLanguage.SLRegex;
 using SelfLanguage.TypeAlias;
 
 namespace SelfLanguage {
+    /// <summary>
+    /// Main Language class
+    /// </summary>
     public class Language {
         private List<Action> RegisterInterrupt { get; set; }
         private int _pointer { get; set; }
@@ -17,21 +20,50 @@ namespace SelfLanguage {
         private RegexContainer DestinationSelecter { get; set; }
         private SelfTypes TypeAliasContainer { get; set; }
         private ConversionSelector Conversion { get; set; }
-
+        /// <summary>
+        /// The Ram, contains all the variables
+        /// </summary>
         public List<Variable> Ram { get; private set; }
+        /// <summary>
+        /// The stack, values can be pushed here
+        /// </summary>
         public Stack<int> CommandStackCarry { get; private set; }
-
+        /// <summary>
+        /// All the SelfLanguage Commands are contained here
+        /// </summary>
         public Dictionary<string, Action> CommandList { get; private set; } //int is where the pointer is when calling the command
+        /// <summary>
+        /// This is the memory where the program is loaded
+        /// </summary>
         public char[] Memory { get; private set; }
+        /// <summary>
+        /// This is where the loaded program starts
+        /// </summary>
         public char ProgramEntryPoint { get; set; }
-
+        /// <summary>
+        /// This is the event rised every time a command is called
+        /// </summary>
         public Action<Logging> Debug { get; set; }
+        /// <summary>
+        /// This a logger, here you can write with the n command
+        /// </summary>
         public Action<Logging> GenericLog { get; set; }
+        /// <summary>
+        /// This is the event rised on Exception
+        /// </summary>
         public event Action<Logging> ExceptionRised; 
-
+        /// <summary>
+        /// This is the pre-command char, a command to be executed, have to have this in front of him
+        /// </summary>
         public readonly char PreCommand = '\0';
+        /// <summary>
+        /// This is the pre-pointer indicator, delimits pointer start and end
+        /// </summary>
         public readonly char PointerIndicator = '&';
-
+        /// <summary>
+        /// Creates a Language instance with the given memory
+        /// </summary>
+        /// <param name="_memorySize">How much memory is needed</param>
         public Language(int _memorySize) {
             DestinationSelecter = new RegexContainer();
             CommandStackCarry = new Stack<int>();
@@ -53,9 +85,10 @@ namespace SelfLanguage {
         #region Commands
         #region <Misc>
         /// <summary>
-        /// Start the program
+        /// Runs the program
         /// </summary>
-        /// <param name="ProgramEntryPoint">Where to start</param>
+        /// <param name="ProgramEntryPoint">Where the program is going to start</param>
+        /// <param name="debug">Executes the program in debug mode (default false)</param>
         public void Run(int ProgramEntryPoint,bool debug=false) {
             var end_o_P = false;
             _pointer = ProgramEntryPoint;
@@ -78,6 +111,8 @@ namespace SelfLanguage {
         /// <summary>
         /// Load in the memory the string s overwriting from the EntryPoint to s.Length
         /// </summary>
+        /// <param name="s">String to be loaded</param>
+        /// <param name="EntryPoint">Where to load the string</param>
         public void LoadInMemory(string s, int EntryPoint) {
             if (EntryPoint + s.Length > Memory.Length) {
                 throw new OutOfMemoryException(string.Format("The memory from {0} to {1} do not fit the string that is {2} char long", EntryPoint, Memory.Length, s.Length));
@@ -90,7 +125,6 @@ namespace SelfLanguage {
         /// <summary>
         /// Moves pointer to a new point, like the assembly jmp
         /// </summary>
-        /// <param name="pointer"></param>
         private void JumpCommand(int pointer) {
             var v = GetLitteral(pointer +2);
             if (v.Contains(';')) {
@@ -120,7 +154,7 @@ namespace SelfLanguage {
         }
         #endregion
         #region <Move>
-        public void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght) || compare is (type:toC1:toC2)
+        private void Move(int pointer) {  //God is here bby   for ram is R:name:[value]:[type=string] || For memory is a N(0, Memory.Lenght) || compare is (type:toC1:toC2)
             var v = GetLitteral(pointer);
             var targets = v.Split(';');
             if (targets.Length != 2) { throw new InvalidMoveException(string.Format("The move is not well formed, {0} is not a valid move argument",targets)); }
@@ -129,7 +163,6 @@ namespace SelfLanguage {
             var to_move = Getter(source);
             Setter(destination, to_move);
         }
-
         private void Setter(string destination, string to_move) {
             var dest = DestinationSelecter.IsCommand(destination);
             if (dest == SelfLanguageDestination.Ram) {
@@ -264,6 +297,11 @@ namespace SelfLanguage {
         }
         #endregion
         #region <Interrupt>
+        /// <summary>
+        /// Use this function to define an interrupt you can call using the i command
+        /// </summary>
+        /// <param name="f">The Interrupt to be executed</param>
+        /// <param name="where">Number to be given</param>
         public void DefineInterrupt(Action f, int where) {
             for (var i = 0; RegisterInterrupt.Count <= where; i++) {
                 if (RegisterInterrupt.Count < i) { RegisterInterrupt.Add(EmptyInterrupt); }
@@ -279,10 +317,7 @@ namespace SelfLanguage {
         private void Interrupt(int i) {
             RegisterInterrupt[GetNFrom(i + 2)]();
         }
-        /// <summary>
-        /// Popa is 0, pusha is 1
-        /// </summary>
-        /// <param name="i"></param>
+
         #endregion
         #region <Working_with_command_carry>
         /// <summary>
@@ -301,8 +336,9 @@ namespace SelfLanguage {
         #endregion
         #region <Pop_and_push>
         /// <summary>
-        /// Calls the interrupt defined after the i command
+        /// Popa is 0, pusha is 1
         /// </summary>
+        /// <param name="i"></param>
         private void PopOrPush(int i) {
             if (GetNFrom(i + 2) == 0) { Popa(); } else { Pusha(); }
         }

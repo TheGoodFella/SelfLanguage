@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SelfLanguage.TypeAlias {
+    /// <summary>
+    /// Class designed to contain all the type alias used by the SelfLanguage
+    /// </summary>
     class SelfTypes {
         Dictionary<string, Type> Aliasses { get; set; }
+        /// <summary>
+        /// Creates a new instance of SelfTypes
+        /// </summary>
         public SelfTypes() {
             Aliasses = new Dictionary<string, Type>();
             Aliasses.Add("str"   , typeof(String));

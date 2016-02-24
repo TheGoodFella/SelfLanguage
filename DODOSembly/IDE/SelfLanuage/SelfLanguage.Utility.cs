@@ -48,7 +48,15 @@ namespace SelfLanguage.Utility {
             return IncapsulatedValue.GetType();
         }
     }
+    /// <summary>
+    /// Conversion parser
+    /// </summary>
     public class ConversionSelector {
+        /// <summary>
+        /// Returns the possible conversion for the variable
+        /// </summary>
+        /// <param name="t">Type to be converted to or from</param>
+        /// <returns>Possible conversion</returns>
         public PossibleConversion[] GetConversion(Type t) {
             var to_r = new List<PossibleConversion>();
             if(t.GetInterfaces().Any(x=>x == typeof(IStringable))){
