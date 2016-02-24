@@ -117,7 +117,6 @@ namespace IDE {
                 DebugErrorColor = true;
                 this.Invoke(new Action(() =>{
                     MessageBox.Show(a.Message  + " at " + a.Pointer);
-                    lstMemory.Items[a.Pointer].BackColor = ErrorColor;
                 }));
                 
             });

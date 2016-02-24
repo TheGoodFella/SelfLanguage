@@ -126,6 +126,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Samples\advanced_move_and_edit.das" />
+    <None Include="Samples\conditional_jump.das" />
     <None Include="Samples\edit_command_simple.das" />
     <None Include="Samples\hello.das" />
     <None Include="Samples\hello_using_stack.das" />
