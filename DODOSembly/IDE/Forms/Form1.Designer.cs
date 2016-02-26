@@ -53,7 +53,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(546, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(615, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -116,8 +116,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl);
-            this.splitContainer1.Size = new System.Drawing.Size(546, 496);
-            this.splitContainer1.SplitterDistance = 424;
+            this.splitContainer1.Size = new System.Drawing.Size(615, 570);
+            this.splitContainer1.SplitterDistance = 477;
             this.splitContainer1.TabIndex = 2;
             // 
             // tabControl
@@ -127,7 +127,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(118, 496);
+            this.tabControl.Size = new System.Drawing.Size(134, 570);
             this.tabControl.TabIndex = 1;
             this.tabControl.Click += new System.EventHandler(this.tabControl_Click);
             // 
@@ -137,7 +137,7 @@
             this.tabASCII.Location = new System.Drawing.Point(4, 22);
             this.tabASCII.Name = "tabASCII";
             this.tabASCII.Padding = new System.Windows.Forms.Padding(3);
-            this.tabASCII.Size = new System.Drawing.Size(110, 470);
+            this.tabASCII.Size = new System.Drawing.Size(126, 544);
             this.tabASCII.TabIndex = 0;
             this.tabASCII.Text = "ASCII Table";
             this.tabASCII.UseVisualStyleBackColor = true;
@@ -147,7 +147,7 @@
             this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textEditor1.Location = new System.Drawing.Point(0, 0);
             this.textEditor1.Name = "textEditor1";
-            this.textEditor1.Size = new System.Drawing.Size(424, 496);
+            this.textEditor1.Size = new System.Drawing.Size(477, 570);
             this.textEditor1.TabIndex = 0;
             // 
             // asciI_Table1
@@ -155,7 +155,7 @@
             this.asciI_Table1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.asciI_Table1.Location = new System.Drawing.Point(3, 3);
             this.asciI_Table1.Name = "asciI_Table1";
-            this.asciI_Table1.Size = new System.Drawing.Size(104, 464);
+            this.asciI_Table1.Size = new System.Drawing.Size(120, 538);
             this.asciI_Table1.SomethingPressed = null;
             this.asciI_Table1.TabIndex = 0;
             // 
@@ -163,7 +163,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 520);
+            this.ClientSize = new System.Drawing.Size(615, 594);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;

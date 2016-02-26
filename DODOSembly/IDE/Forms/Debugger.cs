@@ -38,13 +38,6 @@ namespace IDE {
             _program = program;
             txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
             lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
-            txtToolTip.SetToolTip(lstMemory, "");
-            txtToolTip.Draw += txtToolTip_Draw;
-        }
-
-        void txtToolTip_Draw(object sender, DrawToolTipEventArgs e) {
-            var v = new Cursor(Cursor.Current.Handle);
-            //TODO
         }
 
         private void splitter1_SplitterMoved(object sender, SplitterEventArgs e) {
@@ -123,10 +116,13 @@ namespace IDE {
             }
             language.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
                 DebugErrorColor = true;
-                this.Invoke(new Action(() => {
-                    MessageBox.Show(a.Message + " at " + a.Pointer);
-                }));
+                try {
+                    this.Invoke(new Action(() => {
+                         MessageBox.Show(a.Message + " at " + a.Pointer);
+                    }));
+                } catch {
 
+                }
             });
             language.GenericLog = (s) => {
                 try {
@@ -142,8 +138,11 @@ namespace IDE {
                         if (DebugErrorColor) { return; }
                         DebugGoOn = false;
                         lstMemory.SuspendLayout();
-                        lstMemory.Items.Clear();
-                        lstMemory.Items.AddRange(language.Memory.Select((theStuff) => new ListViewItem(Convert.ToString(theStuff))).ToArray());
+                        Enumerable.Range(0, lstMemory.Items.Count).ToList().ForEach(s => {
+                            if (lstMemory.Items[s].Text != Convert.ToString(language.Memory[s])) {
+                                lstMemory.Items[s].Text = Convert.ToString(language.Memory[s]);
+                            }
+                        });
                         for (int i = 0; i < lstMemory.Items.Count; i++) {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
