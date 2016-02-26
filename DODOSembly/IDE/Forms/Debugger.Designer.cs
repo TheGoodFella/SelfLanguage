@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Debugger));
             this.grpMemoryAndRam = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -48,6 +49,7 @@
             this.txtMemoryAlloc = new System.Windows.Forms.NumericUpDown();
             this.grpLogger = new System.Windows.Forms.GroupBox();
             this.lstLogger = new System.Windows.Forms.ListBox();
+            this.txtToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.grpMemoryAndRam.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -307,7 +309,7 @@
             this.grpLogger.Size = new System.Drawing.Size(250, 218);
             this.grpLogger.TabIndex = 7;
             this.grpLogger.TabStop = false;
-            this.grpLogger.Text = "Logger";
+            this.grpLogger.Text = "too";
             // 
             // lstLogger
             // 
@@ -334,6 +336,8 @@
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Debugger";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Debugger";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Debugger_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Debugger_KeyUp);
@@ -384,6 +388,7 @@
         private System.Windows.Forms.ListBox lstRam;
         private System.Windows.Forms.ListBox lstStack;
         private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+        private System.Windows.Forms.ToolTip txtToolTip;
 
 
 

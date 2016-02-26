@@ -33,10 +33,18 @@ namespace IDE {
             txtMemoryAlloc.Maximum = Int16.MaxValue;
             DebugErrorColor = false;
         }
-        public Debugger(string program):this() {
+        public Debugger(string program)
+            : this() {
             _program = program;
             txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
             lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
+            txtToolTip.SetToolTip(lstMemory, "");
+            txtToolTip.Draw += txtToolTip_Draw;
+        }
+
+        void txtToolTip_Draw(object sender, DrawToolTipEventArgs e) {
+            var v = new Cursor(Cursor.Current.Handle);
+            //TODO
         }
 
         private void splitter1_SplitterMoved(object sender, SplitterEventArgs e) {
@@ -95,19 +103,19 @@ namespace IDE {
         }
         private void slow1000msDelayPerCommandToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => System.Threading.Thread.Sleep(1000));
-            var task = new Task(() => language.Run(EntryPoint, true) );
+            var task = new Task(() => language.Run(EntryPoint, true));
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         private void userF10ToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => { while (!DebugGoOn) { System.Threading.Thread.Sleep(100); } });
-            var task = new Task(() => language.Run(EntryPoint, true) );
+            var task = new Task(() => language.Run(EntryPoint, true));
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         #endregion
 
         private void GenericCreateLanguageDebug(Action whatDebug) {
             if (language == null) {
-                MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to get loaded in the position 0, an it is going to get allocated {0} bytes of memory",_program.Length));
+                MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to get loaded in the position 0, an it is going to get allocated {0} bytes of memory", _program.Length));
                 EntryPoint = 0;
                 Memory = _program.Length;
                 language = new Language(Memory);
@@ -115,10 +123,10 @@ namespace IDE {
             }
             language.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
                 DebugErrorColor = true;
-                this.Invoke(new Action(() =>{
-                    MessageBox.Show(a.Message  + " at " + a.Pointer);
+                this.Invoke(new Action(() => {
+                    MessageBox.Show(a.Message + " at " + a.Pointer);
                 }));
-                
+
             });
             language.GenericLog = (s) => {
                 try {
@@ -141,7 +149,7 @@ namespace IDE {
                         }
                         lstMemory.Items[k.Pointer + 1].BackColor = DebugColor;
                         lstRam.Items.Clear();
-                        lstRam.Items.AddRange(language.Ram.Select((s) =>string.Format("Value> {0}, Name> {1}, Type> {2}",s.IncapsulatedValue,s.Name,s.GetType().Name)).ToArray());
+                        lstRam.Items.AddRange(language.Ram.Select((s) => string.Format("Value> {0}, Name> {1}, Type> {2}", s.IncapsulatedValue, s.Name, s.GetType().Name)).ToArray());
                         lstStack.Items.Clear();
                         lstStack.Items.AddRange(language.CommandStackCarry.Select((ma) => ma.ToString()).ToArray());
                         lstMemory.ResumeLayout();
