@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageFromSelfCode.cs" />
     <Compile Include="SelfLanuage\SelfLanguage.SLRegex.cs" />
     <Compile Include="SelfLanuage\SelfLanguage.TypeAlias.cs" />
     <Compile Include="Utility\ASCII_Table.cs">
@@ -86,7 +85,6 @@
     <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility\FastBitmap.cs" />
     <Compile Include="Utility\TextEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -128,6 +126,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Samples\advanced_move_and_edit.das" />
+    <None Include="Samples\conditional_jump.das" />
     <None Include="Samples\edit_command_simple.das" />
     <None Include="Samples\hello.das" />
     <None Include="Samples\hello_using_stack.das" />

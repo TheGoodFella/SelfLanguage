@@ -33,7 +33,8 @@ namespace IDE {
             txtMemoryAlloc.Maximum = Int16.MaxValue;
             DebugErrorColor = false;
         }
-        public Debugger(string program):this() {
+        public Debugger(string program)
+            : this() {
             _program = program;
             txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
             lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
@@ -95,19 +96,19 @@ namespace IDE {
         }
         private void slow1000msDelayPerCommandToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => System.Threading.Thread.Sleep(1000));
-            var task = new Task(() => language.Run(EntryPoint, true) );
+            var task = new Task(() => language.Run(EntryPoint, true));
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         private void userF10ToolStripMenuItem_Click(object sender, EventArgs e) {
             GenericCreateLanguageDebug(() => { while (!DebugGoOn) { System.Threading.Thread.Sleep(100); } });
-            var task = new Task(() => language.Run(EntryPoint, true) );
+            var task = new Task(() => language.Run(EntryPoint, true));
             task.Start(); //This is done in 2 rows(dec+run) for clarity
         }
         #endregion
 
         private void GenericCreateLanguageDebug(Action whatDebug) {
             if (language == null) {
-                MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to get loaded in the position 0, an it is going to get allocated {0} bytes of memory",_program.Length));
+                MessageBox.Show(string.Format("The program is running with default allocated memory, missing allocation?\n\nThe program is going to get loaded in the position 0, an it is going to get allocated {0} bytes of memory", _program.Length));
                 EntryPoint = 0;
                 Memory = _program.Length;
                 language = new Language(Memory);
@@ -115,15 +116,18 @@ namespace IDE {
             }
             language.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
                 DebugErrorColor = true;
-                this.Invoke(new Action(() =>{
-                    MessageBox.Show(a.Message  + " at " + a.Pointer);
-                    lstMemory.Items[a.Pointer].BackColor = ErrorColor;
-                }));
-                
+                try {
+                    this.Invoke(new Action(() => {
+                         MessageBox.Show(a.Message + " at " + a.Pointer);
+                    }));
+                } catch {
+
+                }
             });
             language.GenericLog = (s) => {
                 try {
                     lstLogger.Invoke(new Action(() => lstLogger.Items.Add(s.Message)));
+                    //lstLogger.Invoke(new Action(() => MessageBox.Show(s.Message)));
                 } catch (ObjectDisposedException) {
                     //Disposed, nothing to bother about it
                 }
@@ -134,14 +138,17 @@ namespace IDE {
                         if (DebugErrorColor) { return; }
                         DebugGoOn = false;
                         lstMemory.SuspendLayout();
-                        lstMemory.Items.Clear();
-                        lstMemory.Items.AddRange(language.Memory.Select((theStuff) => new ListViewItem(Convert.ToString(theStuff))).ToArray());
+                        Enumerable.Range(0, lstMemory.Items.Count).ToList().ForEach(s => {
+                            if (lstMemory.Items[s].Text != Convert.ToString(language.Memory[s])) {
+                                lstMemory.Items[s].Text = Convert.ToString(language.Memory[s]);
+                            }
+                        });
                         for (int i = 0; i < lstMemory.Items.Count; i++) {
                             lstMemory.Items[i].BackColor = lstMemory.BackColor;
                         }
                         lstMemory.Items[k.Pointer + 1].BackColor = DebugColor;
                         lstRam.Items.Clear();
-                        lstRam.Items.AddRange(language.Ram.Select((s) =>string.Format("Value> {0}, Name> {1}, Type> {2}",s.IncapsulatedValue,s.Name,s.GetType().Name)).ToArray());
+                        lstRam.Items.AddRange(language.Ram.Select((s) => string.Format("Value> {0}, Name> {1}, Type> {2}", s.IncapsulatedValue, s.Name, s.GetType().Name)).ToArray());
                         lstStack.Items.Clear();
                         lstStack.Items.AddRange(language.CommandStackCarry.Select((ma) => ma.ToString()).ToArray());
                         lstMemory.ResumeLayout();
@@ -152,49 +159,7 @@ namespace IDE {
                 }
             };
         }
-
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
-#if DEBUG
-            createDLL();
-#endif   
-            var selfC = new SelfLanguage.Compiler.SelfCompiler();
-            selfC.Compile(Path.Combine(@"C:\lavoro-temp", "l.exe"), "#e=0\n#m=100\n" + _program, File.ReadAllText(@"../../ProjectTemplates/ConsoleTmp.cs"));
         }
-#if DEBUG
-        private bool createDLL(){
-            CompilerParameters parameters = new CompilerParameters();
-            parameters.GenerateExecutable = false;
-            parameters.OutputAssembly = "SelfDLL.dll";
-            parameters.ReferencedAssemblies.AddRange(new string[] { "System.dll", "mscorlib.dll", "System.Data.dll", "System.Core.dll"});
-            var files_name = Directory.GetFiles("../../").Where((s) => s.Contains("SelfLanguage") && s.Contains(".cs"));
-            var all_files = files_name.ToList()
-                .Select((w) => File.ReadAllLines(w));
-            var all_usings = noDuplicates(all_files.Select((k)=>k.Where((l)=>l.IndexOf("using")!=-1)).Aggregate((first,second)=>{
-                first.ToList().AddRange(second.ToList());
-                return first;
-            }).ToArray());
-            var code = all_files.Select((l)=>l.Where((z)=>z.IndexOf("using")==-1).ToList()).Aggregate((first,second)=>{
-                first.ToList().AddRange(second.ToList());
-                return first;
-            }) ;
-            var _united_code = all_usings.Aggregate((a, b) => a + b) + code.Aggregate((a, b) => a + b);
-            var er = new CSharpCodeProvider((new Dictionary<string, string> {{"CompilerVersion","v4.0"}}));
-            var r = er.CompileAssemblyFromSource(parameters, _united_code);
-            Enumerable.Range(0, r.Errors.Count).ToList().ForEach((k) => MessageBox.Show(r.Errors[k].ErrorText));
-            return r.Errors.Count == 0;
-        }
-        private string[] noDuplicates(string[] s) {
-            var tmp = new System.Collections.Generic.List<string>();
-            s.ToList().ForEach((k) => {
-                if (!tmp.Contains(k)) {
-                    tmp.Add(k);
-                }
-            });
-            return tmp.ToArray();
-        }
-
-
-#endif
-        
     }
 }

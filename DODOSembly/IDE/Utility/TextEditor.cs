@@ -170,7 +170,7 @@ namespace IDE {
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
             var to_compile = txtCode.Lines.Where((s)=>CleanPointer(s)!=0);
             var query = to_compile.Select((k) => ToCommand(k));
-            if (OnRun != null) { OnRun(this, query.Aggregate((first,second)=>first + second)); }
+            if (OnRun != null && query.Count() >0) { OnRun(this, query.Aggregate((first,second)=>first + second)); }
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e) {

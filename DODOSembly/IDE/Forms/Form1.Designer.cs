@@ -23,6 +23,7 @@
         /// il contenuto del metodo con l'editor di codice.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +52,8 @@
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(678, 24);
+            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.menuStrip1.Size = new System.Drawing.Size(615, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -97,7 +99,7 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
@@ -114,8 +116,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl);
-            this.splitContainer1.Size = new System.Drawing.Size(678, 496);
-            this.splitContainer1.SplitterDistance = 527;
+            this.splitContainer1.Size = new System.Drawing.Size(615, 570);
+            this.splitContainer1.SplitterDistance = 477;
             this.splitContainer1.TabIndex = 2;
             // 
             // tabControl
@@ -125,7 +127,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(147, 496);
+            this.tabControl.Size = new System.Drawing.Size(134, 570);
             this.tabControl.TabIndex = 1;
             this.tabControl.Click += new System.EventHandler(this.tabControl_Click);
             // 
@@ -135,7 +137,7 @@
             this.tabASCII.Location = new System.Drawing.Point(4, 22);
             this.tabASCII.Name = "tabASCII";
             this.tabASCII.Padding = new System.Windows.Forms.Padding(3);
-            this.tabASCII.Size = new System.Drawing.Size(139, 470);
+            this.tabASCII.Size = new System.Drawing.Size(126, 544);
             this.tabASCII.TabIndex = 0;
             this.tabASCII.Text = "ASCII Table";
             this.tabASCII.UseVisualStyleBackColor = true;
@@ -145,7 +147,7 @@
             this.textEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textEditor1.Location = new System.Drawing.Point(0, 0);
             this.textEditor1.Name = "textEditor1";
-            this.textEditor1.Size = new System.Drawing.Size(527, 496);
+            this.textEditor1.Size = new System.Drawing.Size(477, 570);
             this.textEditor1.TabIndex = 0;
             // 
             // asciI_Table1
@@ -153,7 +155,7 @@
             this.asciI_Table1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.asciI_Table1.Location = new System.Drawing.Point(3, 3);
             this.asciI_Table1.Name = "asciI_Table1";
-            this.asciI_Table1.Size = new System.Drawing.Size(133, 464);
+            this.asciI_Table1.Size = new System.Drawing.Size(120, 538);
             this.asciI_Table1.SomethingPressed = null;
             this.asciI_Table1.TabIndex = 0;
             // 
@@ -161,9 +163,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 520);
+            this.ClientSize = new System.Drawing.Size(615, 594);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "VisualDODOSembly";
