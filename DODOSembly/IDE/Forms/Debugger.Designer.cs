@@ -145,7 +145,7 @@
             this.splitter1.Location = new System.Drawing.Point(0, 206);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(471, 3);
-            this.splitter1.TabIndex = 1;
+            this.splitter1.TabIndex = 10;
             this.splitter1.TabStop = false;
             this.splitter1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitter1_SplitterMoved);
             // 
@@ -307,11 +307,11 @@
             this.grpLogger.Size = new System.Drawing.Size(250, 218);
             this.grpLogger.TabIndex = 7;
             this.grpLogger.TabStop = false;
-            this.grpLogger.Text = "too";
+            this.grpLogger.Text = "Logger";
             // 
             // lstLogger
             // 
-            this.lstLogger.BackColor = System.Drawing.SystemColors.MenuText;
+            this.lstLogger.BackColor = System.Drawing.Color.Black;
             this.lstLogger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstLogger.ForeColor = System.Drawing.Color.White;
             this.lstLogger.FormattingEnabled = true;
