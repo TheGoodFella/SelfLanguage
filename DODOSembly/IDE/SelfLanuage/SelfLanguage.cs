@@ -158,6 +158,10 @@ namespace SelfLanguage {
             var param = command.ElementAtOrDefault(1);
             var funcion = command.First().Split(';')[1];
             var variable = command.First().Split(';')[2];
+            dynamic GettedVariable = GetterDynamic(variable);
+            if(((Type)GettedVariable.GetType()).GetMethods().Any(s=>s.Name ==funcion)){
+
+            }
             
         }
         private dynamic GetterDynamic(string source) {
