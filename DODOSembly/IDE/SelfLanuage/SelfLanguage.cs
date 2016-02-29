@@ -80,6 +80,7 @@ namespace SelfLanguage {
             CommandList.Add("n" , () => WriteValueCarry());              //Write value carry in logger
             CommandList.Add("m" , () => Move(_pointer+2));               //Move&Here;what
             CommandList.Add("a" , ()=> Add(_pointer));                   //Add here;so_much
+            CommandList.Add("c",  () => Call(_pointer));                 //Call&variable;Function|param1;param2;param3
             CommandList.Add("\\", () => _pointer = int.MaxValue - 1);    //End of program
         }
         #region Commands
@@ -151,6 +152,34 @@ namespace SelfLanguage {
             var ptr = Convert.ToInt32(command.ElementAt(0));
             var how_m = Convert.ToInt32(command.ElementAt(1));
             Memory[ptr] = Convert.ToChar(Convert.ToInt32(Memory[ptr]) + how_m);
+        }
+        private void Call(int pointer) {
+            var command = GetLitteral(_pointer + 2).Split('|');
+            var param = command.ElementAtOrDefault(1);
+            var funcion = command.First().Split(';')[1];
+            var variable = command.First().Split(';')[2];
+            
+        }
+        private dynamic GetterDynamic(string source) {
+            var dest = DestinationSelecter.IsCommand(source);
+            if (dest == SelfLanguageDestination.None) {
+                throw new InvalidGetterException(string.Format("The getter {0} points to an invalid get for call", source));
+            } else if(dest == SelfLanguageDestination.Here){
+                return source.Replace("^", "");
+            } else if (dest == SelfLanguageDestination.Compare) {
+                return Compare(source);
+            } else if (dest == SelfLanguageDestination.Number) {
+                return HandleFromMemory(Convert.ToInt32(source));
+            } else if (dest == SelfLanguageDestination.Ram) {
+                var new_source = source.Split(':');
+                var name = new_source.ElementAtOrDefault(1); //Name
+                if (Ram.Any(s => s.Name == name)) { throw new NotDefinedVariableException(string.Format("The variable {0} is not defined",name)); }
+                return Ram.First(s => s.Name == name).IncapsulatedValue;
+            } else if (dest == SelfLanguageDestination.Stack) {
+                return CommandStackCarry.Pop();
+            } else {
+                throw new NotImplementedException(); //Missing something
+            }
         }
         #endregion
         #region <Move>
