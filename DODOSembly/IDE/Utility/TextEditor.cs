@@ -42,6 +42,7 @@ namespace IDE {
             Intellisense.Add("m", Color.Red, IDE.Properties.Resources.m);
             Intellisense.Add("\\", Color.Red, IDE.Properties.Resources.slash);
             Intellisense.Add("a", Color.Red, IDE.Properties.Resources.a);
+            Intellisense.Add("c",Color.Red,IDE.Properties.Resources.c);                 
             txtCode.AddPeer(txtPointers);
         }
 
@@ -86,7 +87,7 @@ namespace IDE {
             if (query.Count() == 1) {
                 txtIntellisense.Text = Intellisense.GetDocOfCommand(query.ElementAt(0)).Replace("\\t","\t").Replace("\\n",Environment.NewLine);
                 pnlIntellisense.Visible = true;
-                pnlIntellisense.Top = txtCode.Parent.Top + (txtCode.GetLineFromCharIndex(txtCode.SelectionStart)-first_line) * txtCode.Font.Height;
+                pnlIntellisense.Top = txtCode.Parent.Top + (txtCode.GetLineFromCharIndex(txtCode.SelectionStart)+1-first_line) * txtCode.Font.Height;
                 if (pnlIntellisense.Top > pnlIntellisense.Parent.Height - pnlIntellisense.Height) {
                     pnlIntellisense.Top = pnlIntellisense.Parent.Height - pnlIntellisense.Height;
                 }

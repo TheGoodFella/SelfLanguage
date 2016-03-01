@@ -145,4 +145,7 @@
   <data name="m" xml:space="preserve">
     <value>Move \n\tm&amp;here;what \n\tR:name:[value]:[type=string]\n\tFor memory is a Number\n\t ^What is here</value>
   </data>
+  <data name="c" xml:space="preserve">
+    <value>Call&amp;variable;Function|param1;param2;param3</value>
+  </data>
 </root>
