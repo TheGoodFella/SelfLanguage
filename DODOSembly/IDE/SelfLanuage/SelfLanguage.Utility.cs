@@ -76,7 +76,7 @@ namespace SelfLanguage.Utility {
             {
                 to_r.Add(PossibleConversion.FromStringImplicit);
             }
-            if(t.GetMethods().Where(s => s.Name == "op_Explicit") //Is a implicit operator
+            if(t.GetMethods().Where(s => s.Name == "op_Explicit" || t == typeof(string)) //Is a implicit operator
                 .Any((k)=>k.GetParameters().Length == 1                 //Just 1 parameter
                     && k.GetParameters().First().GetType() == t         //Parameter of type t
                     && k.ReturnType == typeof(string)))                 //Returns string
