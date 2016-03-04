@@ -51,7 +51,11 @@ namespace SelfLanguage {
         /// <summary>
         /// This is the event rised on Exception
         /// </summary>
-        public event Action<Logging> ExceptionRised; 
+        public event Action<Logging> ExceptionRised;
+        /// <summary>
+        /// This is the event rised on end of program
+        /// </summary>
+        public event Action<Logging> EndOfProgram;
         /// <summary>
         /// This is the pre-command char, a command to be executed, have to have this in front of him
         /// </summary>
@@ -102,12 +106,16 @@ namespace SelfLanguage {
                     }
                     _pointer++;
                     if (_pointer < 0 || _pointer > Memory.Length) {
+                        if (EndOfProgram != null)
+                            EndOfProgram.Invoke(new Logging("The program terminated", _pointer));                     
                         return;
                     }
                 }
             } catch (Exception e) {
                 ExceptionRised(new Logging(e.Message,_pointer,e));
             }
+            if(EndOfProgram!=null)
+                EndOfProgram.Invoke(new Logging("The program terminated", _pointer));
         }
         /// <summary>
         /// Load in the memory the string s overwriting from the EntryPoint to s.Length
