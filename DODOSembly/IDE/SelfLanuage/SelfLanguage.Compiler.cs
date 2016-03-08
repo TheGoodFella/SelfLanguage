@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SelfLanguage.Utility;
+using System.IO;
 
 namespace SelfLanguage.Compiler {
     /// <summary>
@@ -35,6 +36,7 @@ namespace SelfLanguage.Compiler {
             code_parameters.GenerateExecutable = false;
             code_parameters.GenerateInMemory = false;
             var result = code_provider.CompileAssemblyFromSource(code_parameters, code);
+            code_provider.Parse();
             if (result.Errors.HasErrors) {
                 foreach (var item in result.Errors) {
                     OnFail.Invoke(this, new Logging(item.ToString()));
@@ -54,6 +56,9 @@ namespace SelfLanguage.Compiler {
                     ReferencedAssemblies.Add(dll_name);
                 }
             }
+        }
+        public SelfCompiler(){
+            ReferencedAssemblies = new List<string>();
         }
     }
 }

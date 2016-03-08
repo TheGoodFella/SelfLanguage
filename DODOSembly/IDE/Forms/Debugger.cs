@@ -160,6 +160,10 @@ namespace IDE {
             };
         }
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
+            var v = new SelfLanguage.Compiler.SelfCompiler();
+            v.OnFail += (a, b) => { MessageBox.Show(b.Message); };
+            v.AddUsingToSelfCompiler(File.ReadAllText(@"C:\Users\massimiliano.girardi\Source\Repos\SelfLanguage\DODOSembly\IDE\ProjectTemplates\ConsoleTmp.cs"));
+            v.Compile(File.ReadAllLines(@"C:\Users\massimiliano.girardi\Source\Repos\SelfLanguage\DODOSembly\IDE\ProjectTemplates\ConsoleTmp.cs"));
         }
     }
 }
