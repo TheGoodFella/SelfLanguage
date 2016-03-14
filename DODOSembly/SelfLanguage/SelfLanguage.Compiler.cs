@@ -13,9 +13,7 @@ namespace SelfLanguage.Compiler {
     /// <summary>
     /// Compiler class
     /// </summary>
-    class SelfCompiler {
-
-        private Regex Usings = new Regex(@"^using .*;",(RegexOptions.Multiline));
+    public class SelfCompiler {
         /// <summary>
         /// All Assembly needed to compile the given code
         /// </summary>
@@ -35,8 +33,8 @@ namespace SelfLanguage.Compiler {
             code_parameters.ReferencedAssemblies.AddRange(ReferencedAssemblies.ToArray());
             code_parameters.GenerateExecutable = false;
             code_parameters.GenerateInMemory = false;
+            code_parameters.MainClass = "ConsoleTmp";
             var result = code_provider.CompileAssemblyFromSource(code_parameters, code);
-            code_provider.Parse();
             if (result.Errors.HasErrors) {
                 foreach (var item in result.Errors) {
                     OnFail.Invoke(this, new Logging(item.ToString()));
@@ -48,14 +46,8 @@ namespace SelfLanguage.Compiler {
         /// <summary>
         /// This addes all needed usings to the SelfCompiler. It does not duplicate them by default
         /// </summary>
-        public void AddUsingToSelfCompiler(string usings) {
-            var matched_using = Usings.Matches(usings);
-            foreach (Match item in matched_using) {
-                var dll_name = item.Value.Replace("using", "").Replace(" ", "").Replace(";", ".dll");
-                if (!ReferencedAssemblies.Contains(dll_name)) {
-                    ReferencedAssemblies.Add(dll_name);
-                }
-            }
+        public void AddUsingToSelfCompiler(Assembly ass){
+            ReferencedAssemblies.AddRange(ass.GetReferencedAssemblies().Select(s => s.Name.Trim() + ".dll").Where(s => !ReferencedAssemblies.Contains(s)));
         }
         public SelfCompiler(){
             ReferencedAssemblies = new List<string>();
