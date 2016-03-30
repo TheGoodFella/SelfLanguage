@@ -98,7 +98,7 @@ namespace IDE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jump \n\tj&amp;Where.
+        ///   Looks up a localized string similar to Jump \n\tj&amp;Where;[condition]\n\t EX:j&amp;30;=(char|^r|^r).
         /// </summary>
         internal static string j {
             get {

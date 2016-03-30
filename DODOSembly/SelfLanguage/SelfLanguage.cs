@@ -72,10 +72,12 @@ namespace SelfLanguage {
             DestinationSelecter = new RegexContainer();
             CommandStackCarry = new Stack<int>();
             TypeAliasContainer = new SelfTypes();
+            RegisterInterrupt = new List<Action>();
             Memory = new char[_memorySize];
             Memory = Memory.Select((s) => '\\').ToArray();
             RegisterInterrupt = new List<Action>();
             Ram = new List<Variable>();
+            Conversion = new ConversionSelector();
             CommandList = new Dictionary<string, Action>();
             CommandList.Add("j" , () => JumpCommand(_pointer));          //Jump
             CommandList.Add("p" , () => PopOrPush(_pointer));            //pop is 0 or push that is 1
@@ -111,7 +113,7 @@ namespace SelfLanguage {
                         return;
                     }
                 }
-            } catch (Exception e) {
+            }catch (Exception e) {
                 ExceptionRised(new Logging(e.Message,_pointer,e));
             }
             if(EndOfProgram!=null)
@@ -256,7 +258,7 @@ namespace SelfLanguage {
             var second = elemtents.ElementAtOrDefault(2);   //Second
             first = Getter(first);
             second = Getter(second);
-            var type = Type.GetType(cmp_type) ?? TypeAliasContainer.GetFromAlias(cmp_type);
+            var type = Type.GetType(cmp_type) ?? TypeAliasContainer.GetFromAliasSafe(cmp_type);
             var variable = GetVariableOfType(type);
             if ((variable is IComparable)&& (variable is IConvertible)) {
                 var new_f = Convert.ChangeType(first, type);
@@ -280,7 +282,7 @@ namespace SelfLanguage {
             //Remove if exsists the variable from ram
             if(Ram.Any((s) => s.Name == name)){ Ram.Remove(Ram.First((s) => s.Name == name));}
             //The variable is not in ram and has to be created
-            var actual_type = Type.GetType(type) ?? TypeAliasContainer.GetFromAlias(type);
+            var actual_type = Type.GetType(type) ?? TypeAliasContainer.GetFromAliasSafe(type);
             if (actual_type == null) { throw new InvalidVariableTypeException(string.Format("The type {0} is not a valid .Net or SelfLanguage type",type)); }
             var convert = Conversion.GetConversion(actual_type);
             var obj = GetVariableOfType(actual_type);
@@ -312,7 +314,7 @@ namespace SelfLanguage {
             var value = new_source.ElementAtOrDefault(2);//Value
             var type = new_source.ElementAtOrDefault(3); //Type
             var to_put = Ram.FirstOrDefault(s => s.Name == name);
-            var convert = Conversion.GetConversion(Type.GetType(type));
+            var convert = Conversion.GetConversion(TypeAliasContainer.GetFromAliasSafe(type));
             if (to_put == null) { throw new NotDefinedVariableException(string.Format("The varible {0} is not defined", name)); } else {
                 if (convert.Any(s=>s== PossibleConversion.IStringable)) {
                     dynamic c = to_put;

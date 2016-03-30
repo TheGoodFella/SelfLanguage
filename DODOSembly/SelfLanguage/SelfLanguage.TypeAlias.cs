@@ -13,21 +13,24 @@ namespace SelfLanguage.TypeAlias {
         /// </summary>
         public SelfTypes() {
             Aliasses = new Dictionary<string, Type>();
-            Aliasses.Add("str"   , typeof(String));
-            Aliasses.Add("int"   , typeof(Int32));
-            Aliasses.Add("int16" , typeof(Int16));
-            Aliasses.Add("int32" , typeof(Int32));
-            Aliasses.Add("int64" , typeof(Int64));
-            Aliasses.Add("obj"   , typeof(Object));
-            Aliasses.Add("dou"   , typeof(Double));
-            Aliasses.Add("float" , typeof(float));
+            Aliasses.Add("str", typeof(String));
+            Aliasses.Add("int", typeof(Int32));
+            Aliasses.Add("i16", typeof(Int16));
+            Aliasses.Add("i32", typeof(Int32));
+            Aliasses.Add("i64", typeof(Int64));
+            Aliasses.Add("obj", typeof(Object));
+            Aliasses.Add("dou", typeof(Double));
+            Aliasses.Add("flt", typeof(float));
+            Aliasses.Add("chr", typeof(char));
         }
         /// <summary>
         /// Returns null if not contained in aliasses
         /// </summary>
-        public Type GetFromAlias(string s) {
+        public Type GetFromAliasSafe(string s) {
             if (Aliasses.ContainsKey(s)) {
                 return Aliasses[s];
+            } else if(Type.GetType(s)!=null){
+                return Type.GetType(s);
             } else {
                 return null;
             }

@@ -128,7 +128,7 @@
     <value>Interrupt \n\ti&amp;Which</value>
   </data>
   <data name="j" xml:space="preserve">
-    <value>Jump \n\tj&amp;Where</value>
+    <value>Jump \n\tj&amp;Where;[condition]\n\t EX:j&amp;30;=(char|^r|^r)</value>
   </data>
   <data name="n" xml:space="preserve">
     <value>Write value carry \n\tn  Pops from the stack</value>

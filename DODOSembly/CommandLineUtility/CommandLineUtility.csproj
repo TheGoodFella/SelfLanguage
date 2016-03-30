@@ -47,12 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Hook25 30-Mar-16.das" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SelfLanguage\SelfLanguage.csproj">
       <Project>{3813c217-eeb3-4281-b885-0a6b65efdbb2}</Project>
       <Name>SelfLanguage</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="shroom.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

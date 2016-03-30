@@ -36,6 +36,8 @@ namespace IDE {
         public Debugger(string program)
             : this() {
             _program = program;
+            Clipboard.SetText(_program);
+            MessageBox.Show(Clipboard.GetText());
             txtMemoryAlloc.Value = Convert.ToDecimal(program.Length);
             lstMemory.Items.AddRange(program.Select((s) => new ListViewItem(Convert.ToString(s))).ToArray());
         }
@@ -114,6 +116,10 @@ namespace IDE {
                 language = new Language(Memory);
                 language.LoadInMemory(_program, 0);
             }
+            for (int i = 0; i < 20; i++) {
+                language.DefineInterrupt(() => MessageBox.Show("Called interrupt " + i), i);
+            }
+            "lrrrbbbrrr".ToList().ForEach(s => language.CommandStackCarry.Push(Convert.ToChar(s)));
             language.ExceptionRised += new Action<SelfLanguage.Utility.Logging>((a) => {
                 DebugErrorColor = true;
                 try {
@@ -160,6 +166,8 @@ namespace IDE {
             };
         }
         private void compileToolStripMenuItem_Click(object sender, EventArgs e) {
+            Clipboard.SetText(_program);
+            return;
             var v = new SelfLanguage.Compiler.SelfCompiler();
             v.OnFail += (a, b) => { MessageBox.Show(b.Message); };
             v.AddUsingToSelfCompiler(typeof(Language).Assembly);
