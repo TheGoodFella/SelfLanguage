@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineUtility", "Comma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfLanguage", "SelfLanguage\SelfLanguage.csproj", "{3813C217-EEB3-4281-B885-0A6B65EFDBB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainFK", "BrainFK\BrainFK.csproj", "{57B870A3-9E54-4F15-BFA1-7A32A7E6F663}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3813C217-EEB3-4281-B885-0A6B65EFDBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3813C217-EEB3-4281-B885-0A6B65EFDBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3813C217-EEB3-4281-B885-0A6B65EFDBB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B870A3-9E54-4F15-BFA1-7A32A7E6F663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B870A3-9E54-4F15-BFA1-7A32A7E6F663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B870A3-9E54-4F15-BFA1-7A32A7E6F663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B870A3-9E54-4F15-BFA1-7A32A7E6F663}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
