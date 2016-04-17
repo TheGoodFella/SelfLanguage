@@ -8,7 +8,7 @@ namespace BrainFuck {
     class BrainFuck {
         int _ptr { get; set; }
         int _memoryptr { get; set; }
-        Stack<Jump> Jump { get; set; }
+        Stack<Jump> _jump { get; set; }
         Char[] _program { get; set; }
         Char[] _memory { get; set; }
         Dictionary<char, Action> moves;
@@ -34,6 +34,7 @@ namespace BrainFuck {
         /// </summary>
         public BrainFuck() {
             moves = new Dictionary<char, Action>();
+            _jump = new Stack<Jump>();
             moves.Add('<', () => this._memoryptr--);
             moves.Add('>', () => this._memoryptr++);
             moves.Add('+', () => this._memory[_memoryptr]++);
@@ -53,7 +54,7 @@ namespace BrainFuck {
             if ( memory != null ) {
                 this._memory = memory;
             } else {
-                memory = new char[1024];
+                this._memory = new char[1024];
             }
             _ptr = pointer;
         }
@@ -62,18 +63,18 @@ namespace BrainFuck {
             _program = program;
         }
         private void EndJump() {
-            _ptr = Jump.FirstOrDefault().Start;
+            _ptr = _jump.FirstOrDefault().Start;
         }
         private void StartJump() {
-            if (! Jump.Any(z => z.Start == _ptr) ) {
+            if (! _jump.Any(z => z.Start == _ptr) ) {
                 var end_of_j = _ptr;
                 while ( _program[end_of_j] !=']') {
                     end_of_j++;
                 }
-                Jump.Push(new Jump(_ptr, end_of_j));
+                _jump.Push(new Jump(_ptr, end_of_j));
             }
             if (_program[_ptr]==0) {
-                _ptr = Jump.Pop().End+1;
+                _ptr = _jump.Pop().End+1;
             } else {
                 _ptr++;
             }
