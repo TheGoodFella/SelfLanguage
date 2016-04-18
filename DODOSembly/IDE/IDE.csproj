@@ -70,7 +70,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectTemplates\ConsoleTmp.cs" />
+    <None Include="ProjectTemplates\ConsoleTmp.tmp" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\Settings.cs">
       <SubType>Form</SubType>
