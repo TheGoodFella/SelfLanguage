@@ -13,7 +13,7 @@ namespace SelfLanguage.Utility {
         public string Message;
         public int Pointer;
         public Exception RisedException;
-        public Logging(string message = "", int pointer = -1, Exception rised = default(Exception)) {
+        public Logging( string message = "", int pointer = -1, Exception rised = default(Exception) ) {
             Message = message;
             Pointer = pointer;
             RisedException = rised;
@@ -36,7 +36,7 @@ namespace SelfLanguage.Utility {
         /// </summary>
         /// <param name="o"></param>
         /// <param name="name"></param>
-        public Variable(object o, string name) {
+        public Variable( object o, string name ) {
             this.IncapsulatedValue = o;
             this.Name = name;
         }
@@ -52,63 +52,47 @@ namespace SelfLanguage.Utility {
     /// Conversion parser
     /// </summary>
     public class ConversionSelector {
+        Type[] CLRTypes = { typeof(Boolean), typeof(SByte), typeof(Byte), typeof(Int16), typeof(UInt16), typeof(Int32)
+                              , typeof(UInt32), typeof(Int64), typeof(UInt64), typeof(Single), typeof(Double), typeof(Decimal), typeof(DateTime), typeof(Char), typeof(String) };
         /// <summary>
         /// Returns the possible conversion for the variable
         /// </summary>
-        /// <param name="t">Type to be converted to or from</param>
+        /// <param name="to">Type to be converted to or from</param>
         /// <returns>Possible conversion</returns>
-        public PossibleConversion[] GetConversion(Type t) {
+        public PossibleConversion[] GetConversion( Type to, Type from ) {
             var to_r = new List<PossibleConversion>();
-            if(t.GetInterfaces().Any(x=>x == typeof(IStringable))){
+            if ( to == from || to.GetMethods()  //IMPLICIT
+                .Where(k => k.Name == "op_Implicit")
+                .Any(( k ) => {
+                    return k.ReturnType == to && k.GetParameters().Length == 1 && k.GetParameters().FirstOrDefault().ParameterType == from;
+                }
+                    )
+            ) {
+                to_r.Add(PossibleConversion.ToImplicit);
+            } else if ( to.GetMethods()  //EXPLICIT
+                  .Where(k => k.Name == "op_Explicit")
+                  .Any(( k ) => {
+                      return k.ReturnType == to && k.GetParameters().Length == 1 && k.GetParameters().FirstOrDefault().ParameterType == from;
+                  }) ) {
+                to_r.Add(PossibleConversion.ToExplicit);
+            } else if ( CLRTypes.Any(s => s == to) && from.GetInterfaces().Any(s=>s == typeof(IConvertible)) ) { //CLRTYPES
+                to_r.Add(PossibleConversion.IConvertible);
+            } else if(to.GetConstructors().Any(s=>s.GetParameters().Length==1 && s.GetParameters().First().ParameterType == from)) {
+                to_r.Add(PossibleConversion.Constructor);
+            } else if ( to.GetInterfaces().Contains(typeof(IStringable)) && from.GetInterfaces().Contains(IStringable) ) {
                 to_r.Add(PossibleConversion.IStringable);
             }
-            if(t.GetMethods().Where(s => s.Name == "op_Implicit") //Is a implicit operator
-                .Any((k)=>k.GetParameters().Length == 1                 //Just 1 parameter
-                    && k.GetParameters().First().GetType() == t         //Parameter of type t
-                    && k.ReturnType == typeof(string)))                 //Returns string
-            {
-                to_r.Add(PossibleConversion.ToStringImplicit);
-            }
-            if(t.GetMethods().Where(s => s.Name == "op_Implicit")     //Is a implicit operator
-                .Any((k)=>k.GetParameters().Length == 1                     //Just 1 parameter
-                    && k.GetParameters().First().GetType() == typeof(string)//Parameter of type string
-                    && k.ReturnType == t))                                  //Returns t
-            {
-                to_r.Add(PossibleConversion.FromStringImplicit);
-            }
-            if(t.GetMethods().Where(s => s.Name == "op_Explicit" || t == typeof(string)) //Is a implicit operator
-                .Any((k)=>k.GetParameters().Length == 1                 //Just 1 parameter
-                    && k.GetParameters().First().GetType() == t         //Parameter of type t
-                    && k.ReturnType == typeof(string)))                 //Returns string
-            {
-                to_r.Add(PossibleConversion.ToStringExplicit);
-            }
-            if(t.GetMethods().Where(s => s.Name == "op_Explicit")     //Is a implicit operator
-                .Any((k)=>k.GetParameters().Length == 1                     //Just 1 parameter
-                    && k.GetParameters().First().GetType() == typeof(string)//Parameter of type string
-                    && k.ReturnType == t))                                  //Returns t
-            {
-                to_r.Add(PossibleConversion.FromStringExplicit);
-            }
-            if(t.GetInterfaces().Any(s => s == typeof(IConvertible))){
-                to_r.Add(PossibleConversion.IConvertible);
-            }
-            if (t.GetConstructors().Any((e) => e.GetParameters().Length == 1 && e.GetParameters().First().GetType() == typeof(string))) {
-                to_r.Add(PossibleConversion.Constructor);
-            }
-            return to_r.ToArray();
+            return to_r.OrderBy(s => (int)s).ToArray();
         }
     }
     /// <summary>
     /// This clarify the Conversion hierarchy
     /// </summary>
     public enum PossibleConversion {
-        IStringable=4,
-        ToStringImplicit = 3,
-        ToStringExplicit = 2,
-        FromStringImplicit = 3,
-        FromStringExplicit = 2,
-        IConvertible=1,
-        Constructor=1,
+        ToImplicit = 3,
+        ToExplicit = 2,
+        IConvertible = 2,
+        IStringable = 1,
+        Constructor = 1,
     }
 }
