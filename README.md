@@ -1,21 +1,4 @@
 # SelfLanguage
 A higly dinamic .NET interpreted language
 #What is this?
-This a very powerfull, more or less "write only" language. It got created by a IT student, developed to make the code unreadable. 
-This is specifically created to make the program hard to read even to those who know the language.
-#Advantages and disadvantages:
-**Advantages**
-- Easy to write
-- A cool IDE
-- Fast to learn commands<br />
-
-**Disadvantages**
-- Really hard to read(ment to)
-- Runs on the .NET Framework so it is not Sonic-Fast
-
-#Common quotes
-> This is mad (*Someone who dont undestand ~~sht~~*)<br />
-
-> We can do hard question on this project (*Some teachers*)
-
-> I'll provide hard answer (*Me, aka god*) 
+This is the demostration of how school is blind, holding those who try to do shomething down. We are all sheeps, all white, all the same, no one deserve to be better than the other or worse. School is what is making me regret starting programming and loving mathematics, because I don't see any recognition of my work, but those who are bad, and really are taking us, the school, anyone down, are recognized for any single action they do. If you are a teacher, stop bothering at helping those who can't make it... 
